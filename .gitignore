@@ -1,0 +1,29 @@
+# Python
+__pycache__/
+
+# Virtual environments
+venv/
+.venv/
+env/
+.env
+
+
+# Model files
+*.pth
+*.pt
+*.onnx
+*.engine
+*.trt
+
+# Outputs
+outputs/
+results/
+runs/
+
+# Data
+data/
+datasets/
+
+# Temporary
+tmp/
+temp/
