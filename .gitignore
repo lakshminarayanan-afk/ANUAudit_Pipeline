@@ -19,6 +19,7 @@ env/
 outputs/
 results/
 runs/
+TEMP_OUTPUT/
 
 # Data
 data/
@@ -27,3 +28,9 @@ datasets/
 # Temporary
 tmp/
 temp/
+
+#weights
+weights/
+
+# Data
+12_Full_Image_Datasets/

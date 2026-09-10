@@ -1,0 +1,390 @@
+{"image_path": "C:\\Users\\laksh\\ANU\\OUTPUT\\CLASS\\ClinicalPatient_13_dcm\\Abdomen\\Abdominal Circumference\\IMG_20260220_1_107.dcm",
+"Modality" :{
+
+},
+
+ "Classification" : {
+
+ },
+ "Segmentation" : {
+    "1st prediction": {
+      "input_filename": "IMG_20260220_1_107.dcm",
+      "plane": "Abdominal Circumference",
+      "plane_quality": "Non-Standard",
+      "mean_structure_confidence": 0.980722,
+      "plane_candidates": [
+        "Abdominal Circumference"
+      ],
+      "plane_mandatory_structures": {
+        "Abdominal Circumference": {
+          "required": [
+            "Umbilical Vein",
+            "Skin Line",
+            "Vertebrae",
+            "Stomach",
+            "Adrenal"
+          ],
+          "present": [
+            "Stomach"
+          ],
+          "missing": [
+            "Umbilical Vein",
+            "Skin Line",
+            "Vertebrae",
+            "Adrenal"
+          ],
+          "detected_fraction": 0.2,
+          "anchor_pass": false
+        },
+        "Cord Insertion": {
+          "required": [
+            "Cord Insertion",
+            "Skin Line",
+            "Vertebrae"
+          ],
+          "present": [],
+          "missing": [
+            "Cord Insertion",
+            "Skin Line",
+            "Vertebrae"
+          ],
+          "detected_fraction": 0.0,
+          "anchor_pass": false
+        },
+        "Transverse Kidneys": {
+          "required": [
+            "Kidney Cortex",
+            "Renal Pelvis",
+            "Vertebrae"
+          ],
+          "present": [],
+          "missing": [
+            "Kidney Cortex",
+            "Renal Pelvis",
+            "Vertebrae"
+          ],
+          "detected_fraction": 0.0,
+          "anchor_pass": false
+        }
+      },
+      "polygons": [
+        {
+          "structure": "Stomach",
+          "type": "polygon",
+          "points": [
+            {
+              "x": 533.0,
+              "y": 303.0
+            },
+            {
+              "x": 533.0,
+              "y": 314.0
+            },
+            {
+              "x": 537.0,
+              "y": 320.0
+            },
+            {
+              "x": 559.0,
+              "y": 330.0
+            },
+            {
+              "x": 569.0,
+              "y": 330.0
+            },
+            {
+              "x": 583.0,
+              "y": 322.0
+            },
+            {
+              "x": 588.0,
+              "y": 314.0
+            },
+            {
+              "x": 581.0,
+              "y": 297.0
+            },
+            {
+              "x": 564.0,
+              "y": 289.0
+            },
+            {
+              "x": 550.0,
+              "y": 290.0
+            }
+          ]
+        }
+      ],
+      "gt_metrics_available": false,
+      "gt_metrics": null,
+      "uv_standard": false,
+      "uv_metrics": {
+        "area": 0.0,
+        "aspect_ratio": NaN,
+        "skeleton_length": 0
+      },
+      "skin_line_shape": {
+        "circularity": 0.313627,
+        "axis_ratio": 1.27442
+      },
+      "quality_reasons": [
+        "Umbilical Vein shape constraint failed"
+      ]
+    },
+
+    "2nd prediction": {
+      "input_filename": "IMG_20260220_1_107.dcm",
+      "plane": "Abdominal Circumference",
+      "plane_quality": "Non-Standard",
+      "mean_structure_confidence": 0.980722,
+      "plane_candidates": [
+        "Abdominal Circumference"
+      ],
+      "plane_mandatory_structures": {
+        "Abdominal Circumference": {
+          "required": [
+            "Umbilical Vein",
+            "Skin Line",
+            "Vertebrae",
+            "Stomach",
+            "Adrenal"
+          ],
+          "present": [
+            "Stomach"
+          ],
+          "missing": [
+            "Umbilical Vein",
+            "Skin Line",
+            "Vertebrae",
+            "Adrenal"
+          ],
+          "detected_fraction": 0.2,
+          "anchor_pass": false
+        },
+        "Cord Insertion": {
+          "required": [
+            "Cord Insertion",
+            "Skin Line",
+            "Vertebrae"
+          ],
+          "present": [],
+          "missing": [
+            "Cord Insertion",
+            "Skin Line",
+            "Vertebrae"
+          ],
+          "detected_fraction": 0.0,
+          "anchor_pass": false
+        },
+        "Transverse Kidneys": {
+          "required": [
+            "Kidney Cortex",
+            "Renal Pelvis",
+            "Vertebrae"
+          ],
+          "present": [],
+          "missing": [
+            "Kidney Cortex",
+            "Renal Pelvis",
+            "Vertebrae"
+          ],
+          "detected_fraction": 0.0,
+          "anchor_pass": false
+        }
+      },
+      "polygons": [
+        {
+          "structure": "Stomach",
+          "type": "polygon",
+          "points": [
+            {
+              "x": 533.0,
+              "y": 303.0
+            },
+            {
+              "x": 533.0,
+              "y": 314.0
+            },
+            {
+              "x": 537.0,
+              "y": 320.0
+            },
+            {
+              "x": 559.0,
+              "y": 330.0
+            },
+            {
+              "x": 569.0,
+              "y": 330.0
+            },
+            {
+              "x": 583.0,
+              "y": 322.0
+            },
+            {
+              "x": 588.0,
+              "y": 314.0
+            },
+            {
+              "x": 581.0,
+              "y": 297.0
+            },
+            {
+              "x": 564.0,
+              "y": 289.0
+            },
+            {
+              "x": 550.0,
+              "y": 290.0
+            }
+          ]
+        }
+      ],
+      "gt_metrics_available": false,
+      "gt_metrics": null,
+      "uv_standard": false,
+      "uv_metrics": {
+        "area": 0.0,
+        "aspect_ratio": NaN,
+        "skeleton_length": 0
+      },
+      "skin_line_shape": {
+        "circularity": 0.313627,
+        "axis_ratio": 1.27442
+      },
+      "quality_reasons": [
+        "Umbilical Vein shape constraint failed"
+      ]
+    },
+    
+    "3rd prediction": {
+      "input_filename": "IMG_20260220_1_107.dcm",
+      "plane": "Abdominal Circumference",
+      "plane_quality": "Non-Standard",
+      "mean_structure_confidence": 0.980722,
+      "plane_candidates": [
+        "Abdominal Circumference"
+      ],
+      "plane_mandatory_structures": {
+        "Abdominal Circumference": {
+          "required": [
+            "Umbilical Vein",
+            "Skin Line",
+            "Vertebrae",
+            "Stomach",
+            "Adrenal"
+          ],
+          "present": [
+            "Stomach"
+          ],
+          "missing": [
+            "Umbilical Vein",
+            "Skin Line",
+            "Vertebrae",
+            "Adrenal"
+          ],
+          "detected_fraction": 0.2,
+          "anchor_pass": false
+        },
+        "Cord Insertion": {
+          "required": [
+            "Cord Insertion",
+            "Skin Line",
+            "Vertebrae"
+          ],
+          "present": [],
+          "missing": [
+            "Cord Insertion",
+            "Skin Line",
+            "Vertebrae"
+          ],
+          "detected_fraction": 0.0,
+          "anchor_pass": false
+        },
+        "Transverse Kidneys": {
+          "required": [
+            "Kidney Cortex",
+            "Renal Pelvis",
+            "Vertebrae"
+          ],
+          "present": [],
+          "missing": [
+            "Kidney Cortex",
+            "Renal Pelvis",
+            "Vertebrae"
+          ],
+          "detected_fraction": 0.0,
+          "anchor_pass": false
+        }
+      },
+      "polygons": [
+        {
+          "structure": "Stomach",
+          "type": "polygon",
+          "points": [
+            {
+              "x": 533.0,
+              "y": 303.0
+            },
+            {
+              "x": 533.0,
+              "y": 314.0
+            },
+            {
+              "x": 537.0,
+              "y": 320.0
+            },
+            {
+              "x": 559.0,
+              "y": 330.0
+            },
+            {
+              "x": 569.0,
+              "y": 330.0
+            },
+            {
+              "x": 583.0,
+              "y": 322.0
+            },
+            {
+              "x": 588.0,
+              "y": 314.0
+            },
+            {
+              "x": 581.0,
+              "y": 297.0
+            },
+            {
+              "x": 564.0,
+              "y": 289.0
+            },
+            {
+              "x": 550.0,
+              "y": 290.0
+            }
+          ]
+        }
+      ],
+      "gt_metrics_available": false,
+      "gt_metrics": null,
+      "uv_standard": false,
+      "uv_metrics": {
+        "area": 0.0,
+        "aspect_ratio": NaN,
+        "skeleton_length": 0
+      },
+      "skin_line_shape": {
+        "circularity": 0.313627,
+        "axis_ratio": 1.27442
+      },
+      "quality_reasons": [
+        "Umbilical Vein shape constraint failed"
+      ]
+    }},
+"Biometry" : {
+
+},
+"Audit" :{
+
+}
+}

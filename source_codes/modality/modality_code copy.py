@@ -13,15 +13,39 @@ from tqdm import tqdm
 import shutil
 import torch 
 import torchvision.transforms as T
-import json
-# from source_codes.models import HierarchicalUltrasoundModel
-from models import HierarchicalUltrasoundModel
+
+from source_codes.models import HierarchicalUltrasoundModel
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 # ── CONFIG: set your image folder here ───────────────────────────────────────
 # folder = r"C:\Users\laksh\ANU\12_Full_Image_Datasets\10"
 INPUT_MODE   = 'folder'
+
+
+# output_dir.mkdir(parents=True, exist_ok=True)
+
+model = HierarchicalUltrasoundModel(
+num_anatomies=NUM_ANATOMIES,
+num_planes=NUM_PLANES,
+backbone_name='convnext_small',
+pretrained=False,
+dropout=0.3,
+).to(device)
+checkpoint = torch.load(MODEL_PATH, map_location=device)
+
+if isinstance(checkpoint, dict) and "model" in checkpoint:
+    state_dict = checkpoint["model"]
+elif isinstance(checkpoint, dict) and "state_dict" in checkpoint:
+    state_dict = checkpoint["state_dict"]
+else:
+    state_dict = checkpoint
+
+model.load_state_dict(state_dict, strict= True)
+model = model.to(device)
+model.eval()
+
+
 
 transform = T.Compose([
     T.Resize((224, 224)),
@@ -81,32 +105,7 @@ idx2anatomy = {
     for anatomy, idx in anatomy2idx.items()
 }
 
-NUM_ANATOMIES = len(idx2anatomy)
-NUM_PLANES = len(idx2plane)
-
 SUPPORTED_EXTS = {'.jpg', '.jpeg', '.png', '.bmp', '.tif', '.tiff', '.webp'}
-MODEL_PATH= "/home/htic/MLN/PIPELINE/ANUAudit_Pipeline/weights/CLASS/hierarchicalmodel27 (1).pt"
-model = HierarchicalUltrasoundModel(
-num_anatomies=NUM_ANATOMIES,
-num_planes=NUM_PLANES,
-backbone_name='convnext_small',
-pretrained=False,
-dropout=0.3,
-).to(device)
-checkpoint = torch.load(MODEL_PATH, map_location=device)
-
-if isinstance(checkpoint, dict) and "model" in checkpoint:
-    state_dict = checkpoint["model"]
-elif isinstance(checkpoint, dict) and "state_dict" in checkpoint:
-    state_dict = checkpoint["state_dict"]
-else:
-    state_dict = checkpoint
-
-model.load_state_dict(state_dict, strict= True)
-model = model.to(device)
-model.eval()
-
-
 
 def get_image_paths(mode, folder=None, df=None):
     """Return a list of absolute image path strings from a folder or a dataframe."""
@@ -124,7 +123,6 @@ def get_image_paths(mode, folder=None, df=None):
 LABEL_NAMES = ['b-mode', 'tinted', 'colour_doppler', 'pulse_doppler', 'split_screen_only', 'quadrant_images']
 CLASS_THRESHOLDS = {'b-mode': 0.950, 'tinted': 0.376, 'colour_doppler': 0.926, 'pulse_doppler': 0.950, 'split_screen_only': 0.950, 'quadrant_images': 0.950}
 
-
 class UltrasoundClassifier(nn.Module):
     def __init__(self, num_classes, dense1, dense2, dropout=0.3):
         super().__init__()
@@ -137,34 +135,17 @@ class UltrasoundClassifier(nn.Module):
     def forward(self, x):
         return self.head(self.backbone(x))
 
-def load_modality_model(model_path):
-    print("Loading Stage 1 Modality Classifier...")
-
-    checkpoint = torch.load(model_path, map_location=device)
-
-    if isinstance(checkpoint, dict) and "model" in checkpoint:
-        state_dict = checkpoint["model"]
-    elif isinstance(checkpoint, dict) and "state_dict" in checkpoint:
-        state_dict = checkpoint["state_dict"]
-    else:
-        state_dict = checkpoint
-
-    dense1 = state_dict["head.0.weight"].shape[0]
-    dense2 = state_dict["head.4.weight"].shape[0]
-    num_classes = state_dict["head.8.weight"].shape[0]
-
-    modality_model = UltrasoundClassifier(
-        num_classes,
-        dense1,
-        dense2
-    ).to(device)
-
-    modality_model.load_state_dict(state_dict)
-    modality_model.eval()
-
-    print("Stage 1 Modality Classifier loaded successfully.")
-
-    return modality_model
+print('Loading Stage 1 Modality Classifier...')
+model_path = model_path
+checkpoint = torch.load(model_path, map_location=d)
+state_dict = checkpoint['model']
+dense1 = state_dict['head.0.weight'].shape[0]
+dense2 = state_dict['head.4.weight'].shape[0]
+num_classes = state_dict['head.8.weight'].shape[0]
+modality_model = UltrasoundClassifier(num_classes, dense1, dense2).to(device)
+modality_model.load_state_dict(state_dict)
+modality_model.eval()
+modality_tf = A.Compose([A.Resize(224, 224), A.Normalize(mean=(0.485,0.456,0.406), std=(0.229,0.224,0.225)), ToTensorV2()])
 
 def add_prediction_text(
     image_bgr,
@@ -413,55 +394,6 @@ def run_model(img_bgr, model, transform, idx2anatomy, idx2plane, device):
 
         return pred_anatomy_name, anatomy_score, pred_anatomy2_name, anatomy2_score, pred_anatomy3_name, anatomy3_score, pred_plane_name, plane_score, pred_plane2_name, plane2_score, pred_plane3_name, plane3_score
 
-
-def get_classification_result(panel_bgr):
-    (
-        pred_anat1,
-        anat1_conf,
-        pred_anat2,
-        anat2_conf,
-        pred_anat3,
-        anat3_conf,
-        pred_plane1,
-        plane1_conf,
-        pred_plane2,
-        plane2_conf,
-        pred_plane3,
-        plane3_conf
-    ) = run_model(
-        panel_bgr,
-        model,
-        transform,
-        idx2anatomy,
-        idx2plane,
-        device
-    )
-
-    return {
-        "1st": {
-            "Anatomy": pred_anat1,
-            "Standard plane": pred_plane1,
-            "Standard_plane_confidence":plane1_conf,
-        },
-
-        "2nd": {
-            "Anatomy": pred_anat2,
-            "Standard plane": pred_plane2,
-            "Standard_plane_confidence":plane2_conf,
-        },
-
-        "3rd": {
-            "Anatomy": pred_anat3,
-            "Standard plane": pred_plane3,
-            "Standard_plane_confidence":plane3_conf,
-        }
-    }
-
-def get_doppler_placeholder(panel_type):
-    return {
-        "result": None
-    }
-
 # ── Resolve image list from folder or CSV ─────────────────────────────────────
 
 # Create image_path -> ground truth lookup
@@ -469,9 +401,9 @@ def get_doppler_placeholder(panel_type):
 
 def modality_split(image_folder = None):
     image_paths = get_image_paths(INPUT_MODE, folder=image_folder, df=df if INPUT_MODE == 'csv' else None)
+    results = []
     print('Starting Unified Inference...')
     for img_path in tqdm(image_paths, desc='Unified Inference'):
-        image_name = Path(img_path).name
         if not os.path.exists(img_path):
             continue
         image_bgr = cv2.imread(img_path)
@@ -479,286 +411,190 @@ def modality_split(image_folder = None):
         if image_bgr is None:
             print(f'Warning: could not read {img_path}, skipping.')
             continue
-        labels, probs = predict_panel(image_bgr)
-        if image_name == "3899671.jpg":
-            print("\n--- Modality probabilities ---")
-            for name, prob in zip(LABEL_NAMES, probs):
-                print(f"{name:20s}: {prob:.4f}")
+        labels, _ = predict_panel(image_bgr)
 
-            print("Selected labels:", labels)
-            print(f"Labels for image {image_name} : {labels}")
+        if 'colour_doppler' in labels:
+            output_dir = Path("colour_doppler")
+            output_dir.mkdir(parents=True, exist_ok=True)
 
-        is_bmode = "b-mode" in labels
-        is_tinted = "tinted" in labels
-        is_colour_doppler = "colour_doppler" in labels
-        is_pulse_doppler = "pulse_doppler" in labels
+            cv2.imwrite(
+                str(output_dir / Path(img_path).name),
+                image_bgr
+            )
 
-        is_doppler = (
-            is_colour_doppler or
-            is_pulse_doppler
-        )
+        elif 'pulse_doppler' in labels:
+            output_dir = Path("pulse_doppler")
+            output_dir.mkdir(parents=True, exist_ok=True)
 
-        is_bisplit = "split_screen_only" in labels
-        is_quadsplit = "quadrant_images" in labels
-
-        result = {
-            "Modality": {
-                "split": None
-            },
-            "classification": {}
-        }
-
-        # ============================================================
-        # CASE 1
-        # B-MODE / TINTED
-        # ============================================================
-
-        if is_bmode or is_tinted:
-
-            # ------------------------------------------------
-            # BI-SPLIT
-            # ------------------------------------------------
-            if is_bisplit:
-
-                result["Modality"]["split"] = "Bi-split"
-
-                split_x = W // 2
-
-                panels = {
-                    "left": image_bgr[:, :split_x],
-                    "right": image_bgr[:, split_x:]
-                }
-
-                for panel_name, panel_bgr in panels.items():
-
-                    result["Modality"][panel_name] = {
-                        "type": "tinted" if is_tinted else "b-mode"
-                    }
-
-                    # Directly run classification model
-                    result["classification"][panel_name] = (
-                        get_classification_result(panel_bgr)
-                    )
+            cv2.imwrite(
+                str(output_dir / Path(img_path).name),
+                image_bgr
+            )
 
 
-            # ------------------------------------------------
-            # QUAD-SPLIT
-            # ------------------------------------------------
-            elif is_quadsplit:
+        elif 'split_screen_only' in labels:
+            # ── Existing split-screen branch (unchanged) ──────────────────────────
+            # ratio = find_best_split_ratio(image_bgr)
+            split_x = W // 2
+            lbgr = image_bgr[:, :split_x]
+            rbgr = image_bgr[:, split_x:]
+            # lbgr, rbgr = generate_masked_panels(image_bgr, ratio)
+            # pred_anatomy_name, anatomy_score, pred_raw_plane_name, raw_plane_score
+            l_pred_anat1, l_anat1_conf, l_pred_anat2, l_anat2_conf, l_pred_anat3, l_anat3_conf, l_pred_plane1, l_plane1_conf, l_pred_plane2, l_plane2_conf, l_pred_plane3, l_plane3_conf = run_model(lbgr, model, transform, idx2anatomy, idx2plane, device)
+            r_pred_anat1, r_anat1_conf, r_pred_anat2, r_anat2_conf, r_pred_anat3, r_anat3_conf, r_pred_plane1, r_plane1_conf, r_pred_plane2, r_plane2_conf, r_pred_plane3, r_plane3_conf = run_model(rbgr, model, transform, idx2anatomy, idx2plane, device)
 
-                result["Modality"]["split"] = "quad-split"
+            # Add predictions to each panel
+            left_annotated = add_prediction_text(
+                lbgr,
+                l_pred_anat1,
+                l_anat1_conf,
+                l_pred_plane1,
+                l_plane1_conf
+            )
 
-                panels = extract_quad_panels(image_bgr)
+            right_annotated = add_prediction_text(
+                rbgr,
+                r_pred_anat1,
+                r_anat1_conf,
+                r_pred_plane1,
+                r_plane1_conf
+            )
 
-                for panel_name, panel_bgr in panels.items():
+            # Recombine panels
+            annotated_image = np.hstack([left_annotated, right_annotated])
 
-                    result["Modality"][panel_name] = {
-                        "type": "tinted" if is_tinted else "b-mode"
-                    }
-
-                    # Directly run classification model
-                    result["classification"][panel_name] = (
-                        get_classification_result(panel_bgr)
-                    )
+            # Save annotated split-screen image
+            output_path = output_dir / Path(img_path).name
+            cv2.imwrite(str(output_path), annotated_image)
 
 
-            # ------------------------------------------------
-            # SINGLE
-            # ------------------------------------------------
-            else:
+            # results.append({'image_path': img_path, 'panel': 'left',  'anatomy_prediction': l_pred_anat, 'anatomy_confidence': l_anat_conf, 'plane_prediction': l_pred_plane, 'plane_confidence': l_plane_conf})
+            # results.append({'image_path': img_path, 'panel': 'right', 'anatomy_prediction': r_pred_anat, 'anatomy_confidence': r_anat_conf, 'plane_prediction': r_pred_plane, 'plane_confidence': r_plane_conf})
+            results.append({
+                'image_path': img_path,
+                # 'anatomy': gt_anatomy,
+                # 'plane': gt_plane,
+                'panel': 'split_screen',
+                # Left panel
+                'left_anatomy_prediction': l_pred_anat1,
+                'left_anatomy_confidence': l_anat1_conf,
+                'left_anatomy2_prediction': l_pred_anat2,
+                'left_anatomy2_confidence': l_anat2_conf,
+                'left_anatomy3_prediction': l_pred_anat3,
+                'left_anatomy3_confidence': l_anat3_conf,
+                'left_plane_prediction': l_pred_plane1,
+                'left_plane_confidence': l_plane1_conf,
+                'left_plane2_prediction': l_pred_plane2,
+                'left_plane2_confidence': l_plane2_conf,
+                'left_plane3_prediction': l_pred_plane3,
+                'left_plane3_confidence': l_plane3_conf,
 
-                result["Modality"] = {
-                    "split": "single",
-                    "type": "tinted" if is_tinted else "b-mode"
-                }
+                # Right panel
+                'right_anatomy_prediction': r_pred_anat1,
+                'right_anatomy_confidence': r_anat1_conf,
+                'right_anatomy2_prediction': r_pred_anat2,
+                'right_anatomy2_confidence': r_anat2_conf,
+                'right_anatomy3_prediction': r_pred_anat3,
+                'right_anatomy3_confidence': r_anat3_conf,
+                'right_plane_prediction': r_pred_plane1,
+                'right_plane_confidence': r_plane1_conf,
+                'right_plane2_prediction': r_pred_plane2,
+                'right_plane2_confidence': r_plane2_conf,
+                'right_plane3_prediction': r_pred_plane3,
+                'right_plane3_confidence': r_plane3_conf,
+            })
 
-                result["classification"] = (
-                    get_classification_result(image_bgr)
+
+        elif 'quadrant_images' in labels:
+            # ── NEW: Quadrant branch ──────────────────────────────────────────────
+            panels = extract_quad_panels(image_bgr)
+            for panel_name, panel_bgr in panels.items():
+                pred_anat, anat_conf, pred_anat2, anat2_conf, pred_anat3, anat3_conf, pred_plane, plane_conf, pred_plane2, plane2_conf, pred_plane3, plane3_conf = run_model(panel_bgr, model, transform, idx2anatomy, idx2plane, device)   # same run_edl, no shortcuts
+
+                annotated_panel = add_prediction_text(
+                    panel_bgr,
+                    pred_anat,
+                    anat_conf,
+                    pred_plane,
+                    plane_conf
                 )
 
-        # ============================================================
-        # CASE 2
-        # DOPPLER + BI/QUAD SPLIT
-        # ============================================================
+                # Save each quadrant separately
+                output_name = (
+                    f"{Path(img_path).stem}_{panel_name}"
+                    f"{Path(img_path).suffix}"
+                )
 
-        elif is_doppler and is_bisplit:
+                output_path = output_dir / output_name
+                cv2.imwrite(str(output_path), annotated_panel)
 
-            result["Modality"]["split"] = "Bi-split"
 
-            H, W = image_bgr.shape[:2]
-            split_x = W // 2
+                results.append({
+                    'image_path': img_path,
+                    # 'anatomy': gt_anatomy,
+                    # 'plane': gt_plane,
+                    'panel':      panel_name,
+                    'anatomy_prediction': pred_anat,
+                    'anatomy_confidence': anat_conf,
+                    'plane_prediction': pred_plane,
+                    'plane_confidence': plane_conf,
 
-            panels = {
-                "left": image_bgr[:, :split_x],
-                "right": image_bgr[:, split_x:]
-            }
+                    'anatomy2_prediction': pred_anat2,
+                    'anatomy2_confidence': anat2_conf,
+                    'plane2_prediction': pred_plane2,
+                    'plane2_confidence': plane2_conf,
 
-            for panel_name, panel_bgr in panels.items():
+                    'anatomy3_prediction': pred_anat3,
+                    'anatomy3_confidence': anat3_conf,
+                    'plane3_prediction': pred_plane3,
+                    'plane3_confidence': plane3_conf
+                })
 
-                panel_labels, _ = predict_panel(panel_bgr)
+        else:
+            # ── Existing single-image branch (unchanged) ──────────────────────────
+            pred_anatomy_name, anatomy_score, pred_anatomy2_name, anatomy2_score, pred_anatomy3_name, anatomy3_score, pred_plane_name, plane_score, pred_plane2_name, plane2_score, pred_plane3_name, plane3_score  = run_model(image_bgr, model, transform, idx2anatomy, idx2plane, device)
 
-                # ----------------------------
-                # Determine panel modality
-                # ----------------------------
+            annotated_image = add_prediction_text(
+                image_bgr,
+                pred_anatomy_name,
+                anatomy_score,
+                pred_plane_name,
+                plane_score
+            )
 
-                if "colour_doppler" in panel_labels:
-                    panel_type = "colour_doppler"
+            output_path = output_dir / Path(img_path).name
+            cv2.imwrite(str(output_path), annotated_image)
 
-                elif "pulse_doppler" in panel_labels:
-                    panel_type = "pulse_doppler"
 
-                elif "tinted" in panel_labels:
-                    panel_type = "tinted"
+            results.append({
+                'image_path': img_path, 
+                # 'anatomy': gt_anatomy, 
+                # 'plane': gt_plane, 
+                'panel': 'full', 
+                'anatomy_prediction': pred_anatomy_name, 'anatomy_confidence': anatomy_score, 
+                'anatomy2_prediction': pred_anatomy2_name, 'anatomy2_confidence': anatomy2_score,
+                'anatomy3_prediction': pred_anatomy3_name, 'anatomy3_confidence': anatomy3_score,
+                'plane_prediction': pred_plane_name, 'plane_confidence': plane_score,
+                'plane2_prediction': pred_plane2_name, 'plane2_confidence': plane2_score,
+                'plane3_prediction': pred_plane3_name, 'plane3_confidence': plane3_score,
+                })
 
-                elif "b-mode" in panel_labels:
-                    panel_type = "b-mode"
-
-                else:
-                    panel_type = "unknown"
-
-                result["Modality"][panel_name] = {
-                    "type": panel_type
-                }
-
-                if panel_type in ["b-mode", "tinted"]:
-
-                    result["classification"][panel_name] = (
-                        get_classification_result(panel_bgr)
-                    )
-
-                elif panel_type in [
-                    "colour_doppler",
-                    "pulse_doppler"
-                ]:
-
-                    result["classification"][panel_name] = (
-                        get_doppler_placeholder(panel_type)
-                    )
-
-        elif is_doppler and is_quadsplit:
-
-            result["Modality"]["split"] = "quad-split"
-
-            panels = extract_quad_panels(image_bgr)
-
-            for panel_name, panel_bgr in panels.items():
-
-                # --------------------------------
-                # Run modality again on each panel
-                # --------------------------------
-
-                panel_labels, _ = predict_panel(panel_bgr)
-
-                if "colour_doppler" in panel_labels:
-                    panel_type = "colour_doppler"
-
-                elif "pulse_doppler" in panel_labels:
-                    panel_type = "pulse_doppler"
-
-                elif "tinted" in panel_labels:
-                    panel_type = "tinted"
-
-                elif "b-mode" in panel_labels:
-                    panel_type = "b-mode"
-
-                else:
-                    panel_type = "unknown"
-
-                result["Modality"][panel_name] = {
-                    "type": panel_type
-                }
-
-                if panel_type in ["b-mode", "tinted"]:
-
-                    result["classification"][panel_name] = (
-                        get_classification_result(panel_bgr)
-                    )
-
-                elif panel_type in [
-                    "colour_doppler",
-                    "pulse_doppler"
-                ]:
-
-                    result["classification"][panel_name] = (
-                        get_doppler_placeholder(panel_type)
-                    )
-
-        # ============================================================
-        # CASE 3
-        # DOPPLER WITHOUT BI/QUAD
-        # ============================================================
-
-        elif is_doppler:
-
-            result["Modality"]["split"] = "single"
-
-            if is_colour_doppler:
-                classification = {
-                    "result": None
-                }
-
-                result = {
-                    "Modality": {
-                        "type": "colour_doppler"
-                    },
-                    "classification": classification
-                }
-
-                # colour_result = run_colour_doppler_model(image_bgr)
-                # result["classification"] = colour_result
-
-            elif is_pulse_doppler:
-                classification = {
-                    "result": None
-                }
-
-                result = {
-                    "Modality": {
-                        "type": "pulse_doppler"
-                    },
-                    "classification": classification
-                }
-
-                # whatever pulse Doppler information you want
-                # result["classification"] = {...}
-
-        json_path = Path(output_dir) / f"{Path(img_path).stem}.json"
-
-        with open(json_path, "w") as f:
-            json.dump(result, f, indent=4)
-
-        print(f"Saved: {json_path}")
+    unified_df = pd.DataFrame(results)
+    unified_df.to_csv('unified_inference_results_march2026.csv', index=False)
+    print(f'Saved {len(unified_df)} predictions to unified_inference_results.csv')
+    unified_df.head(10)
 
 def modality_inference(IMAGE_DIRECTORY, MODEL_PATH, OUTPUT_FOLDER_PATH):
-
-    global modality_model
-    global modality_tf
-    global folder
-    global model_path
-    global output_dir
-
     if os.path.exists(OUTPUT_FOLDER_PATH):
         shutil.rmtree(OUTPUT_FOLDER_PATH)
-
     os.makedirs(OUTPUT_FOLDER_PATH, exist_ok=True)
-
+    global folder
     folder = IMAGE_DIRECTORY
+    global model_path
     model_path = MODEL_PATH
+    global output_dir
     output_dir = OUTPUT_FOLDER_PATH
-
-    # Load Stage 1 model AFTER MODEL_PATH is available
-    modality_model = load_modality_model(MODEL_PATH)
-
-    modality_tf = A.Compose([
-        A.Resize(224, 224),
-        A.Normalize(
-            mean=(0.485, 0.456, 0.406),
-            std=(0.229, 0.224, 0.225)
-        ),
-        ToTensorV2()
-    ])
-
-    modality_split(image_folder=IMAGE_DIRECTORY)
+    modality_split(image_folder = IMAGE_DIRECTORY)
 
 
 
@@ -766,7 +602,7 @@ if __name__ == "__main__":
     modality_inference(
        IMAGE_DIRECTORY = r"/home/htic/MLN/PIPELINE/ANUAudit_Pipeline/12_Full_Image_Datasets/8",
         MODEL_PATH = "/home/htic/MLN/PIPELINE/ANUAudit_Pipeline/weights/MODALITY/modality_model.pth",
-       OUTPUT_FOLDER_PATH = "/home/htic/MLN/PIPELINE/ANUAudit_Pipeline/TEMP_OUTPUT/MODALITY"
+       OUTPUT_FOLDER_PATH = Path(r"C:\Users\laksh\MLN\ANUAudit_Pipeline\TEMP_OUTPUT\MODALITY"),
     )
 
     
