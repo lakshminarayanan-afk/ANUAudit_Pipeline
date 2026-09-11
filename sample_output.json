@@ -1,0 +1,102 @@
+{
+    "Modality": {
+        "split": "single",
+        "type": "b-mode"
+    },
+    "classification": {
+        "1st": {
+            "Anatomy": "Face",
+            "Standard plane": "Median Facial Profile",
+            "Standard_plane_confidence": 0.93556147813797
+        },
+        "2nd": {
+            "Anatomy": "Upper Limbs",
+            "Standard plane": "Coronal Kidneys",
+            "Standard_plane_confidence": 0.010391994379460812
+        },
+        "3rd": {
+            "Anatomy": "Head",
+            "Standard plane": "Open Hands",
+            "Standard_plane_confidence": 0.007538432255387306
+        }
+    }
+}
+
+{
+    "Modality": {
+        "split": "bi",
+        "left":{
+            "type": "b-mode",
+            "right-mask":{
+                "x": 0.0,
+                "y": 0.0,
+                "h": 200.0,
+                "w": 200.0
+            }
+        },
+        "right":{
+            "type": "color-doppler",
+            "left-mask":{
+                "x": 0.0,
+                "y": 0.0,
+                "h": 200.0,
+                "w": 200.0
+            }
+        }
+    },
+    "classification": {
+        "left": {
+            "1st": {
+                "Anatomy": "Face",
+                "Standard plane": "Median Facial Profile",
+                "Standard_plane_confidence": 0.93556147813797
+            },
+            "2nd": {
+                "Anatomy": "Upper Limbs",
+                "Standard plane": "Coronal Kidneys",
+                "Standard_plane_confidence": 0.010391994379460812
+            },
+            "3rd": {
+                "Anatomy": "Head",
+                "Standard plane": "Open Hands",
+                "Standard_plane_confidence": 0.007538432255387306
+            }
+        },
+        "right": {
+            "1st": {
+                "Anatomy": "Face",
+                "Standard plane": "Median Facial Profile",
+                "Standard_plane_confidence": 0.93556147813797
+            },
+            "2nd": {
+                "Anatomy": "Upper Limbs",
+                "Standard plane": "Coronal Kidneys",
+                "Standard_plane_confidence": 0.010391994379460812
+            },
+            "3rd": {
+                "Anatomy": "Head",
+                "Standard plane": "Open Hands",
+                "Standard_plane_confidence": 0.007538432255387306
+            }
+        }
+    }
+}
+
+{
+    "Modality": {
+        "split": "single",
+        "type": "color-doppler"
+    },
+    "classification": {
+        "Anatomy": "Head",
+        "Standard plane": "Open Hands",
+        "Standard_plane_confidence": 0.007538432255387306
+    }
+}
+
+{
+    "Modality": {
+        "split": "single",
+        "type": "pulse-doppler"
+    }
+}

@@ -502,79 +502,79 @@ def modality_split(image_folder = None):
         is_quadsplit = "quadrant_images" in labels
 
         result = {
-            "Modality": {
+            "image_path": str(img_path),
+            "modality": {
                 "split": None
             },
             "classification": {}
         }
 
         # ============================================================
-        # CASE 1
-        # B-MODE / TINTED
+        # CASE 1.1
+        # B-MODE BI-SPLIT / QUAD-SPLIT
         # ============================================================
 
-        if is_bmode or is_tinted:
+        if is_bisplit and not is_doppler:
 
-            # ------------------------------------------------
-            # BI-SPLIT
-            # ------------------------------------------------
-            if is_bisplit:
-
-                result["Modality"]["split"] = "Bi-split"
-
-                split_x = W // 2
-
-                panels = {
-                    "left": image_bgr[:, :split_x],
-                    "right": image_bgr[:, split_x:]
+            result["modality"] = {
+                "split": "bi-split",
+                "type": {
+                    "left": "b-mode",
+                    "right": "b-mode"
                 }
+            }
 
-                for panel_name, panel_bgr in panels.items():
+            split_x = W // 2
 
-                    result["Modality"][panel_name] = {
-                        "type": "tinted" if is_tinted else "b-mode"
-                    }
-
-                    # Directly run classification model
-                    result["classification"][panel_name] = (
-                        get_classification_result(panel_bgr)
-                    )
+            panels = {
+                "left": image_bgr[:, :split_x],
+                "right": image_bgr[:, split_x:]
+            }
 
 
-            # ------------------------------------------------
-            # QUAD-SPLIT
-            # ------------------------------------------------
-            elif is_quadsplit:
+            for panel_name, panel_bgr in panels.items():
 
-                result["Modality"]["split"] = "quad-split"
-
-                panels = extract_quad_panels(image_bgr)
-
-                for panel_name, panel_bgr in panels.items():
-
-                    result["Modality"][panel_name] = {
-                        "type": "tinted" if is_tinted else "b-mode"
-                    }
-
-                    # Directly run classification model
-                    result["classification"][panel_name] = (
-                        get_classification_result(panel_bgr)
-                    )
-
-
-            # ------------------------------------------------
-            # SINGLE
-            # ------------------------------------------------
-            else:
-
-                result["Modality"] = {
-                    "split": "single",
-                    "type": "tinted" if is_tinted else "b-mode"
-                }
-
-                result["classification"] = (
-                    get_classification_result(image_bgr)
+                result["classification"][panel_name] = (
+                    get_classification_result(panel_bgr)
                 )
+
+
+        elif is_quadsplit and not is_doppler:
+
+            result["modality"] = {
+                "split": "quad-split",
+                "type": {
+                    "top_left": "b-mode",
+                    "top_right": "b-mode",
+                    "bottom_left": "b-mode",
+                    "bottom_right": "b-mode"
+                }
+            }
+
+            panels = extract_quad_panels(image_bgr)
+
+            for panel_name, panel_bgr in panels.items():
+
+                result["classification"][panel_name] = (
+                    get_classification_result(panel_bgr)
+                )
+
+
+        # ============================================================
+        # CASE 1.2
+        # SINGLE B-MODE / TINTED
+        # ============================================================
+
+        elif is_bmode or is_tinted:
+
+            result["modality"] = {
+                "split": "single",
+                "type": "tinted" if is_tinted else "b-mode"
+            }
+
+            result["classification"] = (
+                get_classification_result(image_bgr)
+            )
 
         # ============================================================
         # CASE 2
@@ -583,7 +583,10 @@ def modality_split(image_folder = None):
 
         elif is_doppler and is_bisplit:
 
-            result["Modality"]["split"] = "Bi-split"
+            result["modality"] = {
+                "split": "bi-split",
+                "type": {}
+            }
 
             H, W = image_bgr.shape[:2]
             split_x = W // 2
@@ -616,9 +619,7 @@ def modality_split(image_folder = None):
                 else:
                     panel_type = "unknown"
 
-                result["Modality"][panel_name] = {
-                    "type": panel_type
-                }
+                result["modality"]["type"][panel_name] = panel_type
 
                 if panel_type in ["b-mode", "tinted"]:
 
@@ -637,7 +638,10 @@ def modality_split(image_folder = None):
 
         elif is_doppler and is_quadsplit:
 
-            result["Modality"]["split"] = "quad-split"
+            result["modality"] = {
+                "split": "quad-split",
+                "type": {}
+            }
 
             panels = extract_quad_panels(image_bgr)
 
@@ -664,9 +668,7 @@ def modality_split(image_folder = None):
                 else:
                     panel_type = "unknown"
 
-                result["Modality"][panel_name] = {
-                    "type": panel_type
-                }
+                result["modality"]["type"][panel_name] = panel_type
 
                 if panel_type in ["b-mode", "tinted"]:
 
@@ -690,7 +692,7 @@ def modality_split(image_folder = None):
 
         elif is_doppler:
 
-            result["Modality"]["split"] = "single"
+            result["modality"]["split"] = "single"
 
             if is_colour_doppler:
                 classification = {
@@ -698,7 +700,7 @@ def modality_split(image_folder = None):
                 }
 
                 result = {
-                    "Modality": {
+                    "modality": {
                         "type": "colour_doppler"
                     },
                     "classification": classification
@@ -713,7 +715,7 @@ def modality_split(image_folder = None):
                 }
 
                 result = {
-                    "Modality": {
+                    "modality": {
                         "type": "pulse_doppler"
                     },
                     "classification": classification

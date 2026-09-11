@@ -1,3 +1,8 @@
-from source_codes.classification.inference import inference_fn
+from source_codes.modality.modality_code import modality_inference    
 
-results= inference_fn(ROOT_DIR=r"C:\Users\laksh\ANU\12_Full_Image_Datasets\ClinicalPatient_13_dcm", MODEL_PATH=r"C:\Users\laksh\ANU\weights\CLASS\hierarchicalmodel27 (1).pt", OUTPUT_FOLDER_PATH=r"C:\Users\laksh\MLN\ANUAudit_Pipeline\TEMP_OUTPUT\CLASS")
+modality_inference(
+       IMAGE_DIRECTORY = r"/home/htic/MLN/PIPELINE/ANUAudit_Pipeline/12_Full_Image_Datasets/8",
+        MODEL_PATH = "/home/htic/MLN/PIPELINE/ANUAudit_Pipeline/weights/MODALITY/modality_model.pth",
+       OUTPUT_FOLDER_PATH = "/home/htic/MLN/PIPELINE/ANUAudit_Pipeline/TEMP_OUTPUT/MODALITY"
+    )
+
