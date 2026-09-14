@@ -1,5 +1,4 @@
-
-### ORCHESTRATOR
+from source_codes.model_config import MODEL_CONFIG
 
 def build_initial_batches(items):
     batches = {}
@@ -25,7 +24,6 @@ def move_to_next_candidate(item, next_batches):
     next_batches[next_anatomy].append(item)
 
 ### PIPELINE
-
 def run_segmentation_pipeline(items):
 
     current_batches = build_initial_batches(items)
@@ -35,67 +33,42 @@ def run_segmentation_pipeline(items):
         print("\n" + "=" * 70)
         print("NEW PIPELINE ROUND")
         print("=" * 70)
-
         next_batches = {}
 
         for anatomy, batch in current_batches.items():
-
             print()
             print("-" * 70)
             print(f"Running model: {anatomy}")
             print(f"Images: {len(batch)}")
             print("-" * 70)
-
             model_function = MODEL_CONFIG[anatomy]["function"]
 
             # ---------------------------------------
             # Run the actual segmentation model
             # ---------------------------------------
-
             results = model_function(batch)
-
             # results should correspond to batch
             for item, result in zip(batch, results):
-
                 status = result["status"]
 
-                # ---------------------------------------
-                # STANDARD → DONE
-                # ---------------------------------------
-
                 if status == "standard":
-
                     item["status"] = "standard"
-                    item["result"] = result
-
-                    print(
-                        f"[STANDARD] "
-                        f"{item['image_path']} "
-                        f"({item['side']})"
-                    )
 
                 # ---------------------------------------
                 # UNKNOWN / NON-STANDARD → NEXT MODEL
                 # ---------------------------------------
-
                 else:
-
-                    print(
-                        f"[{status.upper()}] "
-                        f"{item['image_path']} "
-                        f"({item['side']}) "
-                        f"→ next candidate"
-                    )
-
+                    # print(
+                    #     f"[{status.upper()}] "
+                    #     f"{item['image_path']} "
+                    #     f"({item['side']}) "
+                    #     f"→ next candidate"
+                    # )
                     move_to_next_candidate(
                         item,
                         next_batches
                     )
 
-        # ---------------------------------------
-        # Next round
-        # ---------------------------------------
-
         current_batches = next_batches
-
+        
     return items

@@ -1,0 +1,330 @@
+{
+  "image_path": "/home/htic/MLN/PIPELINE/ANUAudit_Pipeline/12_Full_Image_Datasets/TEST/bi_head.png",
+  "modality": {
+    "split": "bi-split",
+    "type": {
+      "left": "b-mode",
+      "right": "b-mode"
+    }
+  },
+  "classification": {
+    "left": {
+      "1st": {
+        "Anatomy": "Head",
+        "Standard plane": "Transventricular plane",
+        "Standard_plane_confidence": 0.998420000076294
+      },
+      "2nd": {
+        "Anatomy": "Upper Limbs",
+        "Standard plane": "Transcerebellar plane",
+        "Standard_plane_confidence": 0.0009583774372003973
+      },
+      "3rd": {
+        "Anatomy": "Head",
+        "Standard plane": "Placenta",
+        "Standard_plane_confidence": 0.10507606714963913
+      }
+    },
+    "right": {
+      "1st": {
+        "Anatomy": "Head",
+        "Standard plane": "Transventricular plane",
+        "Standard_plane_confidence": 0.9946761131286621
+      },
+      "2nd": {
+        "Anatomy": "Upper Limbs",
+        "Standard plane": "Transthalamic plane",
+        "Standard_plane_confidence": 0.004601750988513231
+      },
+      "3rd": {
+        "Anatomy": "Fetal Environment",
+        "Standard plane": "Radius and Ulna",
+        "Standard_plane_confidence": 0.003739207750186324
+      }
+    }
+  },
+  "segmentation": {
+    "left": {
+      "1st": {
+        "image_path": "/home/htic/MLN/PIPELINE/ANUAudit_Pipeline/12_Full_Image_Datasets/TEST/bi_head.png",
+        "summary": {
+          "n_structures_predicted": 4,
+          "n_structures_ok": 0,
+          "n_structures_low_contrast": 4,
+          "n_structures_low_conf": 1,
+          "n_structures_locally_blurry": 1,
+          "overall_image_quality": "poor"
+        },
+        "structures": [
+          {
+            "structure_name": "Hemisphere 1",
+            "segmentation_confidence": {
+              "value": 0.7944,
+              "qualitative": "high",
+              "threshold": 0.5
+            },
+            "local_contrast": {
+              "value": 0.2,
+              "qualitative": "low",
+              "threshold": 10.0
+            },
+            "local_blur": {
+              "value": 302.47,
+              "qualitative": "sharp",
+              "threshold": 10.0
+            }
+          },
+          {
+            "structure_name": "Hemisphere 2",
+            "segmentation_confidence": {
+              "value": 0.7243,
+              "qualitative": "high",
+              "threshold": 0.5
+            },
+            "local_contrast": {
+              "value": 6.28,
+              "qualitative": "low",
+              "threshold": 10.0
+            },
+            "local_blur": {
+              "value": 175.33,
+              "qualitative": "sharp",
+              "threshold": 10.0
+            }
+          },
+          {
+            "structure_name": "Midline Falx",
+            "segmentation_confidence": {
+              "value": 0.8323,
+              "qualitative": "high",
+              "threshold": 0.5
+            },
+            "local_contrast": {
+              "value": 0.1,
+              "qualitative": "low",
+              "threshold": 12.0
+            },
+            "local_blur": {
+              "value": 2.23,
+              "qualitative": "blurry",
+              "threshold": 15.0
+            }
+          },
+          {
+            "structure_name": "Inner Calvarium",
+            "segmentation_confidence": {
+              "value": 0.9494,
+              "qualitative": "low",
+              "threshold": 0.95
+            },
+            "local_contrast": {
+              "value": 5.12,
+              "qualitative": "low",
+              "threshold": 30.0
+            },
+            "local_blur": {
+              "value": 168.92,
+              "qualitative": "sharp",
+              "threshold": 25.0
+            }
+          }
+        ]
+      }
+    },
+    "right": {
+      "1st": {
+        "image_path": "/home/htic/MLN/PIPELINE/ANUAudit_Pipeline/12_Full_Image_Datasets/TEST/bi_head.png",
+        "summary": {
+          "n_structures_predicted": 10,
+          "n_structures_ok": 2,
+          "n_structures_low_contrast": 8,
+          "n_structures_low_conf": 0,
+          "n_structures_locally_blurry": 0,
+          "overall_image_quality": "poor"
+        },
+        "structures": [
+          {
+            "structure_name": "Hemisphere 1",
+            "segmentation_confidence": {
+              "value": 0.9658,
+              "qualitative": "high",
+              "threshold": 0.5
+            },
+            "local_contrast": {
+              "value": 11.14,
+              "qualitative": "good",
+              "threshold": 10.0
+            },
+            "local_blur": {
+              "value": 441.43,
+              "qualitative": "sharp",
+              "threshold": 10.0
+            }
+          },
+          {
+            "structure_name": "Hemisphere 2",
+            "segmentation_confidence": {
+              "value": 0.9668,
+              "qualitative": "high",
+              "threshold": 0.5
+            },
+            "local_contrast": {
+              "value": 2.93,
+              "qualitative": "low",
+              "threshold": 10.0
+            },
+            "local_blur": {
+              "value": 171.17,
+              "qualitative": "sharp",
+              "threshold": 10.0
+            }
+          },
+          {
+            "structure_name": "Midline Falx",
+            "segmentation_confidence": {
+              "value": 0.9723,
+              "qualitative": "high",
+              "threshold": 0.5
+            },
+            "local_contrast": {
+              "value": 0.31,
+              "qualitative": "low",
+              "threshold": 12.0
+            },
+            "local_blur": {
+              "value": 42.19,
+              "qualitative": "sharp",
+              "threshold": 15.0
+            }
+          },
+          {
+            "structure_name": "Anterior Horn of Lateral Ventricles 2",
+            "segmentation_confidence": {
+              "value": 0.9848,
+              "qualitative": "high",
+              "threshold": 0.5
+            },
+            "local_contrast": {
+              "value": 20.81,
+              "qualitative": "good",
+              "threshold": 12.0
+            },
+            "local_blur": {
+              "value": 190.9,
+              "qualitative": "sharp",
+              "threshold": 15.0
+            }
+          },
+          {
+            "structure_name": "Anterior Midline Falx",
+            "segmentation_confidence": {
+              "value": 0.9775,
+              "qualitative": "high",
+              "threshold": 0.5
+            },
+            "local_contrast": {
+              "value": 1.91,
+              "qualitative": "low",
+              "threshold": 12.0
+            },
+            "local_blur": {
+              "value": 242.85,
+              "qualitative": "sharp",
+              "threshold": 15.0
+            }
+          },
+          {
+            "structure_name": "Choroid Plexus 2",
+            "segmentation_confidence": {
+              "value": 0.9775,
+              "qualitative": "high",
+              "threshold": 0.5
+            },
+            "local_contrast": {
+              "value": 0.0,
+              "qualitative": "low",
+              "threshold": 15.0
+            },
+            "local_blur": {
+              "value": 123.67,
+              "qualitative": "sharp",
+              "threshold": 15.0
+            }
+          },
+          {
+            "structure_name": "Lateral Ventricle 2",
+            "segmentation_confidence": {
+              "value": 0.8365,
+              "qualitative": "high",
+              "threshold": 0.5
+            },
+            "local_contrast": {
+              "value": 1.87,
+              "qualitative": "low",
+              "threshold": 5.0
+            },
+            "local_blur": {
+              "value": 179.69,
+              "qualitative": "sharp",
+              "threshold": 10.0
+            }
+          },
+          {
+            "structure_name": "Posterior Horn of Lateral Ventricle 2",
+            "segmentation_confidence": {
+              "value": 0.9971,
+              "qualitative": "high",
+              "threshold": 0.5
+            },
+            "local_contrast": {
+              "value": 0.08,
+              "qualitative": "low",
+              "threshold": 12.0
+            },
+            "local_blur": {
+              "value": 34.24,
+              "qualitative": "sharp",
+              "threshold": 15.0
+            }
+          },
+          {
+            "structure_name": "Inner Calvarium",
+            "segmentation_confidence": {
+              "value": 0.9945,
+              "qualitative": "high",
+              "threshold": 0.95
+            },
+            "local_contrast": {
+              "value": 23.06,
+              "qualitative": "low",
+              "threshold": 30.0
+            },
+            "local_blur": {
+              "value": 314.91,
+              "qualitative": "sharp",
+              "threshold": 25.0
+            }
+          },
+          {
+            "structure_name": "Outer Calvarium",
+            "segmentation_confidence": {
+              "value": 0.9925,
+              "qualitative": "high",
+              "threshold": 0.95
+            },
+            "local_contrast": {
+              "value": 15.39,
+              "qualitative": "low",
+              "threshold": 30.0
+            },
+            "local_blur": {
+              "value": 333.11,
+              "qualitative": "sharp",
+              "threshold": 25.0
+            }
+          }
+        ]
+      }
+    }
+  }
+}

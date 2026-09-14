@@ -14,8 +14,9 @@ import shutil
 import torch 
 import torchvision.transforms as T
 import json
-# from source_codes.models import HierarchicalUltrasoundModel
-from models import HierarchicalUltrasoundModel
+from source_codes.modality.models import HierarchicalUltrasoundModel
+from utils.image_utils import load_image
+# from models import HierarchicalUltrasoundModel
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
@@ -81,10 +82,26 @@ idx2anatomy = {
     for anatomy, idx in anatomy2idx.items()
 }
 
+valid_planes_for_anatomy = {
+    "0": [2, 6, 7, 26],
+    "3": [25, 24, 23],
+    "6": [1, 12, 19, 0],
+    "7": [11, 20, 15],
+    "4": [9, 22, 4],
+    "1": [13, 14, 16, 18],
+    "5": [21, 8, 10],
+    "2": [3, 17, 5]
+  }
+
+valid_planes_for_anatomy = {
+    int(k): [int(x) for x in v]
+    for k, v in valid_planes_for_anatomy.items()
+}
+
 NUM_ANATOMIES = len(idx2anatomy)
 NUM_PLANES = len(idx2plane)
 
-SUPPORTED_EXTS = {'.jpg', '.jpeg', '.png', '.bmp', '.tif', '.tiff', '.webp'}
+SUPPORTED_EXTS = {'.jpg', '.jpeg', '.png', '.bmp', '.tif', '.tiff', '.webp', '.dcm', '.dicom'}
 MODEL_PATH= "/home/htic/MLN/PIPELINE/ANUAudit_Pipeline/weights/CLASS/hierarchicalmodel27 (1).pt"
 model = HierarchicalUltrasoundModel(
 num_anatomies=NUM_ANATOMIES,
@@ -280,6 +297,46 @@ def extract_quad_panels(image_bgr):
     }
 
 # ── run_edl at module scope so all branches (split, quadrant, single) can call it ──
+def hierarchical_predict(
+    anatomy_logits,
+    plane_logits,
+    valid_planes_for_anatomy
+):
+    pred_anatomy = anatomy_logits.argmax(dim=1)
+
+    pred_plane_raw = plane_logits.argmax(dim=1)
+
+    masked = plane_logits.clone()
+    num_planes = masked.shape[1]
+
+    for b in range(masked.size(0)):
+
+        aidx = pred_anatomy[b].item()
+
+        valid = valid_planes_for_anatomy.get(
+            aidx,
+            list(range(num_planes))
+        )
+
+        invalid_mask = torch.ones(
+            num_planes,
+            dtype=torch.bool,
+            device=masked.device
+        )
+
+        invalid_mask[valid] = False
+
+        masked[b, invalid_mask] = -1e9
+
+    pred_plane_masked = masked.argmax(dim=1)
+
+    return (
+        pred_anatomy,
+        pred_plane_masked,
+        pred_plane_raw,
+        masked
+    )
+
 def run_model(img_bgr, model, transform, idx2anatomy, idx2plane, device):
     img_rgb = cv2.cvtColor(img_bgr, cv2.COLOR_BGR2RGB)
     img = Image.fromarray(img_rgb)
@@ -290,128 +347,78 @@ def run_model(img_bgr, model, transform, idx2anatomy, idx2plane, device):
         [img, img, img]
     )
 
-    input_tensor = (
-        transform(image)
-        .unsqueeze(0)
-        .to(device)
-    )
+    input_tensor = transform(image).unsqueeze(0).to(device)
+
     with torch.no_grad():
+
         output = model(input_tensor)
-        # anatomy_logits = output["anatomy"]
 
-        # anatomy_probs = torch.softmax(
-        #     anatomy_logits,
-        #     dim=1
-        # )
-
-        # top3_scores, top3_indices = torch.topk(
-        #     anatomy_probs,
-        #     k=3,
-        #     dim=1
-        # )
-
-        # # Top-1
-        # pred_anatomy_idx = top3_indices[0, 0].item()
-        # pred_anatomy_name = idx2anatomy[pred_anatomy_idx]
-        # anatomy_score = top3_scores[0, 0].item()
-        # # =================================================
-        # # 2. RAW PLANE
-        # # =================================================
-
-        # plane_logits = output["plane"]
-
-        # plane_probs = torch.softmax(
-        #     plane_logits,
-        #     dim=1
-        # )
-
-        # pred_raw_plane_idx = plane_probs.argmax(
-        #     dim=1
-        # ).item()
-
-        # pred_raw_plane_name = idx2plane[
-        #     pred_raw_plane_idx
-        # ]
-
-        # raw_plane_score = plane_probs[
-        #     0,
-        #     pred_raw_plane_idx
-        # ].item()
         anatomy_logits = output["anatomy"]
-        
-        anatomy_probs = torch.softmax(
-            anatomy_logits,
-            dim=1
-        )
-
-        top3_scores, top3_indices = torch.topk(
-            anatomy_probs,
-            k=3,
-            dim=1
-        )
-
-        # Top-1
-        pred_anatomy_idx = top3_indices[0, 0].item()
-        pred_anatomy_name = idx2anatomy[pred_anatomy_idx]
-        anatomy_score = top3_scores[0, 0].item()
-
-        # Top-2
-        pred_anatomy2_idx = top3_indices[0, 1].item()
-        pred_anatomy2_name = idx2anatomy[pred_anatomy2_idx]
-        anatomy2_score = top3_scores[0, 1].item()
-
-        # Top-3
-        pred_anatomy3_idx = top3_indices[0, 2].item()
-        pred_anatomy3_name = idx2anatomy[pred_anatomy3_idx]
-        anatomy3_score = top3_scores[0, 2].item()
-
-        # =================================================
-        # 2. RAW PLANE
-        # =================================================
-
         plane_logits = output["plane"]
 
-        plane_probs = torch.softmax(
-            plane_logits,
-            dim=1
-        )
+        # =================================================
+        # 1. ANATOMY TOP-3
+        # =================================================
 
-        # pred_raw_plane_idx = plane_probs.argmax(
-        #     dim=1
-        # ).item()
+        anatomy_probs = torch.softmax(anatomy_logits, dim=1)
 
-        # pred_raw_plane_name = idx2plane[
-        #     pred_raw_plane_idx
-        # ]
+        anatomy_top3_scores, anatomy_top3_indices = torch.topk(anatomy_probs, k=3, dim=1)
 
-        # raw_plane_score = plane_probs[
-        #     0,
-        #     pred_raw_plane_idx
-        # ].item()
+        pred_anatomy_idx = anatomy_top3_indices[0, 0].item()
+        pred_anatomy_name = idx2anatomy[pred_anatomy_idx]
+        anatomy_score = anatomy_top3_scores[0, 0].item()
 
-        top3_scores, top3_indices = torch.topk(
-            plane_probs,
-            k=3,
-            dim=1
-        )
+        pred_anatomy2_idx = anatomy_top3_indices[0, 1].item()
+        pred_anatomy2_name = idx2anatomy[pred_anatomy2_idx]
+        anatomy2_score = anatomy_top3_scores[0, 1].item()
 
-        # Top-1
-        pred_plane_idx = top3_indices[0, 0].item()
-        pred_plane_name = idx2plane[pred_plane_idx]
-        plane_score = top3_scores[0, 0].item()
+        pred_anatomy3_idx = anatomy_top3_indices[0, 2].item()
+        pred_anatomy3_name = idx2anatomy[pred_anatomy3_idx]
+        anatomy3_score = anatomy_top3_scores[0, 2].item()
 
-        # Top-2
-        pred_plane2_idx = top3_indices[0, 1].item()
-        pred_plane2_name = idx2plane[pred_plane2_idx]
-        plane2_score = top3_scores[0, 1].item()
+        # =================================================
+        # 2. HIERARCHICAL PLANE
+        # =================================================
 
-        # Top-3
-        pred_plane3_idx = top3_indices[0, 2].item()
-        pred_plane3_name = idx2plane[pred_plane3_idx]
-        plane3_score = top3_scores[0, 2].item()
+        pred_anatomy, pred_plane_masked, pred_plane_raw, masked_plane_logits = hierarchical_predict(anatomy_logits, plane_logits, valid_planes_for_anatomy)
         
 
-        return pred_anatomy_name, anatomy_score, pred_anatomy2_name, anatomy2_score, pred_anatomy3_name, anatomy3_score, pred_plane_name, plane_score, pred_plane2_name, plane2_score, pred_plane3_name, plane3_score
+        # =================================================
+        # 3. HIERARCHICAL PLANE TOP-3
+        # =================================================
+
+        plane_probs = torch.softmax(masked_plane_logits, dim=1)
+
+        plane_top3_scores, plane_top3_indices = torch.topk(plane_probs, k=3, dim=1)
+
+        pred_plane_idx = plane_top3_indices[0, 0].item()
+        pred_plane_name = idx2plane[pred_plane_idx]
+        plane_score = plane_top3_scores[0, 0].item()
+
+        pred_plane2_idx = plane_top3_indices[0, 1].item()
+        pred_plane2_name = idx2plane[pred_plane2_idx]
+        plane2_score = plane_top3_scores[0, 1].item()
+
+        pred_plane3_idx = plane_top3_indices[0, 2].item()
+        pred_plane3_name = idx2plane[pred_plane3_idx]
+        plane3_score = plane_top3_scores[0, 2].item()
+
+        return (
+            pred_anatomy_name,
+            anatomy_score,
+            pred_anatomy2_name,
+            anatomy2_score,
+            pred_anatomy3_name,
+            anatomy3_score,
+
+            pred_plane_name,
+            plane_score,
+            pred_plane2_name,
+            plane2_score,
+            pred_plane3_name,
+            plane3_score
+        )
+
 
 
 def get_classification_result(panel_bgr):
@@ -471,10 +478,12 @@ def modality_split(image_folder = None):
     image_paths = get_image_paths(INPUT_MODE, folder=image_folder, df=df if INPUT_MODE == 'csv' else None)
     print('Starting Unified Inference...')
     for img_path in tqdm(image_paths, desc='Unified Inference'):
+        image_rgb = load_image(img_path)
+        image_bgr = cv2.cvtColor(image_rgb, cv2.COLOR_RGB2BGR)
         image_name = Path(img_path).name
         if not os.path.exists(img_path):
             continue
-        image_bgr = cv2.imread(img_path)
+        # image_bgr = cv2.imread(img_path)
         H, W, _ = image_bgr.shape
         if image_bgr is None:
             print(f'Warning: could not read {img_path}, skipping.')
@@ -692,7 +701,7 @@ def modality_split(image_folder = None):
 
         elif is_doppler:
 
-            result["modality"]["split"] = "single"
+            # result["modality"]["split"] = "single"
 
             if is_colour_doppler:
                 classification = {
@@ -701,6 +710,7 @@ def modality_split(image_folder = None):
 
                 result = {
                     "modality": {
+                        "split" : "single",
                         "type": "colour_doppler"
                     },
                     "classification": classification
@@ -716,6 +726,7 @@ def modality_split(image_folder = None):
 
                 result = {
                     "modality": {
+                        "split" : "single",
                         "type": "pulse_doppler"
                     },
                     "classification": classification
@@ -729,7 +740,7 @@ def modality_split(image_folder = None):
         with open(json_path, "w") as f:
             json.dump(result, f, indent=4)
 
-        print(f"Saved: {json_path}")
+        # print(f"Saved: {json_path}")
 
 def modality_inference(IMAGE_DIRECTORY, MODEL_PATH, OUTPUT_FOLDER_PATH):
 

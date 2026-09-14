@@ -1,57 +1,102 @@
-RANKS = ["1st", "2nd", "3rd"]
-
 import json
 from pathlib import Path
 
-def generate_candidates(classification):
+RANKS = ["1st", "2nd", "3rd"]
+SKIP_MODALITIES = {
+    "colour_doppler",
+    "pulse_doppler"
+}
+
+def generate_candidates(data):
+    classification = data.get("classification", {})
+    modality = data.get("modality", {})
+    split = modality.get("split")
+    modality_types = modality.get("type")
     candidates = {}
-    for side, predictions in classification.items():
-        side_candidates = []
-        seen = set()
-        for rank in RANKS:
-            prediction = predictions.get(rank)
-            if not prediction:
+
+    if split == "single":
+        panel_type = modality_types
+        if panel_type in SKIP_MODALITIES:
+            print(f"[SKIP] Single panel is {panel_type} → no segmentation")
+            return {}
+        candidates["single"] = build_side_candidates(classification)
+        print(f"[CANDIDATES] Single → {candidates['single']}")
+
+    elif split in ["bi-split", "quad-split"]:
+        for panel_name, predictions in classification.items():
+            panel_type = modality_types.get(panel_name)
+            if panel_type in SKIP_MODALITIES:
+                print(f"[SKIP] {panel_name} is {panel_type} → no segmentation")
                 continue
-            anatomy = prediction.get("Anatomy")
-            if not anatomy:
-                continue
-            # Remove duplicate anatomy models
-            if anatomy in seen:
-                continue
-            seen.add(anatomy)
-            side_candidates.append({
-                "anatomy": anatomy,
-                "rank": rank,
-                "standard_plane": prediction.get("Standard plane"),
-                "confidence": prediction.get(
-                    "Standard_plane_confidence"
-                )
-            })
-        candidates[side] = side_candidates
+            panel_candidates = build_side_candidates(predictions)
+            if panel_candidates:
+                candidates[panel_name] = panel_candidates
+                print(f"[CANDIDATES] {panel_name} ({panel_type}) → {panel_candidates}")
+            else:
+                print(f"[SKIP] {panel_name} has no valid candidates")
+
+    else:
+        print(f"[SKIP] Unknown split type: {split}")
+        return {}
     return candidates
 
+def build_side_candidates(predictions):
+    side_candidates = []
+    seen = set()
+    for rank in RANKS:
+        prediction = predictions.get(rank)
+        if not prediction:
+            print("There is no prediction. SOMME error in the json strcuture/code")
+            continue
+        anatomy = prediction.get("Anatomy")
+        if not anatomy:
+            continue
+        if anatomy in seen:
+            print(f"[SKIP] Duplicate anatomy: {anatomy}")
+            continue
+        seen.add(anatomy)
+        side_candidates.append({
+            "anatomy": anatomy,
+            "rank": rank,
+            "standard_plane": prediction.get("Standard plane"),
+            "confidence": prediction.get("Standard_plane_confidence")
+        })
+    return side_candidates
 
 def load_pipeline_inputs(json_folder):
     json_folder = Path(json_folder)
     items = []
-    for json_path in json_folder.glob("*.json"):
+    json_paths = list(json_folder.glob("*.json"))
+    print(f"[LOAD] Found {len(json_paths)} JSON files")
+    for json_path in json_paths:
+        print(f"\n[PROCESSING] {json_path}")
         with open(json_path, "r") as f:
             data = json.load(f)
-        candidates = generate_candidates(
-            data["classification"]
-        )
-        for side, side_candidates in candidates.items():
-            if not side_candidates:
+        modality = data.get("modality", {})
+        candidates = generate_candidates(data)
+        if not candidates:
+            print(f"[SKIP] {json_path.name} → no segmentation candidates")
+            continue
+        for panel_name, panel_candidates in candidates.items():
+            if not panel_candidates:
+                print(f"[SKIP] {json_path.name} / {panel_name} → no candidates")
                 continue
+            split = modality.get("split")
+            modality_types = modality.get("type")
+            if split == "single":
+                panel_type = modality_types
+            else:
+                panel_type = modality_types.get(panel_name)
             items.append({
                 "image_path": data["image_path"],
                 "json_path": str(json_path),
-                "side": side,
-                "candidates": side_candidates,
-                # Which canddate are we currently trying?
+                "panel": panel_name,
+                "modality": panel_type,
+                "candidates": panel_candidates,
                 "current_index": 0,
                 "status": "pending",
                 "result": None
             })
+            print(f"[ADDED] {json_path.name} | {panel_name} | {panel_type} | First model: {panel_candidates[0]['anatomy']}")
+    print(f"\n[DONE] Total pipeline items: {len(items)}")
     return items
-
