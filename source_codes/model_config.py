@@ -1,9 +1,9 @@
 from source_codes.modality.modality_code import modality_inference
 
 from source_codes.seg.UNET_SoftMAk.inf import run_inference_head
-# from source_codes.seg.ABDOMEN.abdomen_inference import run_inference_abdomen
-# from source_codes.seg.LIMBS.limbs_inference import run_inference_limbs
-# from source_codes.seg.FACE.face_inference import run_inference_face
+from source_codes.seg.ABDOMEN.abdomen_inference import run_inference_abdomen
+from source_codes.seg.LIMBS.limbs_inference import run_inference_limbs
+from source_codes.seg.FACE.face_inference import run_inference_face
 
 from config import Config
 
@@ -91,3 +91,22 @@ MODEL_CONFIG = {
 }
 
 
+BIOM_MODEL_PLANE_CONFIG = {
+    "bpd": [
+        "Transthalamic plane",
+    ],
+
+    "abdomen": [
+        "Abdominal Circumference",
+    ],
+
+    "limbs": [
+        "Femur",
+    ],
+
+    "tc" : ["Transcerebellar plane"],
+    "tv" : ["Transventricular plane"],
+
+    "liquor" : ["Amniotic Fluid or Liquor"]
+
+}

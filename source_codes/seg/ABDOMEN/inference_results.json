@@ -1,0 +1,2939 @@
+{
+  "run_summary": {
+    "n_images": 10,
+    "n_images_with_gt": 0,
+    "mean_structure_dice_over_images_with_gt": null
+  },
+  "images": [
+    {
+      "image_path": "C:\\Users\\laksh\\ANU\\OUTPUT\\CLASS\\ClinicalPatient_13_dcm\\Abdomen\\Abdominal Circumference\\IMG_20260220_1_107.dcm",
+      "vis_path": "C:\\Users\\laksh\\ANU\\OUTPUT\\SEG\\ClinicalPatient_13_dcm\\Abdomen\\visualisations\\IMG_20260220_1_107_vis.png",
+      "input_filename": "IMG_20260220_1_107.dcm",
+      "plane": "Abdominal Circumference",
+      "plane_quality": "Non-Standard",
+      "mean_structure_confidence": 0.980722,
+      "plane_candidates": [
+        "Abdominal Circumference"
+      ],
+      "plane_mandatory_structures": {
+        "Abdominal Circumference": {
+          "required": [
+            "Umbilical Vein",
+            "Skin Line",
+            "Vertebrae",
+            "Stomach",
+            "Adrenal"
+          ],
+          "present": [
+            "Stomach"
+          ],
+          "missing": [
+            "Umbilical Vein",
+            "Skin Line",
+            "Vertebrae",
+            "Adrenal"
+          ],
+          "detected_fraction": 0.2,
+          "anchor_pass": false
+        },
+        "Cord Insertion": {
+          "required": [
+            "Cord Insertion",
+            "Skin Line",
+            "Vertebrae"
+          ],
+          "present": [],
+          "missing": [
+            "Cord Insertion",
+            "Skin Line",
+            "Vertebrae"
+          ],
+          "detected_fraction": 0.0,
+          "anchor_pass": false
+        },
+        "Transverse Kidneys": {
+          "required": [
+            "Kidney Cortex",
+            "Renal Pelvis",
+            "Vertebrae"
+          ],
+          "present": [],
+          "missing": [
+            "Kidney Cortex",
+            "Renal Pelvis",
+            "Vertebrae"
+          ],
+          "detected_fraction": 0.0,
+          "anchor_pass": false
+        }
+      },
+      "polygons": [
+        {
+          "structure": "Stomach",
+          "type": "polygon",
+          "points": [
+            {
+              "x": 533.0,
+              "y": 303.0
+            },
+            {
+              "x": 533.0,
+              "y": 314.0
+            },
+            {
+              "x": 537.0,
+              "y": 320.0
+            },
+            {
+              "x": 559.0,
+              "y": 330.0
+            },
+            {
+              "x": 569.0,
+              "y": 330.0
+            },
+            {
+              "x": 583.0,
+              "y": 322.0
+            },
+            {
+              "x": 588.0,
+              "y": 314.0
+            },
+            {
+              "x": 581.0,
+              "y": 297.0
+            },
+            {
+              "x": 564.0,
+              "y": 289.0
+            },
+            {
+              "x": 550.0,
+              "y": 290.0
+            }
+          ]
+        }
+      ],
+      "gt_metrics_available": false,
+      "gt_metrics": null,
+      "uv_standard": false,
+      "uv_metrics": {
+        "area": 0.0,
+        "aspect_ratio": NaN,
+        "skeleton_length": 0
+      },
+      "skin_line_shape": {
+        "circularity": 0.313627,
+        "axis_ratio": 1.27442
+      },
+      "quality_reasons": [
+        "Umbilical Vein shape constraint failed"
+      ]
+    },
+    {
+      "image_path": "C:\\Users\\laksh\\ANU\\OUTPUT\\CLASS\\ClinicalPatient_13_dcm\\Abdomen\\Abdominal Circumference\\IMG_20260220_1_34.dcm",
+      "vis_path": "C:\\Users\\laksh\\ANU\\OUTPUT\\SEG\\ClinicalPatient_13_dcm\\Abdomen\\visualisations\\IMG_20260220_1_34_vis.png",
+      "input_filename": "IMG_20260220_1_34.dcm",
+      "plane": "Abdominal Circumference",
+      "plane_quality": "Non-Standard",
+      "mean_structure_confidence": 0.978459,
+      "plane_candidates": [
+        "Abdominal Circumference",
+        "Cord Insertion"
+      ],
+      "plane_mandatory_structures": {
+        "Abdominal Circumference": {
+          "required": [
+            "Umbilical Vein",
+            "Skin Line",
+            "Vertebrae",
+            "Stomach",
+            "Adrenal"
+          ],
+          "present": [
+            "Umbilical Vein",
+            "Skin Line",
+            "Vertebrae",
+            "Stomach"
+          ],
+          "missing": [
+            "Adrenal"
+          ],
+          "detected_fraction": 0.8,
+          "anchor_pass": true
+        },
+        "Cord Insertion": {
+          "required": [
+            "Cord Insertion",
+            "Skin Line",
+            "Vertebrae"
+          ],
+          "present": [
+            "Skin Line",
+            "Vertebrae"
+          ],
+          "missing": [
+            "Cord Insertion"
+          ],
+          "detected_fraction": 0.666667,
+          "anchor_pass": false
+        },
+        "Transverse Kidneys": {
+          "required": [
+            "Kidney Cortex",
+            "Renal Pelvis",
+            "Vertebrae"
+          ],
+          "present": [
+            "Vertebrae"
+          ],
+          "missing": [
+            "Kidney Cortex",
+            "Renal Pelvis"
+          ],
+          "detected_fraction": 0.333333,
+          "anchor_pass": false
+        }
+      },
+      "polygons": [
+        {
+          "structure": "Stomach",
+          "type": "polygon",
+          "points": [
+            {
+              "x": 289.0,
+              "y": 584.0
+            },
+            {
+              "x": 293.0,
+              "y": 606.0
+            },
+            {
+              "x": 315.0,
+              "y": 620.0
+            },
+            {
+              "x": 369.0,
+              "y": 613.0
+            },
+            {
+              "x": 397.0,
+              "y": 599.0
+            },
+            {
+              "x": 391.0,
+              "y": 573.0
+            },
+            {
+              "x": 367.0,
+              "y": 557.0
+            },
+            {
+              "x": 334.0,
+              "y": 553.0
+            },
+            {
+              "x": 304.0,
+              "y": 563.0
+            }
+          ]
+        },
+        {
+          "structure": "Umbilical Vein",
+          "type": "polygon",
+          "points": [
+            {
+              "x": 405.0,
+              "y": 484.0
+            },
+            {
+              "x": 402.0,
+              "y": 504.0
+            },
+            {
+              "x": 409.0,
+              "y": 530.0
+            },
+            {
+              "x": 419.0,
+              "y": 537.0
+            },
+            {
+              "x": 437.0,
+              "y": 541.0
+            },
+            {
+              "x": 457.0,
+              "y": 538.0
+            },
+            {
+              "x": 457.0,
+              "y": 526.0
+            },
+            {
+              "x": 437.0,
+              "y": 517.0
+            },
+            {
+              "x": 431.0,
+              "y": 510.0
+            },
+            {
+              "x": 427.0,
+              "y": 479.0
+            },
+            {
+              "x": 419.0,
+              "y": 477.0
+            }
+          ]
+        },
+        {
+          "structure": "Vertebrae",
+          "type": "polygon",
+          "points": [
+            {
+              "x": 284.0,
+              "y": 425.0
+            },
+            {
+              "x": 270.0,
+              "y": 429.0
+            },
+            {
+              "x": 259.0,
+              "y": 438.0
+            },
+            {
+              "x": 248.0,
+              "y": 456.0
+            },
+            {
+              "x": 248.0,
+              "y": 465.0
+            },
+            {
+              "x": 259.0,
+              "y": 493.0
+            },
+            {
+              "x": 274.0,
+              "y": 502.0
+            },
+            {
+              "x": 294.0,
+              "y": 503.0
+            },
+            {
+              "x": 322.0,
+              "y": 476.0
+            },
+            {
+              "x": 320.0,
+              "y": 445.0
+            },
+            {
+              "x": 313.0,
+              "y": 431.0
+            }
+          ]
+        },
+        {
+          "structure": "Aorta",
+          "type": "polygon",
+          "points": [
+            {
+              "x": 323.0,
+              "y": 498.0
+            },
+            {
+              "x": 323.0,
+              "y": 503.0
+            },
+            {
+              "x": 325.0,
+              "y": 504.0
+            },
+            {
+              "x": 325.0,
+              "y": 506.0
+            },
+            {
+              "x": 329.0,
+              "y": 507.0
+            },
+            {
+              "x": 330.0,
+              "y": 509.0
+            },
+            {
+              "x": 346.0,
+              "y": 509.0
+            },
+            {
+              "x": 352.0,
+              "y": 503.0
+            },
+            {
+              "x": 350.0,
+              "y": 502.0
+            },
+            {
+              "x": 350.0,
+              "y": 498.0
+            },
+            {
+              "x": 347.0,
+              "y": 497.0
+            },
+            {
+              "x": 346.0,
+              "y": 495.0
+            },
+            {
+              "x": 341.0,
+              "y": 494.0
+            },
+            {
+              "x": 330.0,
+              "y": 494.0
+            }
+          ]
+        },
+        {
+          "structure": "Skin Line",
+          "type": "polygon",
+          "points": [
+            {
+              "x": 355.0,
+              "y": 377.0
+            },
+            {
+              "x": 250.0,
+              "y": 443.0
+            },
+            {
+              "x": 227.0,
+              "y": 521.0
+            },
+            {
+              "x": 233.0,
+              "y": 580.0
+            },
+            {
+              "x": 325.0,
+              "y": 651.0
+            },
+            {
+              "x": 436.0,
+              "y": 658.0
+            },
+            {
+              "x": 543.0,
+              "y": 534.0
+            },
+            {
+              "x": 551.0,
+              "y": 456.0
+            },
+            {
+              "x": 464.0,
+              "y": 380.0
+            }
+          ]
+        }
+      ],
+      "gt_metrics_available": false,
+      "gt_metrics": null,
+      "uv_standard": true,
+      "uv_metrics": {
+        "area": 714.0,
+        "aspect_ratio": 2.0214,
+        "skeleton_length": 41
+      },
+      "skin_line_shape": {
+        "circularity": 0.843906,
+        "axis_ratio": 1.225124
+      },
+      "quality_reasons": []
+    },
+    {
+      "image_path": "C:\\Users\\laksh\\ANU\\OUTPUT\\CLASS\\ClinicalPatient_13_dcm\\Abdomen\\Abdominal Circumference\\IMG_20260220_1_38.dcm",
+      "vis_path": "C:\\Users\\laksh\\ANU\\OUTPUT\\SEG\\ClinicalPatient_13_dcm\\Abdomen\\visualisations\\IMG_20260220_1_38_vis.png",
+      "input_filename": "IMG_20260220_1_38.dcm",
+      "plane": "Transverse Kidneys",
+      "plane_quality": "Non-Standard",
+      "mean_structure_confidence": 0.856752,
+      "plane_candidates": [
+        "Transverse Kidneys"
+      ],
+      "plane_mandatory_structures": {
+        "Abdominal Circumference": {
+          "required": [
+            "Umbilical Vein",
+            "Skin Line",
+            "Vertebrae",
+            "Stomach",
+            "Adrenal"
+          ],
+          "present": [],
+          "missing": [
+            "Umbilical Vein",
+            "Skin Line",
+            "Vertebrae",
+            "Stomach",
+            "Adrenal"
+          ],
+          "detected_fraction": 0.0,
+          "anchor_pass": false
+        },
+        "Cord Insertion": {
+          "required": [
+            "Cord Insertion",
+            "Skin Line",
+            "Vertebrae"
+          ],
+          "present": [],
+          "missing": [
+            "Cord Insertion",
+            "Skin Line",
+            "Vertebrae"
+          ],
+          "detected_fraction": 0.0,
+          "anchor_pass": false
+        },
+        "Transverse Kidneys": {
+          "required": [
+            "Kidney Cortex",
+            "Renal Pelvis",
+            "Vertebrae"
+          ],
+          "present": [
+            "Kidney Cortex"
+          ],
+          "missing": [
+            "Renal Pelvis",
+            "Vertebrae"
+          ],
+          "detected_fraction": 0.333333,
+          "anchor_pass": true
+        }
+      },
+      "polygons": [
+        {
+          "structure": "Kidney Cortex",
+          "type": "polygon",
+          "points": [
+            {
+              "x": 594.0,
+              "y": 536.0
+            },
+            {
+              "x": 582.0,
+              "y": 536.0
+            },
+            {
+              "x": 581.0,
+              "y": 538.0
+            },
+            {
+              "x": 574.0,
+              "y": 539.0
+            },
+            {
+              "x": 571.0,
+              "y": 542.0
+            },
+            {
+              "x": 567.0,
+              "y": 543.0
+            },
+            {
+              "x": 563.0,
+              "y": 548.0
+            },
+            {
+              "x": 565.0,
+              "y": 550.0
+            },
+            {
+              "x": 565.0,
+              "y": 554.0
+            },
+            {
+              "x": 568.0,
+              "y": 555.0
+            },
+            {
+              "x": 570.0,
+              "y": 559.0
+            },
+            {
+              "x": 574.0,
+              "y": 562.0
+            },
+            {
+              "x": 583.0,
+              "y": 562.0
+            },
+            {
+              "x": 585.0,
+              "y": 559.0
+            },
+            {
+              "x": 588.0,
+              "y": 558.0
+            },
+            {
+              "x": 588.0,
+              "y": 556.0
+            },
+            {
+              "x": 594.0,
+              "y": 549.0
+            },
+            {
+              "x": 594.0,
+              "y": 545.0
+            },
+            {
+              "x": 596.0,
+              "y": 544.0
+            },
+            {
+              "x": 596.0,
+              "y": 539.0
+            },
+            {
+              "x": 594.0,
+              "y": 538.0
+            }
+          ]
+        }
+      ],
+      "gt_metrics_available": false,
+      "gt_metrics": null,
+      "uv_standard": false,
+      "uv_metrics": {
+        "area": 0.0,
+        "aspect_ratio": NaN,
+        "skeleton_length": 0
+      },
+      "skin_line_shape": {
+        "circularity": 0.434137,
+        "axis_ratio": 1.09927
+      },
+      "quality_reasons": []
+    },
+    {
+      "image_path": "C:\\Users\\laksh\\ANU\\OUTPUT\\CLASS\\ClinicalPatient_13_dcm\\Abdomen\\Abdominal Circumference\\IMG_20260220_1_8.dcm",
+      "vis_path": "C:\\Users\\laksh\\ANU\\OUTPUT\\SEG\\ClinicalPatient_13_dcm\\Abdomen\\visualisations\\IMG_20260220_1_8_vis.png",
+      "input_filename": "IMG_20260220_1_8.dcm",
+      "plane": "Abdominal Circumference",
+      "plane_quality": "Non-Standard",
+      "mean_structure_confidence": 0.941988,
+      "plane_candidates": [
+        "Abdominal Circumference"
+      ],
+      "plane_mandatory_structures": {
+        "Abdominal Circumference": {
+          "required": [
+            "Umbilical Vein",
+            "Skin Line",
+            "Vertebrae",
+            "Stomach",
+            "Adrenal"
+          ],
+          "present": [
+            "Vertebrae",
+            "Stomach"
+          ],
+          "missing": [
+            "Umbilical Vein",
+            "Skin Line",
+            "Adrenal"
+          ],
+          "detected_fraction": 0.4,
+          "anchor_pass": false
+        },
+        "Cord Insertion": {
+          "required": [
+            "Cord Insertion",
+            "Skin Line",
+            "Vertebrae"
+          ],
+          "present": [
+            "Vertebrae"
+          ],
+          "missing": [
+            "Cord Insertion",
+            "Skin Line"
+          ],
+          "detected_fraction": 0.333333,
+          "anchor_pass": false
+        },
+        "Transverse Kidneys": {
+          "required": [
+            "Kidney Cortex",
+            "Renal Pelvis",
+            "Vertebrae"
+          ],
+          "present": [
+            "Vertebrae"
+          ],
+          "missing": [
+            "Kidney Cortex",
+            "Renal Pelvis"
+          ],
+          "detected_fraction": 0.333333,
+          "anchor_pass": false
+        }
+      },
+      "polygons": [
+        {
+          "structure": "Stomach",
+          "type": "polygon",
+          "points": [
+            {
+              "x": 525.0,
+              "y": 314.0
+            },
+            {
+              "x": 525.0,
+              "y": 333.0
+            },
+            {
+              "x": 542.0,
+              "y": 351.0
+            },
+            {
+              "x": 553.0,
+              "y": 352.0
+            },
+            {
+              "x": 566.0,
+              "y": 347.0
+            },
+            {
+              "x": 566.0,
+              "y": 341.0
+            },
+            {
+              "x": 575.0,
+              "y": 336.0
+            },
+            {
+              "x": 579.0,
+              "y": 330.0
+            },
+            {
+              "x": 575.0,
+              "y": 321.0
+            },
+            {
+              "x": 558.0,
+              "y": 307.0
+            },
+            {
+              "x": 540.0,
+              "y": 308.0
+            }
+          ]
+        },
+        {
+          "structure": "Vertebrae",
+          "type": "polygon",
+          "points": [
+            {
+              "x": 515.0,
+              "y": 259.0
+            },
+            {
+              "x": 508.0,
+              "y": 256.0
+            },
+            {
+              "x": 499.0,
+              "y": 256.0
+            },
+            {
+              "x": 498.0,
+              "y": 258.0
+            },
+            {
+              "x": 490.0,
+              "y": 259.0
+            },
+            {
+              "x": 480.0,
+              "y": 266.0
+            },
+            {
+              "x": 471.0,
+              "y": 278.0
+            },
+            {
+              "x": 471.0,
+              "y": 282.0
+            },
+            {
+              "x": 479.0,
+              "y": 282.0
+            },
+            {
+              "x": 482.0,
+              "y": 285.0
+            },
+            {
+              "x": 479.0,
+              "y": 295.0
+            },
+            {
+              "x": 506.0,
+              "y": 281.0
+            },
+            {
+              "x": 515.0,
+              "y": 271.0
+            }
+          ]
+        }
+      ],
+      "gt_metrics_available": false,
+      "gt_metrics": null,
+      "uv_standard": false,
+      "uv_metrics": {
+        "area": 0.0,
+        "aspect_ratio": NaN,
+        "skeleton_length": 0
+      },
+      "skin_line_shape": {
+        "circularity": 0.423663,
+        "axis_ratio": 1.058273
+      },
+      "quality_reasons": [
+        "Umbilical Vein shape constraint failed"
+      ]
+    },
+    {
+      "image_path": "C:\\Users\\laksh\\ANU\\OUTPUT\\CLASS\\ClinicalPatient_13_dcm\\Abdomen\\Abdominal Circumference\\IMG_20260220_1_92.dcm",
+      "vis_path": "C:\\Users\\laksh\\ANU\\OUTPUT\\SEG\\ClinicalPatient_13_dcm\\Abdomen\\visualisations\\IMG_20260220_1_92_vis.png",
+      "input_filename": "IMG_20260220_1_92.dcm",
+      "plane": "Abdominal Circumference",
+      "plane_quality": "Non-Standard",
+      "mean_structure_confidence": 0.898326,
+      "plane_candidates": [
+        "Abdominal Circumference"
+      ],
+      "plane_mandatory_structures": {
+        "Abdominal Circumference": {
+          "required": [
+            "Umbilical Vein",
+            "Skin Line",
+            "Vertebrae",
+            "Stomach",
+            "Adrenal"
+          ],
+          "present": [
+            "Umbilical Vein",
+            "Vertebrae",
+            "Stomach",
+            "Adrenal"
+          ],
+          "missing": [
+            "Skin Line"
+          ],
+          "detected_fraction": 0.8,
+          "anchor_pass": false
+        },
+        "Cord Insertion": {
+          "required": [
+            "Cord Insertion",
+            "Skin Line",
+            "Vertebrae"
+          ],
+          "present": [
+            "Vertebrae"
+          ],
+          "missing": [
+            "Cord Insertion",
+            "Skin Line"
+          ],
+          "detected_fraction": 0.333333,
+          "anchor_pass": false
+        },
+        "Transverse Kidneys": {
+          "required": [
+            "Kidney Cortex",
+            "Renal Pelvis",
+            "Vertebrae"
+          ],
+          "present": [
+            "Vertebrae"
+          ],
+          "missing": [
+            "Kidney Cortex",
+            "Renal Pelvis"
+          ],
+          "detected_fraction": 0.333333,
+          "anchor_pass": false
+        }
+      },
+      "polygons": [
+        {
+          "structure": "Stomach",
+          "type": "polygon",
+          "points": [
+            {
+              "x": 465.0,
+              "y": 200.0
+            },
+            {
+              "x": 460.0,
+              "y": 223.0
+            },
+            {
+              "x": 465.0,
+              "y": 232.0
+            },
+            {
+              "x": 522.0,
+              "y": 247.0
+            },
+            {
+              "x": 564.0,
+              "y": 246.0
+            },
+            {
+              "x": 585.0,
+              "y": 264.0
+            },
+            {
+              "x": 596.0,
+              "y": 264.0
+            },
+            {
+              "x": 613.0,
+              "y": 246.0
+            },
+            {
+              "x": 566.0,
+              "y": 166.0
+            },
+            {
+              "x": 549.0,
+              "y": 159.0
+            },
+            {
+              "x": 488.0,
+              "y": 179.0
+            }
+          ]
+        },
+        {
+          "structure": "Umbilical Vein",
+          "type": "polygon",
+          "points": [
+            {
+              "x": 524.0,
+              "y": 351.0
+            },
+            {
+              "x": 525.0,
+              "y": 358.0
+            },
+            {
+              "x": 558.0,
+              "y": 365.0
+            },
+            {
+              "x": 604.0,
+              "y": 381.0
+            },
+            {
+              "x": 639.0,
+              "y": 381.0
+            },
+            {
+              "x": 646.0,
+              "y": 375.0
+            },
+            {
+              "x": 628.0,
+              "y": 356.0
+            },
+            {
+              "x": 607.0,
+              "y": 349.0
+            },
+            {
+              "x": 546.0,
+              "y": 342.0
+            }
+          ]
+        },
+        {
+          "structure": "Vertebrae",
+          "type": "polygon",
+          "points": [
+            {
+              "x": 317.0,
+              "y": 238.0
+            },
+            {
+              "x": 315.0,
+              "y": 268.0
+            },
+            {
+              "x": 334.0,
+              "y": 292.0
+            },
+            {
+              "x": 384.0,
+              "y": 295.0
+            },
+            {
+              "x": 414.0,
+              "y": 272.0
+            },
+            {
+              "x": 410.0,
+              "y": 254.0
+            },
+            {
+              "x": 394.0,
+              "y": 244.0
+            },
+            {
+              "x": 371.0,
+              "y": 218.0
+            },
+            {
+              "x": 340.0,
+              "y": 218.0
+            }
+          ]
+        },
+        {
+          "structure": "Aorta",
+          "type": "polygon",
+          "points": [
+            {
+              "x": 417.0,
+              "y": 276.0
+            },
+            {
+              "x": 417.0,
+              "y": 282.0
+            },
+            {
+              "x": 422.0,
+              "y": 286.0
+            },
+            {
+              "x": 442.0,
+              "y": 286.0
+            },
+            {
+              "x": 444.0,
+              "y": 285.0
+            },
+            {
+              "x": 444.0,
+              "y": 273.0
+            },
+            {
+              "x": 441.0,
+              "y": 272.0
+            },
+            {
+              "x": 440.0,
+              "y": 270.0
+            },
+            {
+              "x": 422.0,
+              "y": 269.0
+            },
+            {
+              "x": 420.0,
+              "y": 270.0
+            },
+            {
+              "x": 419.0,
+              "y": 275.0
+            }
+          ]
+        }
+      ],
+      "gt_metrics_available": false,
+      "gt_metrics": null,
+      "uv_standard": true,
+      "uv_metrics": {
+        "area": 1020.0,
+        "aspect_ratio": 3.168,
+        "skeleton_length": 58
+      },
+      "skin_line_shape": {
+        "circularity": 0.781269,
+        "axis_ratio": 1.274982
+      },
+      "quality_reasons": []
+    },
+    {
+      "image_path": "C:\\Users\\laksh\\ANU\\OUTPUT\\CLASS\\ClinicalPatient_13_dcm\\Abdomen\\Abdominal Circumference\\IMG_20260220_1_93.dcm",
+      "vis_path": "C:\\Users\\laksh\\ANU\\OUTPUT\\SEG\\ClinicalPatient_13_dcm\\Abdomen\\visualisations\\IMG_20260220_1_93_vis.png",
+      "input_filename": "IMG_20260220_1_93.dcm",
+      "plane": "Abdominal Circumference",
+      "plane_quality": "Standard",
+      "mean_structure_confidence": 0.981184,
+      "plane_candidates": [
+        "Abdominal Circumference",
+        "Cord Insertion"
+      ],
+      "plane_mandatory_structures": {
+        "Abdominal Circumference": {
+          "required": [
+            "Umbilical Vein",
+            "Skin Line",
+            "Vertebrae",
+            "Stomach",
+            "Adrenal"
+          ],
+          "present": [
+            "Umbilical Vein",
+            "Skin Line",
+            "Vertebrae",
+            "Stomach",
+            "Adrenal"
+          ],
+          "missing": [],
+          "detected_fraction": 1.0,
+          "anchor_pass": true
+        },
+        "Cord Insertion": {
+          "required": [
+            "Cord Insertion",
+            "Skin Line",
+            "Vertebrae"
+          ],
+          "present": [
+            "Skin Line",
+            "Vertebrae"
+          ],
+          "missing": [
+            "Cord Insertion"
+          ],
+          "detected_fraction": 0.666667,
+          "anchor_pass": false
+        },
+        "Transverse Kidneys": {
+          "required": [
+            "Kidney Cortex",
+            "Renal Pelvis",
+            "Vertebrae"
+          ],
+          "present": [
+            "Vertebrae"
+          ],
+          "missing": [
+            "Kidney Cortex",
+            "Renal Pelvis"
+          ],
+          "detected_fraction": 0.333333,
+          "anchor_pass": false
+        }
+      },
+      "polygons": [
+        {
+          "structure": "Stomach",
+          "type": "polygon",
+          "points": [
+            {
+              "x": 486.0,
+              "y": 256.0
+            },
+            {
+              "x": 486.0,
+              "y": 272.0
+            },
+            {
+              "x": 497.0,
+              "y": 281.0
+            },
+            {
+              "x": 539.0,
+              "y": 284.0
+            },
+            {
+              "x": 577.0,
+              "y": 274.0
+            },
+            {
+              "x": 611.0,
+              "y": 289.0
+            },
+            {
+              "x": 620.0,
+              "y": 284.0
+            },
+            {
+              "x": 626.0,
+              "y": 269.0
+            },
+            {
+              "x": 609.0,
+              "y": 249.0
+            },
+            {
+              "x": 591.0,
+              "y": 244.0
+            },
+            {
+              "x": 583.0,
+              "y": 225.0
+            },
+            {
+              "x": 560.0,
+              "y": 209.0
+            },
+            {
+              "x": 529.0,
+              "y": 218.0
+            },
+            {
+              "x": 515.0,
+              "y": 237.0
+            }
+          ]
+        },
+        {
+          "structure": "Umbilical Vein",
+          "type": "polygon",
+          "points": [
+            {
+              "x": 567.0,
+              "y": 379.0
+            },
+            {
+              "x": 570.0,
+              "y": 393.0
+            },
+            {
+              "x": 587.0,
+              "y": 402.0
+            },
+            {
+              "x": 644.0,
+              "y": 407.0
+            },
+            {
+              "x": 676.0,
+              "y": 402.0
+            },
+            {
+              "x": 686.0,
+              "y": 396.0
+            },
+            {
+              "x": 686.0,
+              "y": 389.0
+            },
+            {
+              "x": 680.0,
+              "y": 384.0
+            },
+            {
+              "x": 573.0,
+              "y": 376.0
+            }
+          ]
+        },
+        {
+          "structure": "Vertebrae",
+          "type": "polygon",
+          "points": [
+            {
+              "x": 448.0,
+              "y": 318.0
+            },
+            {
+              "x": 428.0,
+              "y": 313.0
+            },
+            {
+              "x": 408.0,
+              "y": 300.0
+            },
+            {
+              "x": 375.0,
+              "y": 301.0
+            },
+            {
+              "x": 345.0,
+              "y": 339.0
+            },
+            {
+              "x": 347.0,
+              "y": 362.0
+            },
+            {
+              "x": 357.0,
+              "y": 375.0
+            },
+            {
+              "x": 370.0,
+              "y": 381.0
+            },
+            {
+              "x": 412.0,
+              "y": 374.0
+            },
+            {
+              "x": 448.0,
+              "y": 343.0
+            },
+            {
+              "x": 453.0,
+              "y": 326.0
+            }
+          ]
+        },
+        {
+          "structure": "Aorta",
+          "type": "polygon",
+          "points": [
+            {
+              "x": 456.0,
+              "y": 328.0
+            },
+            {
+              "x": 456.0,
+              "y": 331.0
+            },
+            {
+              "x": 454.0,
+              "y": 332.0
+            },
+            {
+              "x": 454.0,
+              "y": 341.0
+            },
+            {
+              "x": 456.0,
+              "y": 342.0
+            },
+            {
+              "x": 456.0,
+              "y": 344.0
+            },
+            {
+              "x": 458.0,
+              "y": 345.0
+            },
+            {
+              "x": 472.0,
+              "y": 344.0
+            },
+            {
+              "x": 472.0,
+              "y": 342.0
+            },
+            {
+              "x": 474.0,
+              "y": 341.0
+            },
+            {
+              "x": 474.0,
+              "y": 334.0
+            },
+            {
+              "x": 476.0,
+              "y": 333.0
+            },
+            {
+              "x": 476.0,
+              "y": 327.0
+            },
+            {
+              "x": 472.0,
+              "y": 324.0
+            },
+            {
+              "x": 462.0,
+              "y": 324.0
+            },
+            {
+              "x": 459.0,
+              "y": 327.0
+            }
+          ]
+        },
+        {
+          "structure": "Adrenal",
+          "type": "polygon",
+          "points": [
+            {
+              "x": 430.0,
+              "y": 287.0
+            },
+            {
+              "x": 430.0,
+              "y": 291.0
+            },
+            {
+              "x": 434.0,
+              "y": 294.0
+            },
+            {
+              "x": 435.0,
+              "y": 298.0
+            },
+            {
+              "x": 446.0,
+              "y": 300.0
+            },
+            {
+              "x": 447.0,
+              "y": 302.0
+            },
+            {
+              "x": 464.0,
+              "y": 302.0
+            },
+            {
+              "x": 463.0,
+              "y": 297.0
+            },
+            {
+              "x": 450.0,
+              "y": 292.0
+            },
+            {
+              "x": 444.0,
+              "y": 287.0
+            },
+            {
+              "x": 440.0,
+              "y": 286.0
+            }
+          ]
+        },
+        {
+          "structure": "Skin Line",
+          "type": "polygon",
+          "points": [
+            {
+              "x": 411.0,
+              "y": 180.0
+            },
+            {
+              "x": 345.0,
+              "y": 252.0
+            },
+            {
+              "x": 329.0,
+              "y": 426.0
+            },
+            {
+              "x": 368.0,
+              "y": 492.0
+            },
+            {
+              "x": 509.0,
+              "y": 569.0
+            },
+            {
+              "x": 669.0,
+              "y": 547.0
+            },
+            {
+              "x": 718.0,
+              "y": 496.0
+            },
+            {
+              "x": 748.0,
+              "y": 376.0
+            },
+            {
+              "x": 714.0,
+              "y": 211.0
+            },
+            {
+              "x": 648.0,
+              "y": 166.0
+            },
+            {
+              "x": 539.0,
+              "y": 145.0
+            }
+          ]
+        }
+      ],
+      "gt_metrics_available": false,
+      "gt_metrics": null,
+      "uv_standard": true,
+      "uv_metrics": {
+        "area": 978.5,
+        "aspect_ratio": 3.2961,
+        "skeleton_length": 53
+      },
+      "skin_line_shape": {
+        "circularity": 0.824398,
+        "axis_ratio": 1.354324
+      },
+      "quality_reasons": []
+    },
+    {
+      "image_path": "C:\\Users\\laksh\\ANU\\OUTPUT\\CLASS\\ClinicalPatient_13_dcm\\Abdomen\\Abdominal Circumference\\IMG_20260220_1_94.dcm",
+      "vis_path": "C:\\Users\\laksh\\ANU\\OUTPUT\\SEG\\ClinicalPatient_13_dcm\\Abdomen\\visualisations\\IMG_20260220_1_94_vis.png",
+      "input_filename": "IMG_20260220_1_94.dcm",
+      "plane": "Abdominal Circumference",
+      "plane_quality": "Standard",
+      "mean_structure_confidence": 0.981184,
+      "plane_candidates": [
+        "Abdominal Circumference",
+        "Cord Insertion"
+      ],
+      "plane_mandatory_structures": {
+        "Abdominal Circumference": {
+          "required": [
+            "Umbilical Vein",
+            "Skin Line",
+            "Vertebrae",
+            "Stomach",
+            "Adrenal"
+          ],
+          "present": [
+            "Umbilical Vein",
+            "Skin Line",
+            "Vertebrae",
+            "Stomach",
+            "Adrenal"
+          ],
+          "missing": [],
+          "detected_fraction": 1.0,
+          "anchor_pass": true
+        },
+        "Cord Insertion": {
+          "required": [
+            "Cord Insertion",
+            "Skin Line",
+            "Vertebrae"
+          ],
+          "present": [
+            "Skin Line",
+            "Vertebrae"
+          ],
+          "missing": [
+            "Cord Insertion"
+          ],
+          "detected_fraction": 0.666667,
+          "anchor_pass": false
+        },
+        "Transverse Kidneys": {
+          "required": [
+            "Kidney Cortex",
+            "Renal Pelvis",
+            "Vertebrae"
+          ],
+          "present": [
+            "Vertebrae"
+          ],
+          "missing": [
+            "Kidney Cortex",
+            "Renal Pelvis"
+          ],
+          "detected_fraction": 0.333333,
+          "anchor_pass": false
+        }
+      },
+      "polygons": [
+        {
+          "structure": "Stomach",
+          "type": "polygon",
+          "points": [
+            {
+              "x": 486.0,
+              "y": 256.0
+            },
+            {
+              "x": 486.0,
+              "y": 272.0
+            },
+            {
+              "x": 497.0,
+              "y": 281.0
+            },
+            {
+              "x": 539.0,
+              "y": 284.0
+            },
+            {
+              "x": 577.0,
+              "y": 274.0
+            },
+            {
+              "x": 611.0,
+              "y": 289.0
+            },
+            {
+              "x": 620.0,
+              "y": 284.0
+            },
+            {
+              "x": 626.0,
+              "y": 269.0
+            },
+            {
+              "x": 609.0,
+              "y": 249.0
+            },
+            {
+              "x": 591.0,
+              "y": 244.0
+            },
+            {
+              "x": 583.0,
+              "y": 225.0
+            },
+            {
+              "x": 560.0,
+              "y": 209.0
+            },
+            {
+              "x": 529.0,
+              "y": 218.0
+            },
+            {
+              "x": 515.0,
+              "y": 237.0
+            }
+          ]
+        },
+        {
+          "structure": "Umbilical Vein",
+          "type": "polygon",
+          "points": [
+            {
+              "x": 567.0,
+              "y": 379.0
+            },
+            {
+              "x": 570.0,
+              "y": 393.0
+            },
+            {
+              "x": 587.0,
+              "y": 402.0
+            },
+            {
+              "x": 644.0,
+              "y": 407.0
+            },
+            {
+              "x": 676.0,
+              "y": 402.0
+            },
+            {
+              "x": 686.0,
+              "y": 396.0
+            },
+            {
+              "x": 686.0,
+              "y": 389.0
+            },
+            {
+              "x": 680.0,
+              "y": 384.0
+            },
+            {
+              "x": 573.0,
+              "y": 376.0
+            }
+          ]
+        },
+        {
+          "structure": "Vertebrae",
+          "type": "polygon",
+          "points": [
+            {
+              "x": 448.0,
+              "y": 318.0
+            },
+            {
+              "x": 428.0,
+              "y": 313.0
+            },
+            {
+              "x": 408.0,
+              "y": 300.0
+            },
+            {
+              "x": 375.0,
+              "y": 301.0
+            },
+            {
+              "x": 345.0,
+              "y": 339.0
+            },
+            {
+              "x": 347.0,
+              "y": 362.0
+            },
+            {
+              "x": 357.0,
+              "y": 375.0
+            },
+            {
+              "x": 370.0,
+              "y": 381.0
+            },
+            {
+              "x": 412.0,
+              "y": 374.0
+            },
+            {
+              "x": 448.0,
+              "y": 343.0
+            },
+            {
+              "x": 453.0,
+              "y": 326.0
+            }
+          ]
+        },
+        {
+          "structure": "Aorta",
+          "type": "polygon",
+          "points": [
+            {
+              "x": 456.0,
+              "y": 328.0
+            },
+            {
+              "x": 456.0,
+              "y": 331.0
+            },
+            {
+              "x": 454.0,
+              "y": 332.0
+            },
+            {
+              "x": 454.0,
+              "y": 341.0
+            },
+            {
+              "x": 456.0,
+              "y": 342.0
+            },
+            {
+              "x": 456.0,
+              "y": 344.0
+            },
+            {
+              "x": 458.0,
+              "y": 345.0
+            },
+            {
+              "x": 472.0,
+              "y": 344.0
+            },
+            {
+              "x": 472.0,
+              "y": 342.0
+            },
+            {
+              "x": 474.0,
+              "y": 341.0
+            },
+            {
+              "x": 474.0,
+              "y": 334.0
+            },
+            {
+              "x": 476.0,
+              "y": 333.0
+            },
+            {
+              "x": 476.0,
+              "y": 327.0
+            },
+            {
+              "x": 472.0,
+              "y": 324.0
+            },
+            {
+              "x": 462.0,
+              "y": 324.0
+            },
+            {
+              "x": 459.0,
+              "y": 327.0
+            }
+          ]
+        },
+        {
+          "structure": "Adrenal",
+          "type": "polygon",
+          "points": [
+            {
+              "x": 430.0,
+              "y": 287.0
+            },
+            {
+              "x": 430.0,
+              "y": 291.0
+            },
+            {
+              "x": 434.0,
+              "y": 294.0
+            },
+            {
+              "x": 435.0,
+              "y": 298.0
+            },
+            {
+              "x": 446.0,
+              "y": 300.0
+            },
+            {
+              "x": 447.0,
+              "y": 302.0
+            },
+            {
+              "x": 464.0,
+              "y": 302.0
+            },
+            {
+              "x": 463.0,
+              "y": 297.0
+            },
+            {
+              "x": 450.0,
+              "y": 292.0
+            },
+            {
+              "x": 444.0,
+              "y": 287.0
+            },
+            {
+              "x": 440.0,
+              "y": 286.0
+            }
+          ]
+        },
+        {
+          "structure": "Skin Line",
+          "type": "polygon",
+          "points": [
+            {
+              "x": 411.0,
+              "y": 180.0
+            },
+            {
+              "x": 345.0,
+              "y": 252.0
+            },
+            {
+              "x": 329.0,
+              "y": 426.0
+            },
+            {
+              "x": 368.0,
+              "y": 492.0
+            },
+            {
+              "x": 509.0,
+              "y": 569.0
+            },
+            {
+              "x": 669.0,
+              "y": 547.0
+            },
+            {
+              "x": 718.0,
+              "y": 496.0
+            },
+            {
+              "x": 748.0,
+              "y": 376.0
+            },
+            {
+              "x": 714.0,
+              "y": 211.0
+            },
+            {
+              "x": 648.0,
+              "y": 166.0
+            },
+            {
+              "x": 539.0,
+              "y": 145.0
+            }
+          ]
+        }
+      ],
+      "gt_metrics_available": false,
+      "gt_metrics": null,
+      "uv_standard": true,
+      "uv_metrics": {
+        "area": 978.5,
+        "aspect_ratio": 3.2961,
+        "skeleton_length": 53
+      },
+      "skin_line_shape": {
+        "circularity": 0.824398,
+        "axis_ratio": 1.354324
+      },
+      "quality_reasons": []
+    },
+    {
+      "image_path": "C:\\Users\\laksh\\ANU\\OUTPUT\\CLASS\\ClinicalPatient_13_dcm\\Abdomen\\Transverse Kidneys\\IMG_20260220_1_18.dcm",
+      "vis_path": "C:\\Users\\laksh\\ANU\\OUTPUT\\SEG\\ClinicalPatient_13_dcm\\Abdomen\\visualisations\\IMG_20260220_1_18_vis.png",
+      "input_filename": "IMG_20260220_1_18.dcm",
+      "plane": "Transverse Kidneys",
+      "plane_quality": "Standard",
+      "mean_structure_confidence": 0.979463,
+      "plane_candidates": [
+        "Transverse Kidneys"
+      ],
+      "plane_mandatory_structures": {
+        "Abdominal Circumference": {
+          "required": [
+            "Umbilical Vein",
+            "Skin Line",
+            "Vertebrae",
+            "Stomach",
+            "Adrenal"
+          ],
+          "present": [
+            "Vertebrae"
+          ],
+          "missing": [
+            "Umbilical Vein",
+            "Skin Line",
+            "Stomach",
+            "Adrenal"
+          ],
+          "detected_fraction": 0.2,
+          "anchor_pass": false
+        },
+        "Cord Insertion": {
+          "required": [
+            "Cord Insertion",
+            "Skin Line",
+            "Vertebrae"
+          ],
+          "present": [
+            "Vertebrae"
+          ],
+          "missing": [
+            "Cord Insertion",
+            "Skin Line"
+          ],
+          "detected_fraction": 0.333333,
+          "anchor_pass": false
+        },
+        "Transverse Kidneys": {
+          "required": [
+            "Kidney Cortex",
+            "Renal Pelvis",
+            "Vertebrae"
+          ],
+          "present": [
+            "Kidney Cortex",
+            "Renal Pelvis",
+            "Vertebrae"
+          ],
+          "missing": [],
+          "detected_fraction": 1.0,
+          "anchor_pass": true
+        }
+      },
+      "polygons": [
+        {
+          "structure": "Vertebrae",
+          "type": "polygon",
+          "points": [
+            {
+              "x": 388.0,
+              "y": 362.0
+            },
+            {
+              "x": 349.0,
+              "y": 358.0
+            },
+            {
+              "x": 315.0,
+              "y": 369.0
+            },
+            {
+              "x": 306.0,
+              "y": 379.0
+            },
+            {
+              "x": 306.0,
+              "y": 390.0
+            },
+            {
+              "x": 332.0,
+              "y": 423.0
+            },
+            {
+              "x": 342.0,
+              "y": 427.0
+            },
+            {
+              "x": 361.0,
+              "y": 426.0
+            },
+            {
+              "x": 373.0,
+              "y": 419.0
+            },
+            {
+              "x": 380.0,
+              "y": 401.0
+            },
+            {
+              "x": 391.0,
+              "y": 388.0
+            },
+            {
+              "x": 395.0,
+              "y": 372.0
+            }
+          ]
+        },
+        {
+          "structure": "Kidney Cortex",
+          "type": "polygon",
+          "points": [
+            {
+              "x": 255.0,
+              "y": 401.0
+            },
+            {
+              "x": 240.0,
+              "y": 411.0
+            },
+            {
+              "x": 225.0,
+              "y": 434.0
+            },
+            {
+              "x": 222.0,
+              "y": 468.0
+            },
+            {
+              "x": 255.0,
+              "y": 493.0
+            },
+            {
+              "x": 301.0,
+              "y": 496.0
+            },
+            {
+              "x": 309.0,
+              "y": 492.0
+            },
+            {
+              "x": 326.0,
+              "y": 461.0
+            },
+            {
+              "x": 326.0,
+              "y": 443.0
+            },
+            {
+              "x": 313.0,
+              "y": 414.0
+            },
+            {
+              "x": 296.0,
+              "y": 401.0
+            }
+          ]
+        },
+        {
+          "structure": "Kidney Cortex",
+          "type": "polygon",
+          "points": [
+            {
+              "x": 461.0,
+              "y": 384.0
+            },
+            {
+              "x": 432.0,
+              "y": 377.0
+            },
+            {
+              "x": 417.0,
+              "y": 380.0
+            },
+            {
+              "x": 394.0,
+              "y": 397.0
+            },
+            {
+              "x": 379.0,
+              "y": 429.0
+            },
+            {
+              "x": 381.0,
+              "y": 448.0
+            },
+            {
+              "x": 390.0,
+              "y": 465.0
+            },
+            {
+              "x": 442.0,
+              "y": 468.0
+            },
+            {
+              "x": 472.0,
+              "y": 458.0
+            },
+            {
+              "x": 478.0,
+              "y": 447.0
+            },
+            {
+              "x": 481.0,
+              "y": 415.0
+            }
+          ]
+        },
+        {
+          "structure": "Renal Pelvis",
+          "type": "polygon",
+          "points": [
+            {
+              "x": 261.0,
+              "y": 438.0
+            },
+            {
+              "x": 261.0,
+              "y": 442.0
+            },
+            {
+              "x": 265.0,
+              "y": 447.0
+            },
+            {
+              "x": 272.0,
+              "y": 451.0
+            },
+            {
+              "x": 283.0,
+              "y": 452.0
+            },
+            {
+              "x": 284.0,
+              "y": 454.0
+            },
+            {
+              "x": 305.0,
+              "y": 455.0
+            },
+            {
+              "x": 311.0,
+              "y": 448.0
+            },
+            {
+              "x": 309.0,
+              "y": 443.0
+            },
+            {
+              "x": 299.0,
+              "y": 441.0
+            },
+            {
+              "x": 298.0,
+              "y": 439.0
+            },
+            {
+              "x": 274.0,
+              "y": 438.0
+            },
+            {
+              "x": 273.0,
+              "y": 436.0
+            },
+            {
+              "x": 263.0,
+              "y": 436.0
+            }
+          ]
+        },
+        {
+          "structure": "Renal Pelvis",
+          "type": "polygon",
+          "points": [
+            {
+              "x": 455.0,
+              "y": 421.0
+            },
+            {
+              "x": 448.0,
+              "y": 414.0
+            },
+            {
+              "x": 420.0,
+              "y": 414.0
+            },
+            {
+              "x": 398.0,
+              "y": 425.0
+            },
+            {
+              "x": 394.0,
+              "y": 429.0
+            },
+            {
+              "x": 394.0,
+              "y": 433.0
+            },
+            {
+              "x": 398.0,
+              "y": 435.0
+            },
+            {
+              "x": 440.0,
+              "y": 433.0
+            },
+            {
+              "x": 453.0,
+              "y": 427.0
+            }
+          ]
+        }
+      ],
+      "gt_metrics_available": false,
+      "gt_metrics": null,
+      "uv_standard": false,
+      "uv_metrics": {
+        "area": 0.0,
+        "aspect_ratio": NaN,
+        "skeleton_length": 0
+      },
+      "skin_line_shape": {
+        "circularity": 0.566046,
+        "axis_ratio": 1.97585
+      },
+      "quality_reasons": []
+    },
+    {
+      "image_path": "C:\\Users\\laksh\\ANU\\OUTPUT\\CLASS\\ClinicalPatient_13_dcm\\Abdomen\\Transverse Kidneys\\IMG_20260220_1_19.dcm",
+      "vis_path": "C:\\Users\\laksh\\ANU\\OUTPUT\\SEG\\ClinicalPatient_13_dcm\\Abdomen\\visualisations\\IMG_20260220_1_19_vis.png",
+      "input_filename": "IMG_20260220_1_19.dcm",
+      "plane": "Transverse Kidneys",
+      "plane_quality": "Standard",
+      "mean_structure_confidence": 0.976963,
+      "plane_candidates": [
+        "Transverse Kidneys"
+      ],
+      "plane_mandatory_structures": {
+        "Abdominal Circumference": {
+          "required": [
+            "Umbilical Vein",
+            "Skin Line",
+            "Vertebrae",
+            "Stomach",
+            "Adrenal"
+          ],
+          "present": [
+            "Vertebrae"
+          ],
+          "missing": [
+            "Umbilical Vein",
+            "Skin Line",
+            "Stomach",
+            "Adrenal"
+          ],
+          "detected_fraction": 0.2,
+          "anchor_pass": false
+        },
+        "Cord Insertion": {
+          "required": [
+            "Cord Insertion",
+            "Skin Line",
+            "Vertebrae"
+          ],
+          "present": [
+            "Vertebrae"
+          ],
+          "missing": [
+            "Cord Insertion",
+            "Skin Line"
+          ],
+          "detected_fraction": 0.333333,
+          "anchor_pass": false
+        },
+        "Transverse Kidneys": {
+          "required": [
+            "Kidney Cortex",
+            "Renal Pelvis",
+            "Vertebrae"
+          ],
+          "present": [
+            "Kidney Cortex",
+            "Renal Pelvis",
+            "Vertebrae"
+          ],
+          "missing": [],
+          "detected_fraction": 1.0,
+          "anchor_pass": true
+        }
+      },
+      "polygons": [
+        {
+          "structure": "Vertebrae",
+          "type": "polygon",
+          "points": [
+            {
+              "x": 461.0,
+              "y": 353.0
+            },
+            {
+              "x": 420.0,
+              "y": 346.0
+            },
+            {
+              "x": 375.0,
+              "y": 356.0
+            },
+            {
+              "x": 370.0,
+              "y": 360.0
+            },
+            {
+              "x": 370.0,
+              "y": 369.0
+            },
+            {
+              "x": 392.0,
+              "y": 410.0
+            },
+            {
+              "x": 407.0,
+              "y": 419.0
+            },
+            {
+              "x": 421.0,
+              "y": 420.0
+            },
+            {
+              "x": 433.0,
+              "y": 412.0
+            },
+            {
+              "x": 444.0,
+              "y": 391.0
+            },
+            {
+              "x": 461.0,
+              "y": 374.0
+            }
+          ]
+        },
+        {
+          "structure": "Kidney Cortex",
+          "type": "polygon",
+          "points": [
+            {
+              "x": 297.0,
+              "y": 384.0
+            },
+            {
+              "x": 285.0,
+              "y": 394.0
+            },
+            {
+              "x": 276.0,
+              "y": 415.0
+            },
+            {
+              "x": 276.0,
+              "y": 441.0
+            },
+            {
+              "x": 282.0,
+              "y": 451.0
+            },
+            {
+              "x": 302.0,
+              "y": 464.0
+            },
+            {
+              "x": 327.0,
+              "y": 471.0
+            },
+            {
+              "x": 354.0,
+              "y": 471.0
+            },
+            {
+              "x": 367.0,
+              "y": 461.0
+            },
+            {
+              "x": 382.0,
+              "y": 417.0
+            },
+            {
+              "x": 371.0,
+              "y": 387.0
+            },
+            {
+              "x": 346.0,
+              "y": 376.0
+            },
+            {
+              "x": 321.0,
+              "y": 376.0
+            }
+          ]
+        },
+        {
+          "structure": "Kidney Cortex",
+          "type": "polygon",
+          "points": [
+            {
+              "x": 523.0,
+              "y": 377.0
+            },
+            {
+              "x": 480.0,
+              "y": 372.0
+            },
+            {
+              "x": 452.0,
+              "y": 393.0
+            },
+            {
+              "x": 441.0,
+              "y": 415.0
+            },
+            {
+              "x": 441.0,
+              "y": 442.0
+            },
+            {
+              "x": 456.0,
+              "y": 468.0
+            },
+            {
+              "x": 474.0,
+              "y": 471.0
+            },
+            {
+              "x": 506.0,
+              "y": 465.0
+            },
+            {
+              "x": 532.0,
+              "y": 451.0
+            },
+            {
+              "x": 543.0,
+              "y": 407.0
+            }
+          ]
+        },
+        {
+          "structure": "Renal Pelvis",
+          "type": "polygon",
+          "points": [
+            {
+              "x": 319.0,
+              "y": 420.0
+            },
+            {
+              "x": 319.0,
+              "y": 424.0
+            },
+            {
+              "x": 321.0,
+              "y": 426.0
+            },
+            {
+              "x": 328.0,
+              "y": 428.0
+            },
+            {
+              "x": 332.0,
+              "y": 431.0
+            },
+            {
+              "x": 339.0,
+              "y": 431.0
+            },
+            {
+              "x": 340.0,
+              "y": 433.0
+            },
+            {
+              "x": 349.0,
+              "y": 434.0
+            },
+            {
+              "x": 356.0,
+              "y": 433.0
+            },
+            {
+              "x": 358.0,
+              "y": 431.0
+            },
+            {
+              "x": 358.0,
+              "y": 429.0
+            },
+            {
+              "x": 354.0,
+              "y": 425.0
+            },
+            {
+              "x": 347.0,
+              "y": 424.0
+            },
+            {
+              "x": 343.0,
+              "y": 421.0
+            },
+            {
+              "x": 330.0,
+              "y": 420.0
+            },
+            {
+              "x": 329.0,
+              "y": 418.0
+            },
+            {
+              "x": 323.0,
+              "y": 418.0
+            },
+            {
+              "x": 322.0,
+              "y": 420.0
+            }
+          ]
+        },
+        {
+          "structure": "Renal Pelvis",
+          "type": "polygon",
+          "points": [
+            {
+              "x": 504.0,
+              "y": 411.0
+            },
+            {
+              "x": 479.0,
+              "y": 411.0
+            },
+            {
+              "x": 458.0,
+              "y": 421.0
+            },
+            {
+              "x": 456.0,
+              "y": 424.0
+            },
+            {
+              "x": 458.0,
+              "y": 427.0
+            },
+            {
+              "x": 467.0,
+              "y": 432.0
+            },
+            {
+              "x": 462.0,
+              "y": 438.0
+            },
+            {
+              "x": 462.0,
+              "y": 442.0
+            },
+            {
+              "x": 465.0,
+              "y": 445.0
+            },
+            {
+              "x": 478.0,
+              "y": 445.0
+            },
+            {
+              "x": 478.0,
+              "y": 432.0
+            },
+            {
+              "x": 484.0,
+              "y": 428.0
+            },
+            {
+              "x": 491.0,
+              "y": 428.0
+            },
+            {
+              "x": 506.0,
+              "y": 421.0
+            }
+          ]
+        }
+      ],
+      "gt_metrics_available": false,
+      "gt_metrics": null,
+      "uv_standard": false,
+      "uv_metrics": {
+        "area": 0.0,
+        "aspect_ratio": NaN,
+        "skeleton_length": 0
+      },
+      "skin_line_shape": {
+        "circularity": null,
+        "axis_ratio": null
+      },
+      "quality_reasons": []
+    },
+    {
+      "image_path": "C:\\Users\\laksh\\ANU\\OUTPUT\\CLASS\\ClinicalPatient_13_dcm\\Abdomen\\Transverse Kidneys\\IMG_20260220_1_35.dcm",
+      "vis_path": "C:\\Users\\laksh\\ANU\\OUTPUT\\SEG\\ClinicalPatient_13_dcm\\Abdomen\\visualisations\\IMG_20260220_1_35_vis.png",
+      "input_filename": "IMG_20260220_1_35.dcm",
+      "plane": "Transverse Kidneys",
+      "plane_quality": "Standard",
+      "mean_structure_confidence": 0.978833,
+      "plane_candidates": [
+        "Transverse Kidneys"
+      ],
+      "plane_mandatory_structures": {
+        "Abdominal Circumference": {
+          "required": [
+            "Umbilical Vein",
+            "Skin Line",
+            "Vertebrae",
+            "Stomach",
+            "Adrenal"
+          ],
+          "present": [
+            "Vertebrae"
+          ],
+          "missing": [
+            "Umbilical Vein",
+            "Skin Line",
+            "Stomach",
+            "Adrenal"
+          ],
+          "detected_fraction": 0.2,
+          "anchor_pass": false
+        },
+        "Cord Insertion": {
+          "required": [
+            "Cord Insertion",
+            "Skin Line",
+            "Vertebrae"
+          ],
+          "present": [
+            "Vertebrae"
+          ],
+          "missing": [
+            "Cord Insertion",
+            "Skin Line"
+          ],
+          "detected_fraction": 0.333333,
+          "anchor_pass": false
+        },
+        "Transverse Kidneys": {
+          "required": [
+            "Kidney Cortex",
+            "Renal Pelvis",
+            "Vertebrae"
+          ],
+          "present": [
+            "Kidney Cortex",
+            "Renal Pelvis",
+            "Vertebrae"
+          ],
+          "missing": [],
+          "detected_fraction": 1.0,
+          "anchor_pass": true
+        }
+      },
+      "polygons": [
+        {
+          "structure": "Vertebrae",
+          "type": "polygon",
+          "points": [
+            {
+              "x": 404.0,
+              "y": 321.0
+            },
+            {
+              "x": 392.0,
+              "y": 331.0
+            },
+            {
+              "x": 398.0,
+              "y": 376.0
+            },
+            {
+              "x": 411.0,
+              "y": 388.0
+            },
+            {
+              "x": 429.0,
+              "y": 388.0
+            },
+            {
+              "x": 461.0,
+              "y": 362.0
+            },
+            {
+              "x": 463.0,
+              "y": 344.0
+            },
+            {
+              "x": 459.0,
+              "y": 339.0
+            },
+            {
+              "x": 423.0,
+              "y": 324.0
+            }
+          ]
+        },
+        {
+          "structure": "Kidney Cortex",
+          "type": "polygon",
+          "points": [
+            {
+              "x": 471.0,
+              "y": 366.0
+            },
+            {
+              "x": 441.0,
+              "y": 390.0
+            },
+            {
+              "x": 435.0,
+              "y": 416.0
+            },
+            {
+              "x": 458.0,
+              "y": 440.0
+            },
+            {
+              "x": 485.0,
+              "y": 447.0
+            },
+            {
+              "x": 506.0,
+              "y": 435.0
+            },
+            {
+              "x": 515.0,
+              "y": 414.0
+            },
+            {
+              "x": 517.0,
+              "y": 396.0
+            },
+            {
+              "x": 506.0,
+              "y": 375.0
+            },
+            {
+              "x": 483.0,
+              "y": 366.0
+            }
+          ]
+        },
+        {
+          "structure": "Kidney Cortex",
+          "type": "polygon",
+          "points": [
+            {
+              "x": 342.0,
+              "y": 332.0
+            },
+            {
+              "x": 321.0,
+              "y": 346.0
+            },
+            {
+              "x": 312.0,
+              "y": 359.0
+            },
+            {
+              "x": 306.0,
+              "y": 385.0
+            },
+            {
+              "x": 315.0,
+              "y": 395.0
+            },
+            {
+              "x": 347.0,
+              "y": 412.0
+            },
+            {
+              "x": 374.0,
+              "y": 412.0
+            },
+            {
+              "x": 386.0,
+              "y": 403.0
+            },
+            {
+              "x": 391.0,
+              "y": 389.0
+            },
+            {
+              "x": 388.0,
+              "y": 351.0
+            },
+            {
+              "x": 369.0,
+              "y": 332.0
+            }
+          ]
+        },
+        {
+          "structure": "Renal Pelvis",
+          "type": "polygon",
+          "points": [
+            {
+              "x": 443.0,
+              "y": 407.0
+            },
+            {
+              "x": 445.0,
+              "y": 412.0
+            },
+            {
+              "x": 455.0,
+              "y": 414.0
+            },
+            {
+              "x": 456.0,
+              "y": 416.0
+            },
+            {
+              "x": 485.0,
+              "y": 416.0
+            },
+            {
+              "x": 486.0,
+              "y": 414.0
+            },
+            {
+              "x": 493.0,
+              "y": 412.0
+            },
+            {
+              "x": 493.0,
+              "y": 408.0
+            },
+            {
+              "x": 487.0,
+              "y": 404.0
+            },
+            {
+              "x": 479.0,
+              "y": 403.0
+            },
+            {
+              "x": 478.0,
+              "y": 401.0
+            },
+            {
+              "x": 465.0,
+              "y": 400.0
+            },
+            {
+              "x": 464.0,
+              "y": 398.0
+            },
+            {
+              "x": 452.0,
+              "y": 398.0
+            }
+          ]
+        },
+        {
+          "structure": "Renal Pelvis",
+          "type": "polygon",
+          "points": [
+            {
+              "x": 342.0,
+              "y": 368.0
+            },
+            {
+              "x": 342.0,
+              "y": 375.0
+            },
+            {
+              "x": 344.0,
+              "y": 376.0
+            },
+            {
+              "x": 345.0,
+              "y": 381.0
+            },
+            {
+              "x": 364.0,
+              "y": 386.0
+            },
+            {
+              "x": 373.0,
+              "y": 385.0
+            },
+            {
+              "x": 374.0,
+              "y": 383.0
+            },
+            {
+              "x": 378.0,
+              "y": 382.0
+            },
+            {
+              "x": 378.0,
+              "y": 375.0
+            },
+            {
+              "x": 374.0,
+              "y": 370.0
+            },
+            {
+              "x": 359.0,
+              "y": 368.0
+            },
+            {
+              "x": 358.0,
+              "y": 366.0
+            },
+            {
+              "x": 344.0,
+              "y": 366.0
+            }
+          ]
+        }
+      ],
+      "gt_metrics_available": false,
+      "gt_metrics": null,
+      "uv_standard": false,
+      "uv_metrics": {
+        "area": 0.0,
+        "aspect_ratio": NaN,
+        "skeleton_length": 0
+      },
+      "skin_line_shape": {
+        "circularity": null,
+        "axis_ratio": null
+      },
+      "quality_reasons": []
+    }
+  ]
+}

@@ -24,7 +24,7 @@ except ImportError:
 from source_codes.seg.UNET_SoftMAk.config import Config
 from source_codes.seg.UNET_SoftMAk.model import build_model
 from utils.extract_panels import extract_panel
-from utils.seg_results_json import write_segmentation_result
+from utils.seg_biom_results_json import write_segmentation_result
 
 # from UNET_SoftMAk.config import Config
 # from UNET_SoftMAk.model import build_model
@@ -202,41 +202,69 @@ PLANE_MANDATORY: dict[str, list[str]] = {
 
 
 def classify_plane(struct_results: list[dict]) -> dict:
+    """
+    Classifies the head-scan plane (Transthalamic / Transventricular / Transcerebellar)
+    from the per-structure visibility results.
+
+    Returns a dict shaped so it can feed the SAME downstream JSON-building helpers as the
+    abdomen pipeline (build_plane_mandatory_structures_json / build_plane_candidates):
+        - "plane":              winning plane name, or "Unclassified"
+        - "quality":            "Standard" / "Non-Standard" / "N/A"
+        - "plane_match_frac":   winning plane's detected-fraction (0-1)
+        - "plane_mean_conf":    winning plane's mean confidence over its present structures
+        - "present":            {plane: [mandatory structures found]}
+        - "missing":            {plane: [mandatory structures missing]}
+        - "scores":             {plane: detected_fraction}
+        - "mean_confidences":   {plane: mean_confidence}
+        - "anchor_pass":        {plane: bool}  (detected_fraction >= PLANE_MATCH_THRESH)
+    """
     result_by_name: dict[str, dict] = {r["name"]: r for r in struct_results}
-    scores: list[tuple[str, float, float]] = []
+
+    present_by_plane:  dict[str, list[str]] = {}
+    missing_by_plane:  dict[str, list[str]] = {}
+    scores:            dict[str, float]     = {}
+    mean_conf_by_plane: dict[str, float]    = {}
+    anchor_pass:       dict[str, bool]      = {}
 
     for plane, mandatory in PLANE_MANDATORY.items():
-        present, confs = [], []
+        present, missing, confs = [], [], []
         for s in mandatory:
             r = result_by_name.get(s)
             if r and r.get("predicted") and r.get("vis_flag") != "not_predicted":
                 present.append(s)
                 confs.append(r.get("mean_confidence") or r.get("model_confidence") or 0.0)
-        match_frac = len(present) / max(len(mandatory), 1)
-        mean_conf  = float(np.mean(confs)) if confs else 0.0
-        scores.append((plane, match_frac, mean_conf))
+            else:
+                missing.append(s)
+        frac = len(present) / max(len(mandatory), 1)
+        present_by_plane[plane]   = present
+        missing_by_plane[plane]   = missing
+        scores[plane]             = frac
+        mean_conf_by_plane[plane] = float(np.mean(confs)) if confs else 0.0
+        anchor_pass[plane]        = frac >= PLANE_MATCH_THRESH
 
-    passing = [(p, f, c) for p, f, c in scores if f >= PLANE_MATCH_THRESH]
+    passing = [(p, f) for p, f in scores.items() if f >= PLANE_MATCH_THRESH]
 
     if not passing:
-        return {
-            "predicted_plane":  "Unknown",
-            "plane_match_frac": round(max(f for _, f, _ in scores), 4) if scores else 0.0,
-            "plane_mean_conf":  0.0,
-            "plane_standard":   "Non-Standard",
-            "plane_candidates": "",
-        }
-
-    passing.sort(key=lambda x: (x[1], x[2]), reverse=True)
-    best_plane, best_frac, best_conf = passing[0]
-    plane_standard = "Standard" if best_frac >= PLANE_STANDARD_THRESH else "Non-Standard"
+        best_plane = "Unclassified"
+        quality    = "N/A"
+        best_frac  = max(scores.values()) if scores else 0.0
+        best_conf  = 0.0
+    else:
+        passing.sort(key=lambda x: (x[1], mean_conf_by_plane[x[0]]), reverse=True)
+        best_plane, best_frac = passing[0]
+        best_conf = mean_conf_by_plane[best_plane]
+        quality   = "Standard" if best_frac >= PLANE_STANDARD_THRESH else "Non-Standard"
 
     return {
-        "predicted_plane":  best_plane,
+        "plane":            best_plane,
+        "quality":          quality,
         "plane_match_frac": round(best_frac, 4),
         "plane_mean_conf":  round(best_conf, 4),
-        "plane_standard":   plane_standard,
-        "plane_candidates": ", ".join(p for p, _, _ in passing),
+        "present":          present_by_plane,
+        "missing":          missing_by_plane,
+        "scores":           scores,
+        "mean_confidences": mean_conf_by_plane,
+        "anchor_pass":      anchor_pass,
     }
 
 
@@ -806,6 +834,119 @@ def visualise(
     cv2.imwrite(str(final_path), result, imwrite_params)
 
 
+# ═════════════════════════════════════════════════════════════════════════════
+#  Polygons  (mirrors abdomen_inference.py's spec-section-11 helper: FINAL mask
+#  only, one polygon per connected component, in ORIGINAL image coordinates)
+# ═════════════════════════════════════════════════════════════════════════════
+
+def mask_to_polygons(mask_orig: np.ndarray, structure_name: str,
+                      min_pixels: int = 20, epsilon_fraction: float = 0.01) -> list[dict]:
+    """Extracts one polygon entry per connected component of `structure_name`, from a mask
+    already in original-image coordinates. Multiple disconnected components each become
+    their own polygon entry."""
+    polygons = []
+    binary = mask_orig.astype(np.uint8)
+    if binary.max() == 0:
+        return polygons
+    contours, _ = cv2.findContours(binary, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+    for cnt in contours:
+        if cv2.contourArea(cnt) < min_pixels:
+            continue
+        perimeter = cv2.arcLength(cnt, True)
+        if perimeter == 0:
+            continue
+        epsilon = epsilon_fraction * perimeter
+        approx = cv2.approxPolyDP(cnt, epsilon, True)
+        pts = approx.reshape(-1, 2)
+        if len(pts) < 3:
+            pts = cnt.reshape(-1, 2)
+        polygons.append({
+            "structure": structure_name,
+            "type": "polygon",
+            "points": [{"x": float(x), "y": float(y)} for x, y in pts],
+        })
+    return polygons
+
+
+def build_polygons_from_final_mask(
+    inner_map: np.ndarray, calv_bin: np.ndarray, orig_h: int, orig_w: int,
+) -> list[dict]:
+    """
+    Builds the full polygons list for one image from the FINAL head mask (never raw
+    logits/probs). Both inner_map and calv_bin live at model resolution, so - same as the
+    abdomen pipeline - they are resized (nearest-neighbour, no interpolation of class ids)
+    up to the original image resolution before contour extraction. Structure names are
+    title-cased for readability, consistent with the rest of this module.
+    """
+    inner_map_orig = cv2.resize(
+        inner_map.astype(np.uint8), (orig_w, orig_h), interpolation=cv2.INTER_NEAREST
+    ).astype(np.int32)
+
+    polygons: list[dict] = []
+    for c in range(1, Config.NUM_CLASSES):
+        name = Config.STRUCTURES[c - 1]
+        class_mask = (inner_map_orig == c).astype(np.uint8)
+        polygons.extend(mask_to_polygons(class_mask, title_case_structure(name)))
+
+    for ch, name in enumerate(CALV_NAMES):
+        mask_orig = cv2.resize(
+            calv_bin[ch], (orig_w, orig_h), interpolation=cv2.INTER_NEAREST
+        )
+        polygons.extend(mask_to_polygons(mask_orig, title_case_structure(name)))
+
+    return polygons
+
+
+def compute_mean_structure_confidence(struct_results: list[dict]) -> float:
+    """Mean confidence over every predicted structure (mirrors the abdomen pipeline's
+    'mean_structure_confidence' field, computed there from the final mask/probs)."""
+    vals = [
+        r.get("mean_confidence") or r.get("model_confidence") or 0.0
+        for r in struct_results if r.get("predicted")
+    ]
+    return float(np.mean(vals)) if vals else 0.0
+
+
+# ═════════════════════════════════════════════════════════════════════════════
+#  Plane JSON blocks  (same shape/spirit as abdomen_inference.py's
+#  build_plane_mandatory_structures_json / build_plane_candidates)
+# ═════════════════════════════════════════════════════════════════════════════
+
+def build_plane_mandatory_structures_json(plane_info: dict) -> dict:
+    """
+    Builds the "plane_mandatory_structures" block directly from classify_plane()'s own
+    present/missing/scores/anchor_pass dicts (never a second, independent classifier), one
+    {"required", "present", "missing", "detected_fraction", "anchor_pass"} entry per plane.
+    """
+    out: dict = {}
+    for plane, required in PLANE_MANDATORY.items():
+        out[plane] = {
+            "required":          required,
+            "present":           plane_info["present"][plane],
+            "missing":           plane_info["missing"][plane],
+            "detected_fraction": round(plane_info["scores"][plane], 6),
+            "anchor_pass":       bool(plane_info["anchor_pass"][plane]),
+        }
+    return out
+
+
+def build_plane_candidates(plane_info: dict) -> list[str]:
+    """
+    Candidate planes from classify_plane()'s own scores, using the existing
+    PLANE_MATCH_THRESH constant - no new candidate-selection algorithm. The winning plane
+    is always included even in the rare case its own score sits under the threshold;
+    candidates are sorted by score, descending.
+    """
+    scores = plane_info["scores"]
+    if plane_info["plane"] == "Unclassified":
+        return []
+    candidates = [p for p, s in scores.items() if s >= PLANE_MATCH_THRESH]
+    if plane_info["plane"] not in candidates:
+        candidates.append(plane_info["plane"])
+    candidates.sort(key=lambda p: scores[p], reverse=True)
+    return candidates
+
+
 CSV_FIELDNAMES = [
     "image_path", "predicted_plane", "plane_standard", "image_quality",
 ]
@@ -814,24 +955,34 @@ CSV_FIELDNAMES = [
 def _build_csv_row(img_path: Path, plane_info: dict, struct_summary: dict) -> dict:
     return {
         "image_path":      str(img_path),
-        "predicted_plane": plane_info["predicted_plane"],
-        "plane_standard":  plane_info["plane_standard"],
+        "predicted_plane": plane_info["plane"],
+        "plane_standard":  plane_info["quality"],
         "image_quality":   struct_summary["vis_overall_flag"],
     }
 
 
-def _build_json_entry(
+def build_per_image_json_entry(
     img_path:       Path,
     struct_results: list[dict],
     struct_summary: dict,
+    plane_info:     dict,
+    polygons:       list[dict],
+    vis_path:       Path | None = None,
+    gt_metrics:     dict | None = None,
 ) -> dict:
     """
-    Build the per-image JSON entry with:
-      - image_path
-      - summary  (counts + overall_flag from assess_structure_visibility)
-      - structures (one object per predicted structure, with title-cased name,
-                    confidence, contrast, and blur)
+    Builds ONE image's JSON entry, field-for-field aligned with abdomen_inference.py's
+    build_per_image_json_entry(): image_path / vis_path / input_filename / plane /
+    plane_quality / mean_structure_confidence / plane_candidates /
+    plane_mandatory_structures / polygons / gt_metrics_available / gt_metrics.
+
+    The head model has no GT-mask pipeline wired up here, so gt_metrics stays None /
+    gt_metrics_available False unless a caller passes gt_metrics in. Head-specific
+    diagnostics (image_quality_summary / per-structure detail) are appended afterwards,
+    same spirit as abdomen's additive uv_standard / skin_line_shape / quality_reasons.
     """
+    mean_structure_confidence = compute_mean_structure_confidence(struct_results)
+
     structures = []
     for r in struct_results:
         if not r.get("predicted"):
@@ -861,9 +1012,19 @@ def _build_json_entry(
         })
 
     return {
-        "image_path": str(img_path),
-        # ── summary block (new) ──────────────────────────────────────────
-        "summary": {
+        "image_path":      str(img_path),
+        "vis_path":        str(vis_path) if vis_path else None,
+        "input_filename":  Path(img_path).name,
+        "plane":           plane_info["plane"],
+        "plane_quality":   plane_info["quality"],
+        "mean_structure_confidence": round(mean_structure_confidence, 6),
+        "plane_candidates": build_plane_candidates(plane_info),
+        "plane_mandatory_structures": build_plane_mandatory_structures_json(plane_info),
+        "polygons":          polygons,
+        "gt_metrics_available": gt_metrics is not None,
+        "gt_metrics":        gt_metrics,
+        # ── head-specific diagnostics (additive; nothing above is removed/renamed) ──
+        "image_quality_summary": {
             "n_structures_predicted":      struct_summary["vis_n_structures_predicted"],
             "n_structures_ok":             struct_summary["vis_n_structures_ok"],
             "n_structures_low_contrast":   struct_summary["vis_n_structures_low_contrast"],
@@ -871,8 +1032,8 @@ def _build_json_entry(
             "n_structures_locally_blurry": struct_summary["vis_n_structures_locally_blurry"],
             "overall_image_quality":       struct_summary["vis_overall_flag"],
         },
-        # ── per-structure detail ─────────────────────────────────────────
-        "structures": structures,
+        "structures":        structures,
+        "quality_reasons":   [],
     }
 
 PER_STRUCTURE_CSV_FIELDNAMES = [
@@ -985,7 +1146,7 @@ def run_inference_head(
         # ── plane classification ─────────────────────────────────────────
         plane_info = classify_plane(struct_results)
 
-        is_stnd = plane_info["plane_standard"] == "Standard"
+        is_stnd = plane_info["quality"] == "Standard"
 
         if is_stnd:
             status = "standard"
@@ -994,16 +1155,22 @@ def run_inference_head(
 
         results.append({
             "status": status,
-            "predicted_plane": plane_info["predicted_plane"],
+            "predicted_plane": plane_info["plane"],
             "plane_match_frac": plane_info["plane_match_frac"],
             "plane_mean_conf": plane_info["plane_mean_conf"],
         })
 
+        # ── polygons (FINAL mask only, original image coordinates) ────────
+        orig_h, orig_w = raw_gray.shape[:2]
+        polygons = build_polygons_from_final_mask(inner_map, calv_bin, orig_h, orig_w)
+
         csv_rows.append(_build_csv_row(img_path, plane_info, struct_summary))
-        json_entry = _build_json_entry(
+        json_entry = build_per_image_json_entry(
             img_path,
             struct_results,
-            struct_summary
+            struct_summary,
+            plane_info,
+            polygons,
         )
 
         json_entries.append(json_entry)

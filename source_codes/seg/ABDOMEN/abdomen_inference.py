@@ -26,7 +26,8 @@ from source_codes.seg.ABDOMEN.organ_postprocessing import (
 )
 
 from config import PALETTE_RGB_ABDOMEN
-from utils.seg_results_json import write_segmentation_result
+from utils.extract_panels import extract_panel
+from utils.seg_biom_results_json import write_segmentation_result
 
 
 # ═════════════════════════════════════════════════════════════════════════════

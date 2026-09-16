@@ -19,7 +19,9 @@ except ImportError:
 from seg.LIMBS.config import Config
 from seg.LIMBS.model import MultiTaskSwinUNet
 from seg.LIMBS.dataset import load_bone_mask_from_npz, LABEL_MAP, NUM_SEG_CLASSES, IGNORE_INDEX
-# 
+from utils.extract_panels import extract_panel
+from utils.seg_biom_results_json import write_segmentation_result
+
 # from LIMBS.config import Config
 # from LIMBS.model import MultiTaskSwinUNet
 # from LIMBS.dataset import load_bone_mask_from_npz, LABEL_MAP, NUM_SEG_CLASSES, IGNORE_INDEX

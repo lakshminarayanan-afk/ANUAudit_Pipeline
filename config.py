@@ -108,13 +108,13 @@ class Config:
 
     # MODE 1
     #BPD
-    # MEDSAM_CHECKPOINT = '/home/htic/MLN/weights/medsam_vit_b.pth'
-    # BEST_CHECKPOINT = r"C:/Users/laksh/ANU/weights/best_model_head.pth"
     UNET_CHECKPOINT_PATH = r"C:/Users/laksh/ANU/weights/AUTOMATE/head/head_unet/best_model_head.pth"
     #FL
     FEMUR_CHECKPOINT= r"C:/Users/laksh/ANU/weights/AUTOMATE/femur/new_fuvai_best.pt"
     # ABD
     ABD_CHECKPOINT= r"C:/Users/laksh/ANU/weights/AUTOMATE/abd/best_ac_skin_line.pt"
+    # SDVP
+    SDVP_LIQUOR_CHECKPOINT_PATH = r""
 
 
     # AUDIT

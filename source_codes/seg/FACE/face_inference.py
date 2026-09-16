@@ -31,7 +31,7 @@ from matplotlib.lines import Line2D
 from skimage.measure import find_contours
 
 from config import CLASS_NAMES_FACE, PALETTE_RGB_FACE
-from utils.seg_results_json import write_segmentation_result
+from utils.seg_biom_results_json import write_segmentation_result
 
 try:
     import pydicom
