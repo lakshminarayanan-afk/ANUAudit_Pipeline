@@ -1,0 +1,8 @@
+name,no of points,points,type,yolo detection,point misplaced,intersection mismatch,APAD range,TAD length,misplaced caliper,mismatched APAD angle,mismatched intersection angle,TAD difference,RESULTS
+IMG_20260220_1_107.dcm,0,N/A,AC,wrong,1,1,1,1,All (Count Error),,,,No calipers placed
+IMG_20260220_1_34.dcm,4,"(458, 380) (305, 644) (249, 440) (519, 579)",AC,correct,1,1,1,1,Bottom,,,,GOOD
+IMG_20260220_1_38.dcm,0,N/A,AC,wrong,1,1,1,1,,,,,No calipers placed
+IMG_20260220_1_8.dcm,1,N/A,AC,wrong,1,1,1,1,All (Count Error),,,,BAD AUDIT - Top
+IMG_20260220_1_92.dcm,0,N/A,AC,wrong,1,1,1,1,All (Count Error),,,,No calipers placed
+IMG_20260220_1_93.dcm,4,"(536, 140) (520, 559) (326, 315) (736, 366)",AC,correct,1,1,1,1,Bottom,,,,BAD AUDIT - Left
+IMG_20260220_1_94.dcm,4,"(536, 140) (520, 559) (326, 315) (736, 366)",AC,correct,1,1,1,1,Bottom,,,,BAD AUDIT - Left

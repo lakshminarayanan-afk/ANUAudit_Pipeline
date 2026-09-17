@@ -1,0 +1,16 @@
+{
+  "paths": {
+    "dir_data": "/home/htic/vasanth/FetalCLIP_seg_files/segmentation/prep_data_files3/seg",
+    "path_train_val_split": "/home/htic/vasanth/FetalCLIP_seg_files/segmentation/prep_data_files3/train_val_split.json",
+    "path_test_split": "/home/htic/vasanth/FetalCLIP_seg_files/segmentation/prep_data_files3/test_id.json",
+    "dir_preprocessed": "/home/htic/vasanth/FetalCLIP_seg_files/segmentation/prep_data_files3/preprocessed_data",
+    "dir_experiment_logs": "/home/htic/vasanth/FetalCLIP_seg_files/segmentation/prep_data_files3/experiment_logs",
+    "path_fetalclip_config": "/home/htic/Documents/deploy_biometry_3/automate/model/liquor/FetalCLIP_config.json",
+    "path_fetalclip_weight": "/home/htic/Documents/deploy_biometry_3/automate/weights/liquor/FetalCLIP_weights.pt"
+  },
+  "params": {
+    "num_workers": 4,
+    "batch_size": 1,
+    "max_epochs": 20
+  }
+}

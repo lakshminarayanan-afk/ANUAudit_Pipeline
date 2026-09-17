@@ -1,0 +1,2 @@
+name,no of points,points,type,yolo detection,point misplaced,angle mismatch,midpoint mismatch,falx mismatch,misplaced caliper,mismatched angle,RESULTS
+IMG_20260220_1_66.dcm,4,"[(535, 186), (619, 581), (373, 439), (873, 323)]",BPD,correct,0,0,1,0,,,BAD AUDIT - JSON not found

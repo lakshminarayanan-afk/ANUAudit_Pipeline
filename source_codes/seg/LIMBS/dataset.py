@@ -39,7 +39,7 @@ from torch.utils.data import Dataset
 import cv2
 # import albumentations as A
 
-from seg.LIMBS.config import Config
+from source_codes.seg.LIMBS.config import Config
 # from LIMBS.config import Config
 
 # Re-exported for convenience so existing imports (`from dataset import LABEL_MAP, ...`) keep working.

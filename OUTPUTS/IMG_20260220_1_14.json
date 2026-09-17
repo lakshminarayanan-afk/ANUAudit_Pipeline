@@ -1,0 +1,135 @@
+{
+  "image_path": "/home/htic/MLN/PIPELINE/ANUAudit_Pipeline/12_Full_Image_Datasets/TEST_DICOM/IMG_20260220_1_14.dcm",
+  "modality": {
+    "split": "single",
+    "type": "b-mode"
+  },
+  "classification": {
+    "1st": {
+      "Anatomy": "Lower Limbs",
+      "Standard plane": "Femur",
+      "Standard_plane_confidence": 0.9358858466148376
+    },
+    "2nd": {
+      "Anatomy": "Upper Limbs",
+      "Standard plane": "Humerus",
+      "Standard_plane_confidence": 0.931710422039032
+    },
+    "3rd": {
+      "Anatomy": "Thorax",
+      "Standard plane": "3 Vessel ViewOrTrachea or PAS",
+      "Standard_plane_confidence": 0.3251989483833313
+    }
+  },
+  "segmentation": {
+    "single": {
+      "1st": {
+        "image_path": "/home/htic/MLN/PIPELINE/ANUAudit_Pipeline/12_Full_Image_Datasets/TEST_DICOM/IMG_20260220_1_14.dcm",
+        "input_filename": "IMG_20260220_1_14.dcm",
+        "plane": "Femur",
+        "plane_quality": "Standard",
+        "mean_structure_confidence": 1.0,
+        "plane_candidates": [
+          "femur"
+        ],
+        "bone_classification": {
+          "probabilities": {
+            "femur": 1.0,
+            "humerus": 4.1001484976307956e-13,
+            "radius_ulna": 8.368212264624197e-13,
+            "tibia_fibula": 5.315024462215767e-12
+          }
+        },
+        "polygons": [
+          {
+            "structure": "Femur",
+            "type": "polygon",
+            "points": [
+              {
+                "x": 649.0,
+                "y": 292.0
+              },
+              {
+                "x": 642.0,
+                "y": 283.0
+              },
+              {
+                "x": 549.0,
+                "y": 302.0
+              },
+              {
+                "x": 439.0,
+                "y": 298.0
+              },
+              {
+                "x": 433.0,
+                "y": 311.0
+              },
+              {
+                "x": 448.0,
+                "y": 325.0
+              },
+              {
+                "x": 630.0,
+                "y": 318.0
+              },
+              {
+                "x": 642.0,
+                "y": 312.0
+              }
+            ]
+          }
+        ],
+        "gt_metrics_available": false,
+        "gt_metrics": null
+      }
+    }
+  },
+  "final_plane_prediction": {
+    "single": {
+      "plane": "Femur",
+      "source": "segmentation",
+      "rank": "1st",
+      "plane_quality": "Standard",
+      "confidence": 1.0
+    }
+  },
+  "biometry": {
+    "single": {
+      "Femur": {
+        "FL": 30.81,
+        "units": "mm",
+        "confidence": 0.9695,
+        "points": {
+          "start": [
+            440.0,
+            309.0
+          ],
+          "end": [
+            647.0,
+            298.0
+          ]
+        },
+        "audit": {
+          "name": "IMG_20260220_1_14.dcm",
+          "no of points": 2,
+          "points": [
+            [
+              432,
+              317
+            ],
+            [
+              648,
+              302
+            ]
+          ],
+          "type": "FL",
+          "yolo detection": "correct",
+          "point misplaced": 0,
+          "misplaced caliper": "",
+          "RESULTS": "GOOD"
+        }
+      }
+    }
+  }
+}

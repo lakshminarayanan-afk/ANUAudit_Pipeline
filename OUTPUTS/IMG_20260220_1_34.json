@@ -1,0 +1,546 @@
+{
+  "image_path": "/home/htic/MLN/PIPELINE/ANUAudit_Pipeline/12_Full_Image_Datasets/TEST_DICOM/IMG_20260220_1_34.dcm",
+  "modality": {
+    "split": "single",
+    "type": "b-mode"
+  },
+  "classification": {
+    "1st": {
+      "Anatomy": "Abdomen",
+      "Standard plane": "Abdominal Circumference",
+      "Standard_plane_confidence": 0.9829294681549072
+    },
+    "2nd": {
+      "Anatomy": "Upper Limbs",
+      "Standard plane": "Open Hands",
+      "Standard_plane_confidence": 0.7633646726608276
+    },
+    "3rd": {
+      "Anatomy": "Lower Limbs",
+      "Standard plane": "Both Feet",
+      "Standard_plane_confidence": 0.7943706512451172
+    }
+  },
+  "segmentation": {
+    "single": {
+      "1st": {
+        "image_path": "/home/htic/MLN/PIPELINE/ANUAudit_Pipeline/12_Full_Image_Datasets/TEST_DICOM/IMG_20260220_1_34.dcm",
+        "input_filename": "IMG_20260220_1_34.dcm",
+        "plane": "Abdominal Circumference",
+        "plane_quality": "Non-Standard",
+        "mean_structure_confidence": 0.978483,
+        "plane_candidates": [
+          "Abdominal Circumference",
+          "Cord Insertion"
+        ],
+        "plane_mandatory_structures": {
+          "Abdominal Circumference": {
+            "required": [
+              "Umbilical Vein",
+              "Skin Line",
+              "Vertebrae",
+              "Stomach",
+              "Adrenal"
+            ],
+            "present": [
+              "Umbilical Vein",
+              "Skin Line",
+              "Vertebrae",
+              "Stomach"
+            ],
+            "missing": [
+              "Adrenal"
+            ],
+            "detected_fraction": 0.8,
+            "anchor_pass": true
+          },
+          "Cord Insertion": {
+            "required": [
+              "Cord Insertion",
+              "Skin Line",
+              "Vertebrae"
+            ],
+            "present": [
+              "Skin Line",
+              "Vertebrae"
+            ],
+            "missing": [
+              "Cord Insertion"
+            ],
+            "detected_fraction": 0.666667,
+            "anchor_pass": false
+          },
+          "Transverse Kidneys": {
+            "required": [
+              "Kidney Cortex",
+              "Renal Pelvis",
+              "Vertebrae"
+            ],
+            "present": [
+              "Vertebrae"
+            ],
+            "missing": [
+              "Kidney Cortex",
+              "Renal Pelvis"
+            ],
+            "detected_fraction": 0.333333,
+            "anchor_pass": false
+          }
+        },
+        "polygons": [
+          {
+            "structure": "Stomach",
+            "type": "polygon",
+            "points": [
+              {
+                "x": 289.0,
+                "y": 584.0
+              },
+              {
+                "x": 293.0,
+                "y": 606.0
+              },
+              {
+                "x": 315.0,
+                "y": 620.0
+              },
+              {
+                "x": 369.0,
+                "y": 613.0
+              },
+              {
+                "x": 397.0,
+                "y": 599.0
+              },
+              {
+                "x": 391.0,
+                "y": 573.0
+              },
+              {
+                "x": 367.0,
+                "y": 557.0
+              },
+              {
+                "x": 334.0,
+                "y": 553.0
+              },
+              {
+                "x": 304.0,
+                "y": 563.0
+              }
+            ]
+          },
+          {
+            "structure": "Umbilical Vein",
+            "type": "polygon",
+            "points": [
+              {
+                "x": 405.0,
+                "y": 484.0
+              },
+              {
+                "x": 402.0,
+                "y": 504.0
+              },
+              {
+                "x": 409.0,
+                "y": 530.0
+              },
+              {
+                "x": 419.0,
+                "y": 537.0
+              },
+              {
+                "x": 437.0,
+                "y": 541.0
+              },
+              {
+                "x": 457.0,
+                "y": 538.0
+              },
+              {
+                "x": 457.0,
+                "y": 526.0
+              },
+              {
+                "x": 437.0,
+                "y": 517.0
+              },
+              {
+                "x": 431.0,
+                "y": 510.0
+              },
+              {
+                "x": 427.0,
+                "y": 479.0
+              },
+              {
+                "x": 419.0,
+                "y": 477.0
+              }
+            ]
+          },
+          {
+            "structure": "Vertebrae",
+            "type": "polygon",
+            "points": [
+              {
+                "x": 284.0,
+                "y": 425.0
+              },
+              {
+                "x": 270.0,
+                "y": 429.0
+              },
+              {
+                "x": 259.0,
+                "y": 438.0
+              },
+              {
+                "x": 248.0,
+                "y": 456.0
+              },
+              {
+                "x": 248.0,
+                "y": 465.0
+              },
+              {
+                "x": 259.0,
+                "y": 493.0
+              },
+              {
+                "x": 274.0,
+                "y": 502.0
+              },
+              {
+                "x": 294.0,
+                "y": 503.0
+              },
+              {
+                "x": 322.0,
+                "y": 476.0
+              },
+              {
+                "x": 320.0,
+                "y": 445.0
+              },
+              {
+                "x": 313.0,
+                "y": 431.0
+              }
+            ]
+          },
+          {
+            "structure": "Aorta",
+            "type": "polygon",
+            "points": [
+              {
+                "x": 323.0,
+                "y": 498.0
+              },
+              {
+                "x": 323.0,
+                "y": 503.0
+              },
+              {
+                "x": 325.0,
+                "y": 504.0
+              },
+              {
+                "x": 325.0,
+                "y": 506.0
+              },
+              {
+                "x": 329.0,
+                "y": 507.0
+              },
+              {
+                "x": 330.0,
+                "y": 509.0
+              },
+              {
+                "x": 346.0,
+                "y": 509.0
+              },
+              {
+                "x": 352.0,
+                "y": 503.0
+              },
+              {
+                "x": 350.0,
+                "y": 502.0
+              },
+              {
+                "x": 350.0,
+                "y": 498.0
+              },
+              {
+                "x": 347.0,
+                "y": 497.0
+              },
+              {
+                "x": 346.0,
+                "y": 495.0
+              },
+              {
+                "x": 341.0,
+                "y": 494.0
+              },
+              {
+                "x": 330.0,
+                "y": 494.0
+              }
+            ]
+          },
+          {
+            "structure": "Skin Line",
+            "type": "polygon",
+            "points": [
+              {
+                "x": 355.0,
+                "y": 377.0
+              },
+              {
+                "x": 250.0,
+                "y": 443.0
+              },
+              {
+                "x": 227.0,
+                "y": 521.0
+              },
+              {
+                "x": 233.0,
+                "y": 580.0
+              },
+              {
+                "x": 325.0,
+                "y": 651.0
+              },
+              {
+                "x": 436.0,
+                "y": 658.0
+              },
+              {
+                "x": 543.0,
+                "y": 534.0
+              },
+              {
+                "x": 551.0,
+                "y": 456.0
+              },
+              {
+                "x": 464.0,
+                "y": 380.0
+              }
+            ]
+          }
+        ],
+        "gt_metrics_available": false,
+        "gt_metrics": null,
+        "uv_standard": true,
+        "uv_metrics": {
+          "area": 714.0,
+          "aspect_ratio": 2.0214,
+          "skeleton_length": 41
+        },
+        "skin_line_shape": {
+          "circularity": 0.843906,
+          "axis_ratio": 1.225124
+        },
+        "quality_reasons": []
+      },
+      "2nd": {
+        "image_path": "/home/htic/MLN/PIPELINE/ANUAudit_Pipeline/12_Full_Image_Datasets/TEST_DICOM/IMG_20260220_1_34.dcm",
+        "input_filename": "IMG_20260220_1_34.dcm",
+        "plane": "Femur",
+        "plane_quality": "Standard",
+        "mean_structure_confidence": 1.0,
+        "plane_candidates": [
+          "femur"
+        ],
+        "bone_classification": {
+          "probabilities": {
+            "femur": 1.0,
+            "humerus": 1.5453964496980888e-10,
+            "radius_ulna": 4.0629526409929895e-09,
+            "tibia_fibula": 4.422621296962248e-11
+          }
+        },
+        "polygons": [
+          {
+            "structure": "Femur",
+            "type": "polygon",
+            "points": [
+              {
+                "x": 621.0,
+                "y": 318.0
+              },
+              {
+                "x": 616.0,
+                "y": 314.0
+              },
+              {
+                "x": 600.0,
+                "y": 318.0
+              },
+              {
+                "x": 556.0,
+                "y": 337.0
+              },
+              {
+                "x": 533.0,
+                "y": 341.0
+              },
+              {
+                "x": 519.0,
+                "y": 349.0
+              },
+              {
+                "x": 518.0,
+                "y": 353.0
+              },
+              {
+                "x": 542.0,
+                "y": 351.0
+              },
+              {
+                "x": 612.0,
+                "y": 326.0
+              }
+            ]
+          }
+        ],
+        "gt_metrics_available": false,
+        "gt_metrics": null
+      }
+    }
+  },
+  "final_plane_prediction": {
+    "single": {
+      "plane": "Abdominal Circumference",
+      "source": "segmentation",
+      "rank": "2nd",
+      "plane_quality": "Standard",
+      "confidence": 1.0
+    }
+  },
+  "biometry": {
+    "single": {
+      "Abdominal Circumference": {
+        "AC": 140.19,
+        "units": "mm",
+        "confidence": 0.9728,
+        "points": [
+          [
+            445.0,
+            373.0
+          ],
+          [
+            479.0,
+            386.0
+          ],
+          [
+            518.0,
+            412.0
+          ],
+          [
+            535.0,
+            431.0
+          ],
+          [
+            548.0,
+            454.0
+          ],
+          [
+            548.0,
+            498.0
+          ],
+          [
+            518.0,
+            581.0
+          ],
+          [
+            501.0,
+            620.0
+          ],
+          [
+            449.0,
+            662.0
+          ],
+          [
+            419.0,
+            671.0
+          ],
+          [
+            365.0,
+            671.0
+          ],
+          [
+            330.0,
+            662.0
+          ],
+          [
+            279.0,
+            626.0
+          ],
+          [
+            258.0,
+            607.0
+          ],
+          [
+            240.0,
+            584.0
+          ],
+          [
+            232.0,
+            556.0
+          ],
+          [
+            232.0,
+            495.0
+          ],
+          [
+            245.0,
+            450.0
+          ],
+          [
+            262.0,
+            418.0
+          ],
+          [
+            275.0,
+            405.0
+          ],
+          [
+            288.0,
+            396.0
+          ],
+          [
+            365.0,
+            364.0
+          ],
+          [
+            394.0,
+            364.0
+          ]
+        ],
+        "audit": {
+          "name": "IMG_20260220_1_34.dcm",
+          "no of points": 4,
+          "points": "(458, 380) (305, 644) (249, 440) (519, 579)",
+          "type": "AC",
+          "yolo detection": "correct",
+          "point misplaced": "1",
+          "intersection mismatch": "1",
+          "APAD range": "1",
+          "TAD length": "1",
+          "misplaced caliper": "Bottom",
+          "mismatched APAD angle": "",
+          "mismatched intersection angle": "",
+          "TAD difference": "",
+          "RESULTS": "GOOD"
+        }
+      }
+    }
+  }
+}

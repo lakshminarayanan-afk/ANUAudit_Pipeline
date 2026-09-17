@@ -16,9 +16,9 @@ try:
 except ImportError:
     _DICOM_AVAILABLE = False
 
-from seg.LIMBS.config import Config
-from seg.LIMBS.model import MultiTaskSwinUNet
-from seg.LIMBS.dataset import load_bone_mask_from_npz, LABEL_MAP, NUM_SEG_CLASSES, IGNORE_INDEX
+from source_codes.seg.LIMBS.config import Config
+from source_codes.seg.LIMBS.model import MultiTaskSwinUNet
+from source_codes.seg.LIMBS.dataset import load_bone_mask_from_npz, LABEL_MAP, NUM_SEG_CLASSES, IGNORE_INDEX
 from utils.extract_panels import extract_panel
 from utils.seg_biom_results_json import write_segmentation_result
 
@@ -723,17 +723,16 @@ def visualise(image_path: str, pred_mask_final: np.ndarray, gt_mask: np.ndarray 
 # ═══════════════════════════════════════════════════════════════════════
 
 def build_per_image_json_entry(
-    image_path: Path, vis_path: Path | None, seg_plane: str | None, seg_predicted_label: str | None,
+    image_path: Path, seg_plane: str | None, seg_predicted_label: str | None, plane_quality: str,
     mean_structure_confidence: float, plane_candidates: list[str],
     probs_dict: dict, polygons: list[dict],
     class_metrics: dict[str, dict] | None,
 ) -> dict:
     return {
         "image_path": str(image_path),
-        "vis_path": str(vis_path),
         "input_filename": image_path.name,
         "plane": seg_plane if seg_plane is not None else "unknown",
-        "predicted_bone_class": seg_predicted_label.upper() if seg_predicted_label else None,
+        "plane_quality": plane_quality,
         "mean_structure_confidence": round(mean_structure_confidence, 6),
         "plane_candidates": plane_candidates,
         "bone_classification": {
@@ -755,7 +754,7 @@ def build_per_image_json_entry(
     }
 
 
-from ui.utils.dcm_png_utils import anonymized_png_for_dicom
+# from ui.utils.dcm_png_utils import anonymized_png_for_dicom
 
 # ═══════════════════════════════════════════════════════════════════════
 #  MAIN INFERENCE LOOP  (single flat image_dir, no plane organisation)
@@ -764,9 +763,8 @@ from ui.utils.dcm_png_utils import anonymized_png_for_dicom
 def _process_images(
     model: torch.nn.Module,
     device: torch.device,
-    image_dir: str,
+    items,
     masks_dir: str | None,
-    vis_dir: Path,
     alpha: float,
     accum: dict,
 ) -> dict:
@@ -787,21 +785,30 @@ def _process_images(
         logging.info("No masks_dir given - running in INFERENCE-ONLY mode "
                       "(predictions + visualisations only, no GT metrics).")
 
-    img_paths = discover_images(image_dir)
-    logging.info(f"Found {len(img_paths)} images in {image_dir}")
-    logging.info(f"GT masks directory: {masks_path if masks_path else 'None (GT metrics disabled)'}")
+    for n_done, item in enumerate(items, start=1):
 
-    for n_done, img_path in enumerate(img_paths, start=1):
+        img_path = Path(item["image_path"])
         stem = img_path.stem
         input_suffix = img_path.suffix
-        logging.info(f"[{n_done}/{len(img_paths)}] Processing: {stem}{input_suffix}")
+
+        logging.info(
+            f"[{n_done}/{len(items)}] Processing: {stem}{input_suffix}"
+        )
 
         raw_gray = load_gray_image(str(img_path))
         if raw_gray is None:
             continue
-        orig_h, orig_w = raw_gray.shape[:2]
 
-        tensor, pad_h, pad_w = preprocess_gray_to_tensor(raw_gray)
+        panel = item["panel"]
+
+        panel_gray = extract_panel(
+            raw_gray,
+            panel
+        )
+
+        orig_h, orig_w = panel_gray.shape[:2]
+
+        tensor, pad_h, pad_w = preprocess_gray_to_tensor(panel_gray)
 
         # ── single forward pass; seg_logits + bone_logits reused for everything below ──
         seg_logits, bone_logits = run_model(model, tensor, device)
@@ -823,6 +830,21 @@ def _process_images(
         probs_dict, logits_dict = extract_bone_classification(bone_logits[0])
         pred_bone_idx = int(torch.argmax(bone_logits[0]).item())
         pred_bone_name = LABEL_MAP[pred_bone_idx + 1]
+
+        STANDARD_THRESHOLD = 0.8
+
+        # Get top bone class and its probability
+        top_bone_label, top_bone_prob = max(
+            probs_dict.items(),
+            key=lambda x: x[1]
+        )
+
+        # Standard / Non-standard classification
+        if top_bone_prob > STANDARD_THRESHOLD:
+            plane_quality = f"Standard"
+        else:
+            plane_quality = f"Non-Standard"
+            
         if gt_bone_idx is not None:
             accum["bone_total"] += 1
             accum["bone_correct"] += int(pred_bone_idx == gt_bone_idx)
@@ -831,47 +853,53 @@ def _process_images(
         #    plain stem since there's only one shared folder - use rglob-safe stem (no plane
         #    prefix needed since images all come from one tree, but if two files share a stem
         #    in different subfolders this will overwrite; rare in flat datasets) ──
-        png_path = anonymized_png_for_dicom(img_path)
+        # png_path = anonymized_png_for_dicom(img_path)
 
-        if png_path:
-            vis_path = visualise(
-                str(png_path), pred_mask_final, gt_mask, orig_h, orig_w,
-                vis_dir / f"{stem}_vis", input_suffix,
-                gt_bone_name=(gt_bone_name.upper() if gt_bone_name else "NA"),
-                pred_bone_name=pred_bone_name.upper(), alpha=alpha,
-            )
-        else:
-            vis_path = visualise(
-                str(img_path), pred_mask_final, gt_mask, orig_h, orig_w,
-                vis_dir / f"{stem}_vis", input_suffix,
-                gt_bone_name=(gt_bone_name.upper() if gt_bone_name else "NA"),
-                pred_bone_name=pred_bone_name.upper(), alpha=alpha,
-            )
+        # if png_path:
+        #     vis_path = visualise(
+        #         str(png_path), pred_mask_final, gt_mask, orig_h, orig_w,
+        #         vis_dir / f"{stem}_vis", input_suffix,
+        #         gt_bone_name=(gt_bone_name.upper() if gt_bone_name else "NA"),
+        #         pred_bone_name=pred_bone_name.upper(), alpha=alpha,
+        #     )
+        # else:
+        #     vis_path = visualise(
+        #         str(img_path), pred_mask_final, gt_mask, orig_h, orig_w,
+        #         vis_dir / f"{stem}_vis", input_suffix,
+        #         gt_bone_name=(gt_bone_name.upper() if gt_bone_name else "NA"),
+        #         pred_bone_name=pred_bone_name.upper(), alpha=alpha,
+        #     )
 
-        if vis_path:
-            logging.info(f"    [VIS] saved -> {vis_path}")
-        else:
-            logging.warning(f"    [VIS] FAILED to save visualisation for {stem}{input_suffix}")
+        # if vis_path:
+        #     logging.info(f"    [VIS] saved -> {vis_path}")
+        # else:
+        #     logging.warning(f"    [VIS] FAILED to save visualisation for {stem}{input_suffix}")
 
         # ── segmentation-derived plane / confidence / polygons (FINAL mask only) ──
         seg_class_idx, seg_label = determine_final_bone(pred_mask_final)
-        seg_plane_code = PLANE_CODE_FOR_LABEL[seg_label] if seg_label is not None else None
-        mean_structure_confidence = compute_mean_structure_confidence(
-            seg_logits[0], pred_mask_final, seg_class_idx
-        )
-        if seg_label is None:
-            plane_candidates = []
-            polygons = []
-        else:
-            plane_candidates = compute_plane_candidates(probs_dict)
-            polygons = build_polygons_from_final_mask(pred_mask_final, orig_h, orig_w)
 
+        # Write top class into plane_candidates
+        plane_candidates = [top_bone_label]
+
+        # Write top probability into mean_structure_confidence
+        mean_structure_confidence = float(top_bone_prob)
+
+        # Write top class as the plane
+        seg_plane_code = PLANE_CODE_FOR_LABEL.get(top_bone_label)
+
+        # Polygons still come from the segmentation mask
+        polygons = build_polygons_from_final_mask(
+            pred_mask_final,
+            orig_h,
+            orig_w
+        )
         # ── per-image entry, appended into the SHARED aggregate json_entries list ──
         entry = build_per_image_json_entry(
-            img_path, vis_path, seg_plane_code, seg_label, mean_structure_confidence, plane_candidates,
+            img_path, seg_plane_code, seg_label, plane_quality, mean_structure_confidence, plane_candidates,
             probs_dict, polygons, class_metrics,
         )
         accum["json_entries"].append(entry)
+        write_segmentation_result(item, entry)
 
         n_images += 1
 
@@ -953,59 +981,59 @@ def run_inference_limbs(
     stats = _process_images(
         model=model,
         device=device,
-        image_dir=image_dir,
+        items = items,
         masks_dir=masks_dir,
-        vis_dir=vis_dir,
         alpha=alpha,
         accum=accum,
     )
     logging.info(f"Finished: {stats['n_images']} images processed ({stats['n_images_with_gt']} with GT)")
+    return accum["json_entries"]
 
-    json_entries = accum["json_entries"]
-    if not json_entries:
-        logging.warning("No images processed - nothing to write. Double-check --image_dir "
-                         "actually exists and contains supported files "
-                         "(.png/.jpg/.jpeg/.bmp/.tiff/.tif/.dcm/.dicom).")
-        return vis_dir, out / "inference_results.json"
+    # json_entries = accum["json_entries"]
+    # if not json_entries:
+    #     logging.warning("No images processed - nothing to write. Double-check --image_dir "
+    #                      "actually exists and contains supported files "
+    #                      "(.png/.jpg/.jpeg/.bmp/.tiff/.tif/.dcm/.dicom).")
+    #     return vis_dir, out / "inference_results.json"
 
-    # ── ONE aggregate JSON. APPEND mode: if inference_results.json already exists, its
-    #    existing "images" entries are merged in rather than overwritten. ──
-    results_json_path = out / "inference_results.json"
-    existing_entries: list[dict] = []
-    existing_bone_correct = 0
-    existing_bone_total = 0
-    if results_json_path.exists():
-        try:
-            with open(results_json_path, "r") as f:
-                prev = json.load(f)
-            existing_entries = prev.get("images", [])
-            prev_summary = prev.get("run_summary", {})
-            existing_bone_correct = prev_summary.get("bone_classification_correct", 0) or 0
-            existing_bone_total = prev_summary.get("bone_classification_total", 0) or 0
-            logging.info(f"[JSON] found existing {results_json_path} with {len(existing_entries)} "
-                         f"image(s) - appending this run's results to it")
-        except Exception as exc:
-            logging.warning(f"Could not read existing {results_json_path} ({exc}) - starting fresh.")
+    # # ── ONE aggregate JSON. APPEND mode: if inference_results.json already exists, its
+    # #    existing "images" entries are merged in rather than overwritten. ──
+    # results_json_path = out / "inference_results.json"
+    # existing_entries: list[dict] = []
+    # existing_bone_correct = 0
+    # existing_bone_total = 0
+    # if results_json_path.exists():
+    #     try:
+    #         with open(results_json_path, "r") as f:
+    #             prev = json.load(f)
+    #         existing_entries = prev.get("images", [])
+    #         prev_summary = prev.get("run_summary", {})
+    #         existing_bone_correct = prev_summary.get("bone_classification_correct", 0) or 0
+    #         existing_bone_total = prev_summary.get("bone_classification_total", 0) or 0
+    #         logging.info(f"[JSON] found existing {results_json_path} with {len(existing_entries)} "
+    #                      f"image(s) - appending this run's results to it")
+    #     except Exception as exc:
+    #         logging.warning(f"Could not read existing {results_json_path} ({exc}) - starting fresh.")
 
-    all_entries = existing_entries + json_entries
-    total_bone_correct = existing_bone_correct + accum["bone_correct"]
-    total_bone_total = existing_bone_total + accum["bone_total"]
-    n_with_gt = sum(1 for e in all_entries if e.get("gt_metrics_available"))
-    bone_acc = (total_bone_correct / total_bone_total) if total_bone_total > 0 else None
+    # all_entries = existing_entries + json_entries
+    # total_bone_correct = existing_bone_correct + accum["bone_correct"]
+    # total_bone_total = existing_bone_total + accum["bone_total"]
+    # n_with_gt = sum(1 for e in all_entries if e.get("gt_metrics_available"))
+    # bone_acc = (total_bone_correct / total_bone_total) if total_bone_total > 0 else None
 
-    run_summary = {
-        "n_images": len(all_entries),
-        "n_images_with_gt": n_with_gt,
-        "mean_structure_dice_over_images_with_gt": _cumulative_training_comparable_mean_fg_dice(all_entries),
-        "bone_classification_accuracy": bone_acc,
-        "bone_classification_correct": total_bone_correct,
-        "bone_classification_total": total_bone_total,
-    }
-    with open(results_json_path, "w") as f:
-        json.dump({"run_summary": run_summary, "images": all_entries}, f, indent=2)
-    logging.info(f"\n[JSON] wrote {results_json_path}  ({len(all_entries)} images total)")
+    # run_summary = {
+    #     "n_images": len(all_entries),
+    #     "n_images_with_gt": n_with_gt,
+    #     "mean_structure_dice_over_images_with_gt": _cumulative_training_comparable_mean_fg_dice(all_entries),
+    #     "bone_classification_accuracy": bone_acc,
+    #     "bone_classification_correct": total_bone_correct,
+    #     "bone_classification_total": total_bone_total,
+    # }
+    # with open(results_json_path, "w") as f:
+    #     json.dump({"run_summary": run_summary, "images": all_entries}, f, indent=2)
+    # logging.info(f"\n[JSON] wrote {results_json_path}  ({len(all_entries)} images total)")
 
-    return str(vis_dir), str(results_json_path)
+    # return str(vis_dir), str(results_json_path)
 
 
 # ─────────────────────────────────────────────────────────────────────────

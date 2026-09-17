@@ -37,9 +37,9 @@ import torchvision.transforms.functional as TF
 # Optional heavy imports
 # -------------------------------------------------------------------------
 _SCRIPT_DIR = os.path.abspath(os.path.dirname(__file__))
-_BASE_DIR   = os.path.abspath(os.path.join(_SCRIPT_DIR, '..', '..'))
+# _BASE_DIR   = os.path.abspath(os.path.join(_SCRIPT_DIR,  '..'))
 
-sys.path.insert(0, os.path.join(_BASE_DIR, 'model', 'head', 'head_unet_new'))
+sys.path.insert(0, os.path.join(_SCRIPT_DIR, 'model', 'head', 'head_unet_new'))
 # sys.path.insert(0, os.path.join(_BASE_DIR, 'model', 'head', 'head_medsam'))
 
 # UNet — required for TT plane (BPD / OFD / HC)
@@ -1142,6 +1142,7 @@ def measure_cm(
 
 def setup_unet_model(tc_tv_model_ckpt):
     """Load the Dual-Head UNet from UNET_CHECKPOINT_PATH."""
+    print(f"_SCRIPT_DIR:{_SCRIPT_DIR}")
     model      = UNet()
     checkpoint = torch.load(tc_tv_model_ckpt, map_location=UNET_DEVICE)
     state_dict = checkpoint.get('model_state_dict', checkpoint)

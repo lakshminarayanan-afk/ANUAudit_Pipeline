@@ -1236,6 +1236,7 @@ def run_inference_abdomen(
 
     for item in items:
         img_path = Path(item["image_path"])
+        panel = item["panel"]
         logging.info(f"Processing: {img_path.name}")
         gray = load_gray_image(str(img_path))
         if gray is None:
@@ -1248,9 +1249,15 @@ def run_inference_abdomen(
 
         orig_h, orig_w = gray.shape[:2]
 
+        panel_gray = extract_panel(
+            gray,
+            panel
+        )
+
+
         # ── Predict (EXISTING abdomen model + EXISTING abdomen post-processing, untouched) ──
         label_map, skin_bin, probs, (skin_circularity, skin_axis_ratio) = predict(
-            model, gray, device, threshold
+            model, panel_gray, device, threshold
         )
 
         # ── GT (optional; never crashes the run) ──
@@ -1333,7 +1340,7 @@ def run_inference_abdomen(
 
         # ── One JSON entry, appended to the SHARED aggregate list (never a per-image file) ──
         entry = build_per_image_json_entry(
-            img_path, None, plane_result, mean_structure_confidence, polygons, gt_metrics,
+            img_path, plane_result, mean_structure_confidence, polygons, gt_metrics,
             skin_circularity, skin_axis_ratio,
         )
         if plane_result["quality"] == "Standard":
@@ -1361,42 +1368,42 @@ def run_inference_abdomen(
         #     "mean_struct_dice":           round(image_mean_struct_dice, 6) if image_mean_struct_dice is not None else None,
         # })
 
-        if progress_callback is not None:
-            img_path_str = str(img_path)
+        # if progress_callback is not None:
+        #     img_path_str = str(img_path)
 
-            # True when the selected plane is Standard
-            is_stnd = plane_result["quality"] == "Standard"
+        #     # True when the selected plane is Standard
+        #     is_stnd = plane_result["quality"] == "Standard"
 
-            progress_callback(img_path_str, is_stnd)
+        #     progress_callback(img_path_str, is_stnd)
 
     # ── ONE aggregate JSON for the whole run - flat under metrics/, no per-plane dir.
     # APPEND mode: if inference_results.json already exists (e.g. this is a second/third
     # run against the same --output_dir for a different plane's --image_dir), its existing
     # "images" entries are merged in rather than overwritten, so results from every plane
     # accumulate in the same file instead of the last run clobbering the previous ones. ──
-    results_json_path = out / "inference_results.json"
-    existing_entries: list[dict] = []
-    existing_n_with_gt = 0
-    if results_json_path.exists():
-        try:
-            with open(results_json_path, "r") as f:
-                prev = json.load(f)
-            existing_entries = prev.get("images", [])
-            existing_n_with_gt = prev.get("run_summary", {}).get("n_images_with_gt", 0)
-            logging.info(f"[JSON] found existing {results_json_path} with {len(existing_entries)} "
-                         f"image(s) - appending this run's results to it")
-        except Exception as exc:
-            logging.warning(f"Could not read existing {results_json_path} ({exc}) - starting fresh.")
+    # results_json_path = out / "inference_results.json"
+    # existing_entries: list[dict] = []
+    # existing_n_with_gt = 0
+    # if results_json_path.exists():
+    #     try:
+    #         with open(results_json_path, "r") as f:
+    #             prev = json.load(f)
+    #         existing_entries = prev.get("images", [])
+    #         existing_n_with_gt = prev.get("run_summary", {}).get("n_images_with_gt", 0)
+    #         logging.info(f"[JSON] found existing {results_json_path} with {len(existing_entries)} "
+    #                      f"image(s) - appending this run's results to it")
+    #     except Exception as exc:
+    #         logging.warning(f"Could not read existing {results_json_path} ({exc}) - starting fresh.")
 
-    all_entries = existing_entries + json_entries
-    run_summary = {
-        "n_images":           len(all_entries),
-        "n_images_with_gt":   existing_n_with_gt + n_with_gt,
-        "mean_structure_dice_over_images_with_gt": None,  # filled in below, after gt_metrics.csv is written
-    }
-    with open(results_json_path, "w") as f:
-        json.dump({"run_summary": run_summary, "images": all_entries}, f, indent=2)
-    logging.info(f"\n[JSON] wrote {results_json_path}  ({len(all_entries)} images total)")
+    # all_entries = existing_entries + json_entries
+    # run_summary = {
+    #     "n_images":           len(all_entries),
+    #     "n_images_with_gt":   existing_n_with_gt + n_with_gt,
+    #     "mean_structure_dice_over_images_with_gt": None,  # filled in below, after gt_metrics.csv is written
+    # }
+    # with open(results_json_path, "w") as f:
+    #     json.dump({"run_summary": run_summary, "images": all_entries}, f, indent=2)
+    # logging.info(f"\n[JSON] wrote {results_json_path}  ({len(all_entries)} images total)")
 
     # ── gt_metrics.csv - one row per (image, structure), only for images with GT.
     # APPEND mode: header written only the first time the file is created. ──
@@ -1428,10 +1435,10 @@ def run_inference_abdomen(
     #             continue
     #         cumulative_dice_by_image.setdefault(row["input_filename"], []).append(float(row["dice"]))
 
-    cumulative_image_means = [float(np.mean(v)) for v in cumulative_dice_by_image.values() if v]
-    run_summary["mean_structure_dice_over_images_with_gt"] = _mean(cumulative_image_means)
-    with open(results_json_path, "w") as f:
-        json.dump({"run_summary": run_summary, "images": all_entries}, f, indent=2)
+    # cumulative_image_means = [float(np.mean(v)) for v in cumulative_dice_by_image.values() if v]
+    # run_summary["mean_structure_dice_over_images_with_gt"] = _mean(cumulative_image_means)
+    # with open(results_json_path, "w") as f:
+    #     json.dump({"run_summary": run_summary, "images": all_entries}, f, indent=2)
 
     # ── inference_summary.csv - one row per image. APPEND mode, same as above. ──
     # inference_summary_csv_path = met_dir / "inference_summary.csv"
@@ -1452,7 +1459,7 @@ def run_inference_abdomen(
     # logging.info(f"  Visualisations -> {vis_dir}")
     # logging.info(f"  Metrics        -> {met_dir}")
 
-    return str(vis_dir), str(results_json_path)
+    # return str(vis_dir), str(results_json_path)
         # "metrics_dir": str(met_dir),
         
         # "gt_metrics_csv_path": str(gt_metrics_csv_path),

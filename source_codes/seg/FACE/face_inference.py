@@ -32,6 +32,7 @@ from skimage.measure import find_contours
 
 from config import CLASS_NAMES_FACE, PALETTE_RGB_FACE
 from utils.seg_biom_results_json import write_segmentation_result
+from utils.extract_panels import extract_panel
 
 try:
     import pydicom
@@ -3366,7 +3367,6 @@ def make_visualization(
 
 def build_per_image_json_entry(
     image_path: Path,
-    patient_id: str,
     view: str,
     plane_info: dict,
     plane_candidates: list[str],
@@ -3383,7 +3383,7 @@ def build_per_image_json_entry(
         "image_path": str(image_path),
         "input_filename": image_path.name,
 
-        "patient_id": patient_id,
+
         "view": view,
 
         "plane": plane_info["predicted_plane"],
@@ -3577,11 +3577,17 @@ def run_inference_face(
         #     load_rgb_image(str(anon_path)) if anon_path is not None else None
         # )
 
+        panel = item["panel"]
+
+        panel_rgb = extract_panel(
+            rgb,
+            panel
+        )
         orig_h, orig_w = (
-            rgb.shape[:2]
+            panel_rgb.shape[:2]
         )
 
-        patient_id = stem
+        # patient_id = stem
         view = "Unknown"
 
         image_tensor = (
@@ -3825,7 +3831,6 @@ def run_inference_face(
 
             img_path,
             # vis_path,
-            patient_id,
             view,
             plane_info,
             plane_candidates,

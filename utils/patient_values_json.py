@@ -4,7 +4,6 @@ from pathlib import Path
 
 def write_patient_results(
     json_path,
-    output_dir,
     patient_name,
     best,
     bpd_val,

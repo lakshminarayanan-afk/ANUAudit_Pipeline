@@ -18,22 +18,22 @@ def run_head_model(items):
         calv_min_px=1000,
     )
 
-def run_abdomen_model(image_paths):
+def run_abdomen_model(items):
 
-    return run_inference_abdomen(
-        image_paths=image_paths,
+    return run_inference_abdomen(        
         checkpoint=Config.SEG_MODEL_ABD,
+        items=items,
         threshold=0.5,
         vis_confidence=0.70,
+        device_str= "cuda",
     )
 
 
-def run_limbs_model(image_paths):
+def run_limbs_model(items):
 
     return run_inference_limbs(
         checkpoint=Config.SEG_MODEL_LIMBS,
-        output_dir=output_dir,
-        image_dir=image_paths,
+        items=items,
         device_str = "cuda",
         alpha = 0.35,
         # debug = False,
@@ -42,16 +42,13 @@ def run_limbs_model(image_paths):
         # progress_callback= progress_callback
     )
 
-def run_face_model(image_paths):
+def run_face_model(items):
     return run_inference_face(
                 checkpoint= Config.SEG_MODEL_FACE,
-                image_dir=image_paths,
-                output_dir=output_dir, 
+                items=items,
                 masks_dir = None,
-                num_vis_images = 10000,
                 seed = 42,
                 device_str= "cuda",
-                progress_callback = progress_callback,
             )
 
 MODEL_CONFIG = {
@@ -60,22 +57,21 @@ MODEL_CONFIG = {
         "function": run_head_model,
     },
 
+    "Abdomen": {
+        "function": run_abdomen_model,
+    },
 
-    # "Abdomen": {
-    #     "function": run_abdomen_model,
-    # },
+    "Lower Limbs": {
+        "function": run_limbs_model,
+    },
 
-    # "Lower Limbs": {
-    #     "function": run_limbs_model,
-    # },
+    "Upper Limbs": {
+        "function": run_limbs_model,
+    },
 
-    # "Upper Limbs": {
-    #     "function": run_limbs_model,
-    # },
-
-    # "Face": {
-    #     "function": run_face_model,
-    # },
+    "Face": {
+        "function": run_face_model,
+    },
 
     # "Spine": {
     #     "function": run_spine_model,
@@ -93,7 +89,7 @@ MODEL_CONFIG = {
 
 BIOM_MODEL_PLANE_CONFIG = {
     "bpd": [
-        "Transthalamic plane",
+        "Transthalamic",
     ],
 
     "abdomen": [
@@ -104,8 +100,8 @@ BIOM_MODEL_PLANE_CONFIG = {
         "Femur",
     ],
 
-    "tc" : ["Transcerebellar plane"],
-    "tv" : ["Transventricular plane"],
+    "tc" : ["Transcerebellar"],
+    "tv" : ["Transventricular"],
 
     "liquor" : ["Amniotic Fluid or Liquor"]
 

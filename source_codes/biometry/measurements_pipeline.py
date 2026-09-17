@@ -1,14 +1,23 @@
 from source_codes.biometry.ac_bpd_fl import biomet_inf
+from source_codes.audit.FINAL_PIPELINE.inference import (run_biometry_audit, setup_biometry_validators)
 from source_codes.biometry.tt_tc_tv import process_single_image_tc, process_single_image_tv, setup_unet_model
 from source_codes.biometry.sdvp import setup_model as setup_sdvp_model, process_single_image_sdvp
 from utils.seg_biom_results_json import write_biometry_result
 from config import Config
+import torch
+
+device = torch.device(
+    "cuda" if torch.cuda.is_available() else "cpu"
+)
 
 def measurements_pipeline(model_inputs):
 
     # ============================================================
     # BPD / AC / FL
     # ============================================================
+    print("\n" + "=" * 70)
+    print("RUN 1 — BPD / AC / FL")
+    print("=" * 70)
 
     bpd_ac_fl_model_inputs = {
         "bpd": model_inputs.get("bpd", []),
@@ -16,11 +25,24 @@ def measurements_pipeline(model_inputs):
         "limbs": model_inputs.get("limbs", []),
     }
 
-    biomet_result = biomet_inf(bpd_ac_fl_model_inputs)
+    print(f"BPD     : {len(bpd_ac_fl_model_inputs['bpd'])} images")
+    print(f"Abdomen : {len(bpd_ac_fl_model_inputs['abdomen'])} images")
+    print(f"Limbs   : {len(bpd_ac_fl_model_inputs['limbs'])} images")
 
+    print("\n[RUNNING] BPD / AC / FL...")
+    biomet_inf(bpd_ac_fl_model_inputs)
+    print("[RUNNING] BPD / AC / FL Audit...")
+    validators = setup_biometry_validators(device)
+    run_biometry_audit(bpd_ac_fl_model_inputs, validators)
+                                                               
     # ============================================================
     # TC → TCD / CM; TV -> 
     # ============================================================
+
+    print("\n" + "=" * 70)
+    print("RUN 2 — TC / TCD / CM")
+    print("=" * 70)
+
     model_unet = setup_unet_model(tc_tv_model_ckpt= Config.UNET_CHECKPOINT_PATH)
 
     tc_inputs = model_inputs.get("tc", [])
@@ -54,6 +76,10 @@ def measurements_pipeline(model_inputs):
     # SDVP / LIQUOR
     # ============================================================
 
+    print("\n" + "=" * 70)
+    print("RUN 3 — LIQUOR")
+    print("=" * 70)
+
     liquor_inputs = model_inputs.get("liquor", [])
 
     if liquor_inputs:
@@ -77,5 +103,3 @@ def measurements_pipeline(model_inputs):
                 item,
                 json_entry
             )
-
-    return biomet_result

@@ -16,6 +16,24 @@ def prepare_plane_inputs(json_directory, model_plane_config=BIOM_MODEL_PLANE_CON
         with open(json_path, "r") as f:
             data = json.load(f)
 
+        # ============================================================
+        # SKIP BISPLIT / QUAD IMAGES
+        # ============================================================
+
+        modality = data.get("modality", {})
+        split_type = modality.get("split", "single")
+
+        if split_type in {"bisplit", "quad"}:
+            print(
+                f"[SKIP] {json_path.name} | "
+                f"split={split_type}"
+            )
+            continue
+
+        # ============================================================
+        # IMAGE PATH
+        # ============================================================
+        
         image_path = data.get("image_path")
         final_prediction = data.get("final_plane_prediction", {})
 
@@ -23,8 +41,17 @@ def prepare_plane_inputs(json_directory, model_plane_config=BIOM_MODEL_PLANE_CON
             continue
 
         for panel, prediction in final_prediction.items():
-            plane = prediction.get("plane")
 
+            plane_quality = prediction.get("plane_quality")
+            if plane_quality != "Standard":
+                print(
+                    f"[SKIP] {json_path.name} | "
+                    f"panel={panel} | "
+                    f"plane_quality={plane_quality}"
+                )
+                continue
+
+            plane = prediction.get("plane")
             if not plane:
                 continue
 

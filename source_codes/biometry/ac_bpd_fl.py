@@ -15,9 +15,9 @@ from glob import glob
 from scipy.optimize import brentq
 from tqdm import main
 
-from biometry.weights.head.head_unet.model import UNet
-from biometry.weights.abd.model import YNet
-from biometry.weights.limbs.model import YNet as YNet_limbs
+from source_codes.biometry.weights.head.head_unet.model import UNet
+from source_codes.biometry.weights.abd.model import YNet
+from source_codes.biometry.weights.limbs.model import YNet as YNet_limbs
 # from weights.abd.model import YNet
 # from weights.limbs.model import YNet as YNet_limbs
 
@@ -800,7 +800,7 @@ def process_single_file_fl(dicom_path=None, image_path=None):
 
     img_bgr, _, pixel_spacing, is_dicom = load_image_generic(file_path)
 
-    has_split = detectCenterLines(img_bgr)
+    # has_split = detectCenterLines(img_bgr)
 
     # ---------------------------------------------------------
     # Visualization image:
@@ -833,14 +833,14 @@ def process_single_file_fl(dicom_path=None, image_path=None):
     #         print(f"⚠️ No anonymized PNG found for: {file_path}")
     #         print("   Falling back to original image for visualization.")
             
-    if has_split:
-        frames = [
-            (img_bgr[:, :img_bgr.shape[1] // 2], "left",  0),
-            (img_bgr[:, img_bgr.shape[1] // 2:], "right", img_bgr.shape[1] // 2),
-        ]
-    else:
-        frames = [(img_bgr, "full", 0)]
-
+    # if has_split:
+    #     frames = [
+    #         (img_bgr[:, :img_bgr.shape[1] // 2], "left",  0),
+    #         (img_bgr[:, img_bgr.shape[1] // 2:], "right", img_bgr.shape[1] // 2),
+    #     ]
+    # else:
+    #     frames = [(img_bgr, "full", 0)]
+    frames = [(img_bgr, "full", 0)]
     # master_vis = img_bgr.copy()
     
     master_vis = vis_img_bgr.copy()
@@ -852,13 +852,13 @@ def process_single_file_fl(dicom_path=None, image_path=None):
             get_clinical_best_fl(seg_map, frame_np)
 
         # combined_frame = frame_np.copy()
-        if has_split:
-            vis_frame_np = vis_img_bgr[
-                :,
-                offset:offset + frame_np.shape[1]
-            ]
-        else:
-            vis_frame_np = vis_img_bgr
+        # if has_split:
+        #     vis_frame_np = vis_img_bgr[
+        #         :,
+        #         offset:offset + frame_np.shape[1]
+        #     ]
+        # else:
+        vis_frame_np = vis_img_bgr
 
         combined_frame = vis_frame_np.copy()
 
@@ -882,7 +882,7 @@ def process_single_file_fl(dicom_path=None, image_path=None):
 
         master_vis[:, offset:offset + frame_np.shape[1]] = combined_frame
 
-        if status == "Rejected" or has_split:
+        if status == "Rejected":
             continue
 
         # ── Confidence score: mean seg_map probability within best_mask ─
@@ -939,7 +939,6 @@ def process_single_file_fl(dicom_path=None, image_path=None):
 
         return (
             best_result[0],
-            best_result[1],
             is_dicom,
             best_result[2],
             {
@@ -955,40 +954,40 @@ def process_single_file_fl(dicom_path=None, image_path=None):
         )
 
     # ── Split-screen overlays (unchanged logic) ───────────────────────
-    if has_split:
-        # os.makedirs(OVERLAY_DIR_FEMUR_SPLITSCREEN, exist_ok=True)
-        # splitscreen_overlay_path = os.path.join(
-        #     OVERLAY_DIR_FEMUR_SPLITSCREEN,
-        #     os.path.basename(file_path) + "_overlay.png",
-        # )
-        # cv2.imwrite(splitscreen_overlay_path, master_vis)
-        # print(f"Split-screen overlay saved to: {splitscreen_overlay_path}")
+    # if has_split:
+    #     # os.makedirs(OVERLAY_DIR_FEMUR_SPLITSCREEN, exist_ok=True)
+    #     # splitscreen_overlay_path = os.path.join(
+    #     #     OVERLAY_DIR_FEMUR_SPLITSCREEN,
+    #     #     os.path.basename(file_path) + "_overlay.png",
+    #     # )
+    #     # cv2.imwrite(splitscreen_overlay_path, master_vis)
+    #     # print(f"Split-screen overlay saved to: {splitscreen_overlay_path}")
 
-        combined_best_mask = np.zeros(img_bgr.shape[:2], dtype=np.uint8)
-        for frame_np, side, offset in frames:
-            seg_map_ss = run_inference_fl(frame_np)
-            _, _, _, best_mask_ss, _, _, _, _ = get_clinical_best_fl(seg_map_ss, frame_np)
-            if best_mask_ss is not None:
-                combined_best_mask[
-                    :, offset:offset + frame_np.shape[1]
-                ] = best_mask_ss
+    #     combined_best_mask = np.zeros(img_bgr.shape[:2], dtype=np.uint8)
+    #     for frame_np, side, offset in frames:
+    #         seg_map_ss = run_inference_fl(frame_np)
+    #         _, _, _, best_mask_ss, _, _, _, _ = get_clinical_best_fl(seg_map_ss, frame_np)
+    #         if best_mask_ss is not None:
+    #             combined_best_mask[
+    #                 :, offset:offset + frame_np.shape[1]
+    #             ] = best_mask_ss
 
-        if combined_best_mask.any():
-            # os.makedirs(MASK_OVERLAY_DIR_FEMUR_SPLITSCREEN, exist_ok=True)
-            # splitscreen_mask_overlay_path = os.path.join(
-            #     MASK_OVERLAY_DIR_FEMUR_SPLITSCREEN,
-            #     os.path.basename(file_path) + "_mask_overlay.png",
-            # )
-            # save_mask_overlay(
-            #     img_bgr,
-            #     {'femur': (combined_best_mask, MASK_COLOR_FEMUR)},
-            #     splitscreen_mask_overlay_path,
-            # )
-            print(f"SPLIT")
+    #     if combined_best_mask.any():
+    #         # os.makedirs(MASK_OVERLAY_DIR_FEMUR_SPLITSCREEN, exist_ok=True)
+    #         # splitscreen_mask_overlay_path = os.path.join(
+    #         #     MASK_OVERLAY_DIR_FEMUR_SPLITSCREEN,
+    #         #     os.path.basename(file_path) + "_mask_overlay.png",
+    #         # )
+    #         # save_mask_overlay(
+    #         #     img_bgr,
+    #         #     {'femur': (combined_best_mask, MASK_COLOR_FEMUR)},
+    #         #     splitscreen_mask_overlay_path,
+    #         # )
+    #         print(f"SPLIT")
 
 
     print("Could not detect femur or no accepted measurement found.")
-    return None, img_bgr, is_dicom, None
+    return None, is_dicom, None, None
 
 
 #########################################################################
@@ -1075,12 +1074,18 @@ def bio_ga(model_inputs):
         + model_inputs.get("limbs", [])
     )
 
+    if not all_inputs:
+        print("No biometry inputs found. Skipping biometry pipeline.")
+        return None
+
     patient_name = Path(
         all_inputs[0]["image_path"]
     ).parent.name
 
     patient_json_path = all_inputs[0]["json_path"]
-    print(f"Patient_json_path:{patient_json_path}")
+
+    print(f"Patient_json_path: {patient_json_path}")
+    print(f"Patient: {patient_name}")
 
     if not all_inputs:
         raise ValueError("No biometry inputs found.")
@@ -1205,8 +1210,7 @@ def bio_ga(model_inputs):
 
     for item in model_inputs.get("limbs", []):
 
-        (
-            fl_val,
+        (   fl_val,
             is_dicom,
             confidence_score,
             fl_points,

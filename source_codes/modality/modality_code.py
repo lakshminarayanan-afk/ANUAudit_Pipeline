@@ -347,143 +347,163 @@ def run_model(img_bgr, model, transform, idx2anatomy, idx2plane, device):
         [img, img, img]
     )
 
-    input_tensor = (
-        transform(image)
-        .unsqueeze(0)
-        .to(device)
-    )
+    input_tensor = transform(image).unsqueeze(0).to(device)
+
     with torch.no_grad():
+
         output = model(input_tensor)
-        # anatomy_logits = output["anatomy"]
 
-        # anatomy_probs = torch.softmax(
-        #     anatomy_logits,
-        #     dim=1
-        # )
-
-        # top3_scores, top3_indices = torch.topk(
-        #     anatomy_probs,
-        #     k=3,
-        #     dim=1
-        # )
-
-        # # Top-1
-        # pred_anatomy_idx = top3_indices[0, 0].item()
-        # pred_anatomy_name = idx2anatomy[pred_anatomy_idx]
-        # anatomy_score = top3_scores[0, 0].item()
-        # # =================================================
-        # # 2. RAW PLANE
-        # # =================================================
-
-        # plane_logits = output["plane"]
-
-        # plane_probs = torch.softmax(
-        #     plane_logits,
-        #     dim=1
-        # )
-
-        # pred_raw_plane_idx = plane_probs.argmax(
-        #     dim=1
-        # ).item()
-
-        # pred_raw_plane_name = idx2plane[
-        #     pred_raw_plane_idx
-        # ]
-
-        # raw_plane_score = plane_probs[
-        #     0,
-        #     pred_raw_plane_idx
-        # ].item()
         anatomy_logits = output["anatomy"]
-        
-        anatomy_probs = torch.softmax(
-            anatomy_logits,
-            dim=1
-        )
-
-        top3_scores, top3_indices = torch.topk(
-            anatomy_probs,
-            k=3,
-            dim=1
-        )
-
-        # Top-1
-        pred_anatomy_idx = top3_indices[0, 0].item()
-        pred_anatomy_name = idx2anatomy[pred_anatomy_idx]
-        anatomy_score = top3_scores[0, 0].item()
-
-        # Top-2
-        pred_anatomy2_idx = top3_indices[0, 1].item()
-        pred_anatomy2_name = idx2anatomy[pred_anatomy2_idx]
-        anatomy2_score = top3_scores[0, 1].item()
-
-        # Top-3
-        pred_anatomy3_idx = top3_indices[0, 2].item()
-        pred_anatomy3_name = idx2anatomy[pred_anatomy3_idx]
-        anatomy3_score = top3_scores[0, 2].item()
-
-        # =================================================
-        # 2. RAW PLANE
-        # =================================================
-
         plane_logits = output["plane"]
 
-        plane_probs = torch.softmax(
-            plane_logits,
-            dim=1
+        # =================================================
+        # 1. ANATOMY TOP-3
+        # =================================================
+
+        anatomy_probs = torch.softmax(anatomy_logits, dim=1)
+
+        anatomy_top3_scores, anatomy_top3_indices = torch.topk(
+            anatomy_probs, k=3, dim=1
         )
 
-        # pred_raw_plane_idx = plane_probs.argmax(
-        #     dim=1
-        # ).item()
+        # -------------------------
+        # TOP-1 ANATOMY
+        # -------------------------
 
-        # pred_raw_plane_name = idx2plane[
-        #     pred_raw_plane_idx
-        # ]
+        pred_anatomy_idx = anatomy_top3_indices[0, 0].item()
+        pred_anatomy_name = idx2anatomy[pred_anatomy_idx]
+        anatomy_score = anatomy_top3_scores[0, 0].item()
 
-        # raw_plane_score = plane_probs[
-        #     0,
-        #     pred_raw_plane_idx
-        # ].item()
+        # -------------------------
+        # TOP-2 ANATOMY
+        # -------------------------
 
-        top3_scores, top3_indices = torch.topk(
-            plane_probs,
-            k=3,
-            dim=1
+        pred_anatomy2_idx = anatomy_top3_indices[0, 1].item()
+        pred_anatomy2_name = idx2anatomy[pred_anatomy2_idx]
+        anatomy2_score = anatomy_top3_scores[0, 1].item()
+
+        # -------------------------
+        # TOP-3 ANATOMY
+        # -------------------------
+
+        pred_anatomy3_idx = anatomy_top3_indices[0, 2].item()
+        pred_anatomy3_name = idx2anatomy[pred_anatomy3_idx]
+        anatomy3_score = anatomy_top3_scores[0, 2].item()
+
+
+        # =================================================
+        # 2. PLANE FOR TOP-1 ANATOMY
+        # =================================================
+
+        valid_planes_top1 = valid_planes_for_anatomy[pred_anatomy_idx]
+
+        plane_logits_top1 = plane_logits.clone()
+
+        # Mask invalid planes
+        for plane_idx in range(plane_logits.shape[1]):
+            if plane_idx not in valid_planes_top1:
+                plane_logits_top1[0, plane_idx] = float("-inf")
+
+        plane_probs_top1 = torch.softmax(plane_logits_top1, dim=1)
+
+        plane_score_tensor, plane_idx_tensor = torch.max(
+            plane_probs_top1, dim=1
         )
 
-        # Top-1
-        pred_plane_idx = top3_indices[0, 0].item()
+        pred_plane_idx = plane_idx_tensor[0].item()
         pred_plane_name = idx2plane[pred_plane_idx]
-        plane_score = top3_scores[0, 0].item()
+        plane_score = plane_score_tensor[0].item()
 
-        # Top-2
-        pred_plane2_idx = top3_indices[0, 1].item()
+
+        # =================================================
+        # 3. PLANE FOR TOP-2 ANATOMY
+        # =================================================
+
+        valid_planes_top2 = valid_planes_for_anatomy[pred_anatomy2_idx]
+
+        plane_logits_top2 = plane_logits.clone()
+
+        # Mask invalid planes
+        for plane_idx in range(plane_logits.shape[1]):
+            if plane_idx not in valid_planes_top2:
+                plane_logits_top2[0, plane_idx] = float("-inf")
+
+        plane_probs_top2 = torch.softmax(plane_logits_top2, dim=1)
+
+        plane_score_tensor2, plane_idx_tensor2 = torch.max(
+            plane_probs_top2, dim=1
+        )
+
+        pred_plane2_idx = plane_idx_tensor2[0].item()
         pred_plane2_name = idx2plane[pred_plane2_idx]
-        plane2_score = top3_scores[0, 1].item()
+        plane2_score = plane_score_tensor2[0].item()
 
-        # Top-3
-        pred_plane3_idx = top3_indices[0, 2].item()
+
+        # =================================================
+        # 4. PLANE FOR TOP-3 ANATOMY
+        # =================================================
+
+        valid_planes_top3 = valid_planes_for_anatomy[pred_anatomy3_idx]
+
+        plane_logits_top3 = plane_logits.clone()
+
+        # Mask invalid planes
+        for plane_idx in range(plane_logits.shape[1]):
+            if plane_idx not in valid_planes_top3:
+                plane_logits_top3[0, plane_idx] = float("-inf")
+
+        plane_probs_top3 = torch.softmax(plane_logits_top3, dim=1)
+
+        plane_score_tensor3, plane_idx_tensor3 = torch.max(
+            plane_probs_top3, dim=1
+        )
+
+        pred_plane3_idx = plane_idx_tensor3[0].item()
         pred_plane3_name = idx2plane[pred_plane3_idx]
-        plane3_score = top3_scores[0, 2].item()
-        
+        plane3_score = plane_score_tensor3[0].item()
 
-        return pred_anatomy_name, anatomy_score, pred_anatomy2_name, anatomy2_score, pred_anatomy3_name, anatomy3_score, pred_plane_name, plane_score, pred_plane2_name, plane2_score, pred_plane3_name, plane3_score
 
+        # =================================================
+        # RETURN
+        # =================================================
+
+        return (
+            # TOP-1 ANATOMY + PLANE
+            pred_anatomy_name,
+            anatomy_score,
+            pred_plane_name,
+            plane_score,
+
+            # TOP-2 ANATOMY + PLANE
+            pred_anatomy2_name,
+            anatomy2_score,
+            pred_plane2_name,
+            plane2_score,
+
+            # TOP-3 ANATOMY + PLANE
+            pred_anatomy3_name,
+            anatomy3_score,
+            pred_plane3_name,
+            plane3_score
+        )
+    
 def get_classification_result(panel_bgr):
     (
         pred_anat1,
         anat1_conf,
-        pred_anat2,
-        anat2_conf,
-        pred_anat3,
-        anat3_conf,
         pred_plane1,
         plane1_conf,
+
+        pred_anat2,
+        anat2_conf,
         pred_plane2,
         plane2_conf,
+
+        pred_anat3,
+        anat3_conf,
         pred_plane3,
         plane3_conf
+
     ) = run_model(
         panel_bgr,
         model,

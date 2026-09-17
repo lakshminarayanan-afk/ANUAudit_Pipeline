@@ -80,17 +80,6 @@ STRUCTURE_PALETTE_IDX_LOWER_LIMBS = {
 
 class Config:
 
-    ROOT_OUTPUT_DIR=r"C:/Users/laksh/ANU/OUTPUT"
-    CLASSIFIC_OUTPUT_DIR=r"C:/Users/laksh/ANU/OUTPUT/CLASS"
-    SEG_OUTPUT_DIR= r"C:/Users/laksh/ANU/OUTPUT/SEG"
-    BIOM_OUTPUT_DIR= r"C:/Users/laksh/ANU/OUTPUT/BIOM"
-    AUDIT_OUTPUT_DIR= r"C:/Users/laksh/ANU/OUTPUT/BIOM_AUDIT"
-    EXPORT_DIR= "/home/htic/DHIVYA"
-    AUDIT_JSON= r"C:/Users/laksh/ANU/ANU-Audit/AUDIT_STATE"
-
-    ## Input folder
-    INPUT_FOLDER= r"C:/Users/laksh/ANU/12_Full_Image_Datasets"
-
     ## ML
     # CLASS_MODEL_PATH= r"C:/Users/laksh/ANU/weights/swa_final_27-classes-DACL+ContrLoss+DeeperClsHead#1.pth"
     CLASS_MODEL_PATH = r"C:/Users/laksh/ANU/weights/CLASS/hierarchicalmodel27 (1).pt"
@@ -99,30 +88,29 @@ class Config:
     ## SEG
     # SEG_MODEL_PATH_MEDSAM= '/home/htic/MLN/weights/best_model.pth'
     SEG_MODEL_HEAD= r"/home/htic/MLN/PIPELINE/ANUAudit_Pipeline/weights/SEG/best_model_unet.pth"
-    SEG_MODEL_ABD = r"C:/Users/laksh/ANU/weights/SEG/abdomen_best.pth"
-    SEG_MODEL_LIMBS = r"C:/Users/laksh/ANU/weights/SEG/limbs_best.pt"
-    SEG_MODEL_FACE = r"C:/Users/laksh/ANU/weights/SEG/face_best.pt"
-    ADAPTER_CHECKPOINT_PATH= r"C:/Users/laksh/ANU/weights/adpt_head_full_train_best.pth"
+    SEG_MODEL_ABD = r"/home/htic/MLN/PIPELINE/ANUAudit_Pipeline/weights/SEG/abdomen_best.pth"
+    SEG_MODEL_LIMBS = r"/home/htic/MLN/PIPELINE/ANUAudit_Pipeline/weights/SEG/limbs_best.pt"
+    SEG_MODEL_FACE = r"/home/htic/MLN/PIPELINE/ANUAudit_Pipeline/weights/SEG/face_best.pt"
 
     ## BIOMETRY
 
     # MODE 1
     #BPD
-    UNET_CHECKPOINT_PATH = r"C:/Users/laksh/ANU/weights/AUTOMATE/head/head_unet/best_model_head.pth"
+    UNET_CHECKPOINT_PATH = r"/home/htic/MLN/PIPELINE/ANUAudit_Pipeline/weights/AUTOMATE/head/head_unet/best_model_head.pth"
     #FL
-    FEMUR_CHECKPOINT= r"C:/Users/laksh/ANU/weights/AUTOMATE/femur/new_fuvai_best.pt"
+    FEMUR_CHECKPOINT= r"/home/htic/MLN/PIPELINE/ANUAudit_Pipeline/weights/AUTOMATE/femur/new_fuvai_best.pt"
     # ABD
-    ABD_CHECKPOINT= r"C:/Users/laksh/ANU/weights/AUTOMATE/abd/best_ac_skin_line.pt"
+    ABD_CHECKPOINT= r"/home/htic/MLN/PIPELINE/ANUAudit_Pipeline/weights/AUTOMATE/abd/best_ac_skin_line.pt"
     # SDVP
     SDVP_LIQUOR_CHECKPOINT_PATH = r""
 
 
     # AUDIT
-    YOLO_AC_BPD= r"C:/Users/laksh/ANU/weights/AUDIT/yolo_ac_bpd.pt"
-    YOLO_FL= r"C:/Users/laksh/ANU/weights/AUDIT/yolo_fl.pt"
-    BPD_MASK= r"C:/Users/laksh/ANU/weights/AUDIT/mask_bpd.pth"
-    AC_MASK= r"C:/Users/laksh/ANU/weights/AUDIT/mask_ac.pt"
-    FL_MASK= r"C:/Users/laksh/ANU/weights/AUDIT/mask_fl.pt"
+    YOLO_AC_BPD= r"/home/htic/MLN/PIPELINE/ANUAudit_Pipeline/weights/AUDIT/yolo_ac_bpd.pt"
+    YOLO_FL= r"/home/htic/MLN/PIPELINE/ANUAudit_Pipeline/weights/AUDIT/yolo_fl.pt"
+    BPD_MASK= r"/home/htic/MLN/PIPELINE/ANUAudit_Pipeline/weights/AUDIT/mask_bpd.pth"
+    AC_MASK= r"/home/htic/MLN/PIPELINE/ANUAudit_Pipeline/weights/AUDIT/mask_ac.pt"
+    FL_MASK= r"/home/htic/MLN/PIPELINE/ANUAudit_Pipeline/weights/AUDIT/mask_fl.pt"
 
     # MODE 2
     TEMP_SEG= '/home/htic/MLN/ANU-Audit/seg/output_final1'
@@ -130,7 +118,7 @@ class Config:
     # FROM OTHERS
     PATH_FETALCLIP_CONFIG = r"C:/Users/laksh/ANU/weights/FetalCLIP_config.json"
     PATH_FETALCLIP_WEIGHT = r"C:/Users/laksh/ANU/weights/FetalCLIP_weights.pt"
-    BI0MET_CSV_PATH = r"C:/Users/laksh/ANU/ANU-Audit/biometry/coefficientsGlobalV3.csv"
+    BI0MET_CSV_PATH = r"/home/htic/MLN/PIPELINE/ANUAudit_Pipeline/weights/AUTOMATE/coefficientsGlobalV3.csv"
 
     MISC_ANATOMY = "Miscellaneous"
     MISC_PLANE = "Miscellaneous"

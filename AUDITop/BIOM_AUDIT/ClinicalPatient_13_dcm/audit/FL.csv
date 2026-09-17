@@ -1,0 +1,7 @@
+name,no of points,points,type,yolo detection,point misplaced,misplaced caliper,RESULTS
+IMG_20260220_1_11.dcm,0,[],FL,wrong,0,,No calipers placed
+IMG_20260220_1_14.dcm,2,"[(432, 317), (648, 302)]",FL,correct,0,,GOOD
+IMG_20260220_1_57.dcm,2,"[(298, 353), (544, 368)]",FL,correct,0,,GOOD
+IMG_20260220_1_62.dcm,1,"[(922, 362)]",FL,wrong,0,,BAD AUDIT - JSON not found
+IMG_20260220_1_63.dcm,0,[],FL,wrong,0,,No calipers placed
+IMG_20260220_1_74.dcm,0,[],FL,wrong,0,,No calipers placed

@@ -16,14 +16,15 @@ import open_clip
 from pathlib import Path
 
 _LIQUOR_MODEL_DIR = os.path.abspath(
-    os.path.join(os.path.dirname(__file__), "..", "..", "model", "liquor")
+    os.path.join(os.path.dirname(__file__), "model", "liquor")
 )
 sys.path.insert(0, _LIQUOR_MODEL_DIR)
 
-from utils_get_embeddings import EncoderWrapper
+from source_codes.biometry.model.liquor.utils_get_embeddings import EncoderWrapper
 
 # --- 1. CONFIGURATION ---
 _CONFIG_PATH = os.path.join(_LIQUOR_MODEL_DIR, "config.json")
+print(f"_CONFIG_PATH:{_CONFIG_PATH}")
 with open(_CONFIG_PATH, 'r') as file:
     config = json.load(file)
 
