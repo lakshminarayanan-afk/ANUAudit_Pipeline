@@ -20,6 +20,9 @@ outputs/
 results/
 runs/
 TEMP_OUTPUT/
+TEMP_OUTPUT_HEAD/
+AUDITop/
+out_liq/
 
 # Data
 data/
