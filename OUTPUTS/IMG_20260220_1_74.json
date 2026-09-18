@@ -1,0 +1,151 @@
+{
+  "image_path": "/home/htic/MLN/PIPELINE/ANUAudit_Pipeline/12_Full_Image_Datasets/ClinicalPatient_13_dcm/IMG_20260220_1_74.dcm",
+  "modality": {
+    "split": "single",
+    "type": "b-mode"
+  },
+  "classification": {
+    "1st": {
+      "Anatomy": "Upper Limbs",
+      "Standard plane": "Radius and Ulna",
+      "Standard_plane_confidence": 0.5952541828155518
+    },
+    "2nd": {
+      "Anatomy": "Lower Limbs",
+      "Standard plane": "Both Feet",
+      "Standard_plane_confidence": 0.990307092666626
+    },
+    "3rd": {
+      "Anatomy": "Thorax",
+      "Standard plane": "3 Vessel View or PAS",
+      "Standard_plane_confidence": 0.4241259694099426
+    }
+  },
+  "segmentation": {
+    "single": {
+      "1st": {
+        "image_path": "/home/htic/MLN/PIPELINE/ANUAudit_Pipeline/12_Full_Image_Datasets/ClinicalPatient_13_dcm/IMG_20260220_1_74.dcm",
+        "input_filename": "IMG_20260220_1_74.dcm",
+        "plane": "Radius and Ulna",
+        "plane_quality": "Standard",
+        "mean_structure_confidence": 0.999996,
+        "plane_candidates": [
+          "radius_ulna"
+        ],
+        "bone_classification": {
+          "probabilities": {
+            "femur": 2.4320578884129418e-09,
+            "humerus": 3.7557165342150256e-06,
+            "radius_ulna": 0.9999960660934448,
+            "tibia_fibula": 6.307992350684799e-08
+          }
+        },
+        "polygons": [
+          {
+            "structure": "Radius_Ulna",
+            "type": "polygon",
+            "points": [
+              {
+                "x": 515.0,
+                "y": 467.0
+              },
+              {
+                "x": 523.0,
+                "y": 483.0
+              },
+              {
+                "x": 601.0,
+                "y": 515.0
+              },
+              {
+                "x": 633.0,
+                "y": 534.0
+              },
+              {
+                "x": 652.0,
+                "y": 536.0
+              },
+              {
+                "x": 660.0,
+                "y": 530.0
+              },
+              {
+                "x": 661.0,
+                "y": 513.0
+              },
+              {
+                "x": 630.0,
+                "y": 495.0
+              },
+              {
+                "x": 539.0,
+                "y": 464.0
+              },
+              {
+                "x": 520.0,
+                "y": 462.0
+              }
+            ]
+          },
+          {
+            "structure": "Radius_Ulna",
+            "type": "polygon",
+            "points": [
+              {
+                "x": 428.0,
+                "y": 437.0
+              },
+              {
+                "x": 431.0,
+                "y": 453.0
+              },
+              {
+                "x": 475.0,
+                "y": 494.0
+              },
+              {
+                "x": 585.0,
+                "y": 550.0
+              },
+              {
+                "x": 615.0,
+                "y": 551.0
+              },
+              {
+                "x": 613.0,
+                "y": 540.0
+              },
+              {
+                "x": 593.0,
+                "y": 536.0
+              },
+              {
+                "x": 485.0,
+                "y": 459.0
+              },
+              {
+                "x": 460.0,
+                "y": 449.0
+              },
+              {
+                "x": 455.0,
+                "y": 428.0
+              }
+            ]
+          }
+        ],
+        "gt_metrics_available": false,
+        "gt_metrics": null
+      }
+    }
+  },
+  "final_plane_prediction": {
+    "single": {
+      "plane": "Radius and Ulna",
+      "source": "segmentation",
+      "rank": "1st",
+      "plane_quality": "Standard",
+      "confidence": 0.999996
+    }
+  }
+}

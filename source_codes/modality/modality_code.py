@@ -17,6 +17,7 @@ import json
 from source_codes.modality.models import HierarchicalUltrasoundModel
 from utils.image_utils import load_image
 # from models import HierarchicalUltrasoundModel
+from config import Config
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
@@ -33,69 +34,14 @@ transform = T.Compose([
     )
 ])
 
-plane2idx = {
-    "3 Vessel ViewOrTrachea or PAS": 0,
-    "4 Chamber View of Heart": 1,
-    "Abdominal Circumference": 2,
-    "Amniotic Fluid or Liquor": 3,
-    "Both Feet": 4,
-    "Cervix": 5,
-    "Cord Insertion": 6,
-    "Coronal Kidneys": 7,
-    "Coronal Spine": 8,
-    "Femur": 9,
-    "Full Body Coronal View": 10,
-    "Humerus": 11,
-    "LVOT": 12,
-    "Median Facial Profile": 13,
-    "Nose and Mouth": 14,
-    "Open Hands": 15,
-    "Orbits and Lenses": 16,
-    "Placenta": 17,
-    "Premaxillary Triangle": 18,
-    "RVOT": 19,
-    "Radius and Ulna": 20,
-    "Sagittal Spine": 21,
-    "Tibia and Fibula": 22,
-    "Transcerebellar plane": 23,
-    "Transthalamic plane": 24,
-    "Transventricular plane": 25,
-    "Transverse Kidneys": 26
-  }
-
-idx2plane = {idx: plane for plane, idx in plane2idx.items()}
-
-
-anatomy2idx = {
-    "Abdomen": 0,
-    "Face": 1,
-    "Fetal Environment": 2,
-    "Head": 3,
-    "Lower Limbs": 4,
-    "Spine": 5,
-    "Thorax": 6,
-    "Upper Limbs": 7
-}
-
+idx2plane = {idx: plane for plane, idx in Config.plane2idx.items()}
 idx2anatomy = {
     idx: anatomy
-    for anatomy, idx in anatomy2idx.items()
+    for anatomy, idx in Config.anatomy2idx.items()
 }
-
-valid_planes_for_anatomy = {
-    "0": [2, 6, 7, 26],
-    "3": [25, 24, 23],
-    "6": [1, 12, 19, 0],
-    "7": [11, 20, 15],
-    "4": [9, 22, 4],
-    "1": [13, 14, 16, 18],
-    "5": [21, 8, 10],
-    "2": [3, 17, 5]
-  }
-
 valid_planes_for_anatomy = {
     int(k): [int(x) for x in v]
-    for k, v in valid_planes_for_anatomy.items()
+    for k, v in Config.valid_planes_for_anatomy.items()
 }
 
 NUM_ANATOMIES = len(idx2anatomy)
@@ -138,7 +84,7 @@ def get_image_paths(mode, folder=None, df=None):
         return paths
 # ─────────────────────────────────────────────────────────────────────────────
 
-LABEL_NAMES = ['b-mode', 'tinted', 'colour_doppler', 'pulse_doppler', 'split_screen_only', 'quadrant_images']
+LABEL_NAMES = Config.LABEL_NAMES
 CLASS_THRESHOLDS = {'b-mode': 0.950, 'tinted': 0.376, 'colour_doppler': 0.926, 'pulse_doppler': 0.950, 'split_screen_only': 0.950, 'quadrant_images': 0.950}
 
 
@@ -178,8 +124,6 @@ def load_modality_model(model_path):
 
     modality_model.load_state_dict(state_dict)
     modality_model.eval()
-
-    print("Stage 1 Modality Classifier loaded successfully.")
 
     return modality_model
 

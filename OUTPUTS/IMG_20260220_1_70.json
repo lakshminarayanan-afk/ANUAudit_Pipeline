@@ -1,0 +1,225 @@
+{
+  "image_path": "/home/htic/MLN/PIPELINE/ANUAudit_Pipeline/12_Full_Image_Datasets/ClinicalPatient_13_dcm/IMG_20260220_1_70.dcm",
+  "modality": {
+    "split": "bi-split",
+    "type": {
+      "left": "b-mode",
+      "right": "b-mode"
+    }
+  },
+  "classification": {
+    "left": {
+      "1st": {
+        "Anatomy": "Upper Limbs",
+        "Standard plane": "Humerus",
+        "Standard_plane_confidence": 0.9903271794319153
+      },
+      "2nd": {
+        "Anatomy": "Lower Limbs",
+        "Standard plane": "Both Feet",
+        "Standard_plane_confidence": 0.7712304592132568
+      },
+      "3rd": {
+        "Anatomy": "Head",
+        "Standard plane": "Transthalamic plane",
+        "Standard_plane_confidence": 0.34588000178337097
+      }
+    },
+    "right": {
+      "1st": {
+        "Anatomy": "Upper Limbs",
+        "Standard plane": "Humerus",
+        "Standard_plane_confidence": 0.9906490445137024
+      },
+      "2nd": {
+        "Anatomy": "Thorax",
+        "Standard plane": "3 Vessel View or PAS",
+        "Standard_plane_confidence": 0.3621516525745392
+      },
+      "3rd": {
+        "Anatomy": "Lower Limbs",
+        "Standard plane": "Both Feet",
+        "Standard_plane_confidence": 0.8318676948547363
+      }
+    }
+  },
+  "segmentation": {
+    "left": {
+      "1st": {
+        "image_path": "/home/htic/MLN/PIPELINE/ANUAudit_Pipeline/12_Full_Image_Datasets/ClinicalPatient_13_dcm/IMG_20260220_1_70.dcm",
+        "input_filename": "IMG_20260220_1_70.dcm",
+        "plane": "Humerus",
+        "plane_quality": "Standard",
+        "mean_structure_confidence": 0.999997,
+        "plane_candidates": [
+          "humerus"
+        ],
+        "bone_classification": {
+          "probabilities": {
+            "femur": 2.4571784251747886e-06,
+            "humerus": 0.9999974966049194,
+            "radius_ulna": 1.7175459277041227e-08,
+            "tibia_fibula": 2.931778708692434e-10
+          }
+        },
+        "polygons": [
+          {
+            "structure": "Humerus",
+            "type": "polygon",
+            "points": [
+              {
+                "x": 388.0,
+                "y": 237.0
+              },
+              {
+                "x": 374.0,
+                "y": 229.0
+              },
+              {
+                "x": 296.0,
+                "y": 256.0
+              },
+              {
+                "x": 145.0,
+                "y": 279.0
+              },
+              {
+                "x": 130.0,
+                "y": 296.0
+              },
+              {
+                "x": 141.0,
+                "y": 310.0
+              },
+              {
+                "x": 373.0,
+                "y": 271.0
+              }
+            ]
+          }
+        ],
+        "gt_metrics_available": false,
+        "gt_metrics": null
+      }
+    },
+    "right": {
+      "1st": {
+        "image_path": "/home/htic/MLN/PIPELINE/ANUAudit_Pipeline/12_Full_Image_Datasets/ClinicalPatient_13_dcm/IMG_20260220_1_70.dcm",
+        "input_filename": "IMG_20260220_1_70.dcm",
+        "plane": "Femur",
+        "plane_quality": "Standard",
+        "mean_structure_confidence": 0.887425,
+        "plane_candidates": [
+          "femur"
+        ],
+        "bone_classification": {
+          "probabilities": {
+            "femur": 0.887424647808075,
+            "humerus": 0.1120278388261795,
+            "radius_ulna": 0.0005469280295073986,
+            "tibia_fibula": 5.023885023547336e-07
+          }
+        },
+        "polygons": [
+          {
+            "structure": "Humerus",
+            "type": "polygon",
+            "points": [
+              {
+                "x": 155.0,
+                "y": 494.0
+              },
+              {
+                "x": 166.0,
+                "y": 518.0
+              },
+              {
+                "x": 375.0,
+                "y": 545.0
+              },
+              {
+                "x": 385.0,
+                "y": 554.0
+              },
+              {
+                "x": 408.0,
+                "y": 550.0
+              },
+              {
+                "x": 407.0,
+                "y": 538.0
+              },
+              {
+                "x": 380.0,
+                "y": 535.0
+              },
+              {
+                "x": 385.0,
+                "y": 527.0
+              },
+              {
+                "x": 374.0,
+                "y": 514.0
+              }
+            ]
+          }
+        ],
+        "gt_metrics_available": false,
+        "gt_metrics": null
+      }
+    }
+  },
+  "final_plane_prediction": {
+    "left": {
+      "plane": "Humerus",
+      "source": "segmentation",
+      "rank": "1st",
+      "plane_quality": "Standard",
+      "confidence": 0.999997
+    },
+    "right": {
+      "plane": "Femur",
+      "source": "segmentation",
+      "rank": "1st",
+      "plane_quality": "Standard",
+      "confidence": 0.887425
+    }
+  },
+  "biometry": {
+    "right": {
+      "Femur": {
+        "FL": 30.81,
+        "units": "mm",
+        "confidence": 0.9709,
+        "points": {
+          "start": [
+            131.0,
+            296.0
+          ],
+          "end": [
+            387.0,
+            241.0
+          ]
+        },
+        "audit": [
+          {
+            "name": "IMG_20260220_1_70.dcm",
+            "no of points": 1,
+            "points": [
+              [
+                918,
+                276
+              ]
+            ],
+            "type": "FL",
+            "yolo detection": "wrong",
+            "point misplaced": 0,
+            "misplaced caliper": "",
+            "RESULTS": "BAD AUDIT - Expected 2 calipers, found 1"
+          },
+          null
+        ]
+      }
+    }
+  }
+}

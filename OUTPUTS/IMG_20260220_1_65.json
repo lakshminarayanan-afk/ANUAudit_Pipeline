@@ -1,0 +1,306 @@
+{
+  "image_path": "/home/htic/MLN/PIPELINE/ANUAudit_Pipeline/12_Full_Image_Datasets/ClinicalPatient_13_dcm/IMG_20260220_1_65.dcm",
+  "modality": {
+    "split": "single",
+    "type": "b-mode"
+  },
+  "classification": {
+    "1st": {
+      "Anatomy": "Abdomen",
+      "Standard plane": "Cord Insertion",
+      "Standard_plane_confidence": 0.9806032776832581
+    },
+    "2nd": {
+      "Anatomy": "Upper Limbs",
+      "Standard plane": "Open Hands",
+      "Standard_plane_confidence": 0.7938143610954285
+    },
+    "3rd": {
+      "Anatomy": "Lower Limbs",
+      "Standard plane": "Both Feet",
+      "Standard_plane_confidence": 0.7923932671546936
+    }
+  },
+  "segmentation": {
+    "single": {
+      "1st": {
+        "image_path": "/home/htic/MLN/PIPELINE/ANUAudit_Pipeline/12_Full_Image_Datasets/ClinicalPatient_13_dcm/IMG_20260220_1_65.dcm",
+        "input_filename": "IMG_20260220_1_65.dcm",
+        "plane": "Cord Insertion",
+        "plane_quality": "Non-Standard",
+        "mean_structure_confidence": 0.949214,
+        "plane_candidates": [
+          "Cord Insertion"
+        ],
+        "plane_mandatory_structures": {
+          "Abdominal Circumference": {
+            "required": [
+              "Umbilical Vein",
+              "Skin Line",
+              "Vertebrae",
+              "Stomach",
+              "Adrenal"
+            ],
+            "present": [
+              "Vertebrae"
+            ],
+            "missing": [
+              "Umbilical Vein",
+              "Skin Line",
+              "Stomach",
+              "Adrenal"
+            ],
+            "detected_fraction": 0.2,
+            "anchor_pass": false
+          },
+          "Cord Insertion": {
+            "required": [
+              "Cord Insertion",
+              "Skin Line",
+              "Vertebrae"
+            ],
+            "present": [
+              "Cord Insertion",
+              "Vertebrae"
+            ],
+            "missing": [
+              "Skin Line"
+            ],
+            "detected_fraction": 0.666667,
+            "anchor_pass": true
+          },
+          "Transverse Kidneys": {
+            "required": [
+              "Kidney Cortex",
+              "Renal Pelvis",
+              "Vertebrae"
+            ],
+            "present": [
+              "Vertebrae"
+            ],
+            "missing": [
+              "Kidney Cortex",
+              "Renal Pelvis"
+            ],
+            "detected_fraction": 0.333333,
+            "anchor_pass": false
+          }
+        },
+        "polygons": [
+          {
+            "structure": "Vertebrae",
+            "type": "polygon",
+            "points": [
+              {
+                "x": 319.0,
+                "y": 290.0
+              },
+              {
+                "x": 319.0,
+                "y": 295.0
+              },
+              {
+                "x": 330.0,
+                "y": 303.0
+              },
+              {
+                "x": 327.0,
+                "y": 351.0
+              },
+              {
+                "x": 359.0,
+                "y": 354.0
+              },
+              {
+                "x": 380.0,
+                "y": 343.0
+              },
+              {
+                "x": 378.0,
+                "y": 335.0
+              },
+              {
+                "x": 385.0,
+                "y": 327.0
+              },
+              {
+                "x": 406.0,
+                "y": 320.0
+              },
+              {
+                "x": 379.0,
+                "y": 310.0
+              },
+              {
+                "x": 376.0,
+                "y": 304.0
+              },
+              {
+                "x": 380.0,
+                "y": 299.0
+              },
+              {
+                "x": 347.0,
+                "y": 296.0
+              },
+              {
+                "x": 341.0,
+                "y": 282.0
+              },
+              {
+                "x": 327.0,
+                "y": 283.0
+              }
+            ]
+          },
+          {
+            "structure": "Placenta",
+            "type": "polygon",
+            "points": [
+              {
+                "x": 463.0,
+                "y": 207.0
+              },
+              {
+                "x": 453.0,
+                "y": 197.0
+              },
+              {
+                "x": 420.0,
+                "y": 192.0
+              },
+              {
+                "x": 385.0,
+                "y": 204.0
+              },
+              {
+                "x": 368.0,
+                "y": 225.0
+              },
+              {
+                "x": 364.0,
+                "y": 255.0
+              },
+              {
+                "x": 376.0,
+                "y": 260.0
+              },
+              {
+                "x": 388.0,
+                "y": 257.0
+              },
+              {
+                "x": 404.0,
+                "y": 244.0
+              },
+              {
+                "x": 438.0,
+                "y": 239.0
+              },
+              {
+                "x": 444.0,
+                "y": 233.0
+              },
+              {
+                "x": 444.0,
+                "y": 221.0
+              },
+              {
+                "x": 461.0,
+                "y": 215.0
+              }
+            ]
+          },
+          {
+            "structure": "Cord Insertion",
+            "type": "polygon",
+            "points": [
+              {
+                "x": 695.0,
+                "y": 391.0
+              },
+              {
+                "x": 653.0,
+                "y": 387.0
+              },
+              {
+                "x": 621.0,
+                "y": 397.0
+              },
+              {
+                "x": 612.0,
+                "y": 431.0
+              },
+              {
+                "x": 589.0,
+                "y": 465.0
+              },
+              {
+                "x": 593.0,
+                "y": 492.0
+              },
+              {
+                "x": 624.0,
+                "y": 497.0
+              },
+              {
+                "x": 642.0,
+                "y": 511.0
+              },
+              {
+                "x": 671.0,
+                "y": 502.0
+              },
+              {
+                "x": 673.0,
+                "y": 495.0
+              },
+              {
+                "x": 653.0,
+                "y": 490.0
+              },
+              {
+                "x": 641.0,
+                "y": 470.0
+              },
+              {
+                "x": 676.0,
+                "y": 452.0
+              },
+              {
+                "x": 667.0,
+                "y": 448.0
+              },
+              {
+                "x": 699.0,
+                "y": 417.0
+              }
+            ]
+          }
+        ],
+        "gt_metrics_available": false,
+        "gt_metrics": null,
+        "uv_standard": false,
+        "uv_metrics": {
+          "area": 0.0,
+          "aspect_ratio": NaN,
+          "skeleton_length": 0
+        },
+        "skin_line_shape": {
+          "circularity": 0.589501,
+          "axis_ratio": 1.164908
+        },
+        "quality_reasons": []
+      }
+    }
+  },
+  "final_plane_prediction": {
+    "single": {
+      "plane": "Cord Insertion",
+      "source": "segmentation",
+      "rank": "1st",
+      "plane_quality": "Non-Standard",
+      "confidence": 0.949214
+    }
+  }
+}

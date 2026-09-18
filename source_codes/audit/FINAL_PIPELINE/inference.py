@@ -30,6 +30,11 @@ from config import Config
 # from model_bpd import UNet as UNetBPD
 # from model_fl import YNet as YNetFL
 
+def get_audit_term(audit_type, point_name):
+    return Config.AUDIT_TERMINOLOGY.get(
+        audit_type, {}
+    ).get(point_name, point_name)
+
 # =================================================================
 # UTILITY: UNIVERSAL IMAGE & IO LOADER
 # =================================================================
@@ -651,7 +656,10 @@ class AC:
 
                             if i < len(caliper_names):
                                 failed_calipers.append(
-                                    caliper_names[i]
+                                    get_audit_term(
+                                        "AC",
+                                        caliper_names[i]
+                                    )
                                 )
                             else:
                                 failed_calipers.append(
@@ -1010,16 +1018,25 @@ class BPD:
                             if point is not None:
                                 json_boxes[point_name] = make_box_from_point(point, half_size=13)
 
+                            # if point is None or det is None:
+                            #     failed_points.append(point_name)
+                            #     continue
                             if point is None or det is None:
-                                failed_points.append(point_name)
+                                failed_points.append(
+                                    get_audit_term("BPD", point_name)
+                                )
                                 continue
 
                             box = det.get("box", det.get("coords")) # audit 
 
                             passed = boxes_overlap(json_boxes[point_name], box) 
 
+                            # if not passed:
+                            #     failed_points.append(point_name)
                             if not passed:
-                                failed_points.append(point_name)
+                                failed_points.append(
+                                    get_audit_term("BPD", point_name)
+                                )
 
 
                         # ------------------------------------------------
@@ -1313,8 +1330,9 @@ class FL:
                         start_point = json_points.get("start")
 
                         if start_point is None:
-
-                            failed_points.append("Start")
+                            failed_points.append(
+                                get_audit_term("FL", "Start")
+                            )
 
                         else:
 
@@ -1328,7 +1346,9 @@ class FL:
                             start_pass = boxes_overlap(start_box, calipers[0]["box"])
 
                             if not start_pass:
-                                failed_points.append("Start")
+                                failed_points.append(
+                                    get_audit_term("FL", "Start")
+                                )
 
 
                     # ------------------------------------------------
@@ -1339,8 +1359,9 @@ class FL:
                         end_point = json_points.get("end")
 
                         if end_point is None:
-
-                            failed_points.append("End")
+                            failed_points.append(
+                                get_audit_term("FL", "End")
+                            )
 
                         else:
 
@@ -1354,7 +1375,9 @@ class FL:
                             end_pass = boxes_overlap(end_box, calipers[1]["box"])
 
                             if not end_pass:
-                                failed_points.append("End")
+                                failed_points.append(
+                                    get_audit_term("FL", "End")
+                                )
 
 
                     # ------------------------------------------------

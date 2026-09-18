@@ -1,5 +1,5 @@
 {
-  "image_path": "/home/htic/MLN/PIPELINE/ANUAudit_Pipeline/12_Full_Image_Datasets/TEST_DICOM/IMG_20260220_1_69.dcm",
+  "image_path": "/home/htic/MLN/PIPELINE/ANUAudit_Pipeline/12_Full_Image_Datasets/ClinicalPatient_13_dcm/IMG_20260220_1_69.dcm",
   "modality": {
     "split": "single",
     "type": "b-mode"
@@ -24,7 +24,7 @@
   "segmentation": {
     "single": {
       "1st": {
-        "image_path": "/home/htic/MLN/PIPELINE/ANUAudit_Pipeline/12_Full_Image_Datasets/TEST_DICOM/IMG_20260220_1_69.dcm",
+        "image_path": "/home/htic/MLN/PIPELINE/ANUAudit_Pipeline/12_Full_Image_Datasets/ClinicalPatient_13_dcm/IMG_20260220_1_69.dcm",
         "vis_path": null,
         "input_filename": "IMG_20260220_1_69.dcm",
         "plane": "Transcerebellar",

@@ -3638,35 +3638,35 @@ def run_inference_face(
         # GT
         # =====================================================
 
-        gt_arr = (
-            load_gt(
-                gt_dir,
-                stem,
-                MODEL_INPUT_SIZE
-            )
-            if gt_dir is not None
-            else None
-        )
+        # gt_arr = (
+        #     load_gt(
+        #         gt_dir,
+        #         stem,
+        #         MODEL_INPUT_SIZE
+        #     )
+        #     if gt_dir is not None
+        #     else None
+        # )
 
-        masks_binary = (
-            torch.from_numpy(
-                gt_arr
-            ).bool()
-            if gt_arr is not None
-            else None
-        )
+        # masks_binary = (
+        #     torch.from_numpy(
+        #         gt_arr
+        #     ).bool()
+        #     if gt_arr is not None
+        #     else None
+        # )
 
-        if masks_binary is not None:
+        # if masks_binary is not None:
 
-            n_with_gt += 1
+        #     n_with_gt += 1
 
-        else:
+        # else:
 
-            logging.info(
-                f"    [GT] no NPZ found "
-                f"for '{stem}' - "
-                f"gt_metrics_available=false"
-            )
+        #     logging.info(
+        #         f"    [GT] no NPZ found "
+        #         f"for '{stem}' - "
+        #         f"gt_metrics_available=false"
+        #     )
 
         # =====================================================
         # 3. SCORE CLEANED MASK
@@ -3677,30 +3677,30 @@ def run_inference_face(
             struct_summary
         ) = assess_structures(
             prediction,
-            masks_binary,
+            None,
             confidences
         )
 
-        gt_metrics = (
-            gt_metrics_rows_to_dict(
-                struct_results
-            )
-            if masks_binary is not None
-            else None
-        )
+        # gt_metrics = (
+        #     gt_metrics_rows_to_dict(
+        #         struct_results
+        #     )
+        #     if masks_binary is not None
+        #     else None
+        # )
 
-        if (
-            struct_summary is not None
-            and struct_summary[
-                "mean_dice_gt_present"
-            ] is not None
-        ):
+        # if (
+        #     struct_summary is not None
+        #     and struct_summary[
+        #         "mean_dice_gt_present"
+        #     ] is not None
+        # ):
 
-            gt_present_dice_all.append(
-                struct_summary[
-                    "mean_dice_gt_present"
-                ]
-            )
+        #     gt_present_dice_all.append(
+        #         struct_summary[
+        #             "mean_dice_gt_present"
+        #         ]
+        #     )
 
         # =====================================================
         # 4. PLANE DECISION
@@ -3838,7 +3838,7 @@ def run_inference_face(
             mean_structure_confidence,
             visualization_structures,
             polygons,
-            gt_metrics,
+            None,
             struct_summary,
         )
         if plane_info["plane_info"]["plane_standard"] == "Standard":

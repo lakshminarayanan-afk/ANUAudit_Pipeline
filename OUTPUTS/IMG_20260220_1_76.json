@@ -1,0 +1,197 @@
+{
+  "image_path": "/home/htic/MLN/PIPELINE/ANUAudit_Pipeline/12_Full_Image_Datasets/ClinicalPatient_13_dcm/IMG_20260220_1_76.dcm",
+  "modality": {
+    "split": "single",
+    "type": "b-mode"
+  },
+  "classification": {
+    "1st": {
+      "Anatomy": "Face",
+      "Standard plane": "Nose and Mouth",
+      "Standard_plane_confidence": 0.9838581681251526
+    },
+    "2nd": {
+      "Anatomy": "Upper Limbs",
+      "Standard plane": "Open Hands",
+      "Standard_plane_confidence": 0.997475802898407
+    },
+    "3rd": {
+      "Anatomy": "Lower Limbs",
+      "Standard plane": "Both Feet",
+      "Standard_plane_confidence": 0.8208275437355042
+    }
+  },
+  "segmentation": {
+    "single": {
+      "1st": {
+        "image_path": "/home/htic/MLN/PIPELINE/ANUAudit_Pipeline/12_Full_Image_Datasets/ClinicalPatient_13_dcm/IMG_20260220_1_76.dcm",
+        "input_filename": "IMG_20260220_1_76.dcm",
+        "view": "Unknown",
+        "plane": "Unknown",
+        "plane_quality": "Unknown",
+        "plane_candidates": [
+          "Unknown"
+        ],
+        "plane_mandatory_structures": {
+          "Nose and Mouth": {
+            "required": [
+              "Nose",
+              "Upper Lip",
+              "Lower Lip",
+              "Chin"
+            ],
+            "present": [],
+            "missing": [
+              "Nose",
+              "Upper Lip",
+              "Lower Lip",
+              "Chin"
+            ],
+            "detected_fraction": 0.0,
+            "anchor_pass": false
+          },
+          "Orbits and Lenses": {
+            "required": [
+              "Orbits",
+              "Lenses"
+            ],
+            "present": [],
+            "missing": [
+              "Orbits",
+              "Lenses"
+            ],
+            "detected_fraction": 0.0,
+            "anchor_pass": false
+          },
+          "Median Facial Profile": {
+            "required": [
+              "Diencephalon",
+              "Forehead",
+              "Maxilla",
+              "Nasal_Bone",
+              "Skinline",
+              "Mandible",
+              "Chin",
+              "Vomer_bone",
+              "Lips"
+            ],
+            "present": [],
+            "missing": [
+              "Diencephalon",
+              "Forehead",
+              "Maxilla",
+              "Nasal_Bone",
+              "Skinline",
+              "Mandible",
+              "Chin",
+              "Vomer_bone",
+              "Lips"
+            ],
+            "detected_fraction": 0.0,
+            "anchor_pass": false
+          }
+        },
+        "mean_structure_confidence": 0.0,
+        "structures": [
+          {
+            "name": "Forehead",
+            "predicted_present": false,
+            "confidence": 0.0221,
+            "confidence_pass": false
+          },
+          {
+            "name": "Nose",
+            "predicted_present": false,
+            "confidence": 0.9928,
+            "confidence_pass": true
+          },
+          {
+            "name": "Maxilla",
+            "predicted_present": false,
+            "confidence": 0.0118,
+            "confidence_pass": false
+          },
+          {
+            "name": "Nasal_Bone",
+            "predicted_present": false,
+            "confidence": 0.014,
+            "confidence_pass": false
+          },
+          {
+            "name": "Skinline",
+            "predicted_present": false,
+            "confidence": 0.0407,
+            "confidence_pass": false
+          },
+          {
+            "name": "Lips",
+            "predicted_present": false,
+            "confidence": 0.009,
+            "confidence_pass": false
+          },
+          {
+            "name": "Mandible",
+            "predicted_present": false,
+            "confidence": 0.0182,
+            "confidence_pass": false
+          },
+          {
+            "name": "Chin",
+            "predicted_present": false,
+            "confidence": 0.0044,
+            "confidence_pass": false
+          },
+          {
+            "name": "Vomer_bone",
+            "predicted_present": false,
+            "confidence": 0.0097,
+            "confidence_pass": false
+          },
+          {
+            "name": "Diencephalon",
+            "predicted_present": false,
+            "confidence": 0.0259,
+            "confidence_pass": false
+          },
+          {
+            "name": "Orbits",
+            "predicted_present": false,
+            "confidence": 0.0422,
+            "confidence_pass": false
+          },
+          {
+            "name": "Lenses",
+            "predicted_present": false,
+            "confidence": 0.0152,
+            "confidence_pass": false
+          },
+          {
+            "name": "Upper Lip",
+            "predicted_present": false,
+            "confidence": 0.9843,
+            "confidence_pass": false
+          },
+          {
+            "name": "Lower Lip",
+            "predicted_present": false,
+            "confidence": 0.035,
+            "confidence_pass": false
+          }
+        ],
+        "polygons": [],
+        "gt_metrics_available": false,
+        "gt_metrics": null,
+        "gt_summary": null,
+        "postprocessing": null
+      }
+    }
+  },
+  "final_plane_prediction": {
+    "single": {
+      "plane": "Nose and Mouth",
+      "source": "classification",
+      "rank": "1st",
+      "confidence": 0.9838581681251526
+    }
+  }
+}

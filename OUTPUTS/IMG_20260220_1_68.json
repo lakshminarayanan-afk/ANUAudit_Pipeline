@@ -1,5 +1,5 @@
 {
-  "image_path": "/home/htic/MLN/PIPELINE/ANUAudit_Pipeline/12_Full_Image_Datasets/TEST_DICOM/IMG_20260220_1_68.dcm",
+  "image_path": "/home/htic/MLN/PIPELINE/ANUAudit_Pipeline/12_Full_Image_Datasets/ClinicalPatient_13_dcm/IMG_20260220_1_68.dcm",
   "modality": {
     "split": "single",
     "type": "b-mode"
@@ -24,7 +24,7 @@
   "segmentation": {
     "single": {
       "1st": {
-        "image_path": "/home/htic/MLN/PIPELINE/ANUAudit_Pipeline/12_Full_Image_Datasets/TEST_DICOM/IMG_20260220_1_68.dcm",
+        "image_path": "/home/htic/MLN/PIPELINE/ANUAudit_Pipeline/12_Full_Image_Datasets/ClinicalPatient_13_dcm/IMG_20260220_1_68.dcm",
         "vis_path": null,
         "input_filename": "IMG_20260220_1_68.dcm",
         "plane": "Transcerebellar",
@@ -1179,172 +1179,16 @@
           }
         ],
         "quality_reasons": []
-      },
-      "2nd": {
-        "image_path": "/home/htic/MLN/PIPELINE/ANUAudit_Pipeline/12_Full_Image_Datasets/TEST_DICOM/IMG_20260220_1_68.dcm",
-        "input_filename": "IMG_20260220_1_68.dcm",
-        "plane": "Femur",
-        "plane_quality": "Standard",
-        "mean_structure_confidence": 0.999449,
-        "plane_candidates": [
-          "femur"
-        ],
-        "bone_classification": {
-          "probabilities": {
-            "femur": 0.9994493126869202,
-            "humerus": 1.3528628187486902e-05,
-            "radius_ulna": 0.000537155952770263,
-            "tibia_fibula": 3.4403671023142124e-09
-          }
-        },
-        "polygons": [
-          {
-            "structure": "Femur",
-            "type": "polygon",
-            "points": [
-              {
-                "x": 685.0,
-                "y": 532.0
-              },
-              {
-                "x": 675.0,
-                "y": 527.0
-              },
-              {
-                "x": 642.0,
-                "y": 543.0
-              },
-              {
-                "x": 569.0,
-                "y": 541.0
-              },
-              {
-                "x": 556.0,
-                "y": 543.0
-              },
-              {
-                "x": 552.0,
-                "y": 548.0
-              },
-              {
-                "x": 588.0,
-                "y": 552.0
-              },
-              {
-                "x": 662.0,
-                "y": 546.0
-              },
-              {
-                "x": 681.0,
-                "y": 541.0
-              }
-            ]
-          },
-          {
-            "structure": "Femur",
-            "type": "polygon",
-            "points": [
-              {
-                "x": 515.0,
-                "y": 523.0
-              },
-              {
-                "x": 519.0,
-                "y": 534.0
-              },
-              {
-                "x": 524.0,
-                "y": 539.0
-              },
-              {
-                "x": 531.0,
-                "y": 542.0
-              },
-              {
-                "x": 542.0,
-                "y": 542.0
-              },
-              {
-                "x": 550.0,
-                "y": 539.0
-              },
-              {
-                "x": 553.0,
-                "y": 531.0
-              },
-              {
-                "x": 558.0,
-                "y": 527.0
-              },
-              {
-                "x": 558.0,
-                "y": 524.0
-              },
-              {
-                "x": 545.0,
-                "y": 520.0
-              },
-              {
-                "x": 519.0,
-                "y": 520.0
-              }
-            ]
-          }
-        ],
-        "gt_metrics_available": false,
-        "gt_metrics": null
       }
     }
   },
   "final_plane_prediction": {
     "single": {
-      "plane": "Transthalamic",
+      "plane": "Transcerebellar",
       "source": "segmentation",
-      "rank": "2nd",
-      "plane_quality": "Standard",
-      "confidence": 0.999449
-    }
-  },
-  "biometry": {
-    "single": {
-      "Transthalamic": {
-        "BPD": 47.03,
-        "OFD": 56.81,
-        "units": "mm",
-        "confidence": 0.9747,
-        "points": {
-          "ofd_start": [
-            402.0,
-            326.34654919236414
-          ],
-          "ofd_end": [
-            884.0,
-            354.65785609397943
-          ],
-          "bpd_top": [
-            655.0856583455702,
-            128.0
-          ],
-          "bpd_bottom": [
-            631.4542339696525,
-            527.0
-          ]
-        },
-        "audit": {
-          "name": "IMG_20260220_1_68.dcm",
-          "no of points": 2,
-          "points": "",
-          "type": "BPD",
-          "yolo detection": "wrong",
-          "point misplaced": "0",
-          "angle mismatch": "0",
-          "midpoint mismatch": "0",
-          "falx mismatch": "0",
-          "misplaced caliper": "",
-          "mismatched angle": "",
-          "RESULTS": "BAD AUDIT - Expected 4 calipers, found 2"
-        }
-      }
+      "rank": "1st",
+      "plane_quality": "Non-Standard",
+      "confidence": 0.988027
     }
   }
 }

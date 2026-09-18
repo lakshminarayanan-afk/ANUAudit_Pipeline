@@ -1,0 +1,58 @@
+{
+  "image_path": "/home/htic/MLN/PIPELINE/ANUAudit_Pipeline/12_Full_Image_Datasets/ClinicalPatient_13_dcm/IMG_20260220_1_85.dcm",
+  "modality": {
+    "split": "single",
+    "type": "b-mode"
+  },
+  "classification": {
+    "1st": {
+      "Anatomy": "Lower Limbs",
+      "Standard plane": "Tibia and Fibula",
+      "Standard_plane_confidence": 0.9829970598220825
+    },
+    "2nd": {
+      "Anatomy": "Abdomen",
+      "Standard plane": "Coronal Kidneys",
+      "Standard_plane_confidence": 0.7424836158752441
+    },
+    "3rd": {
+      "Anatomy": "Upper Limbs",
+      "Standard plane": "Open Hands",
+      "Standard_plane_confidence": 0.6321600675582886
+    }
+  },
+  "segmentation": {
+    "single": {
+      "1st": {
+        "image_path": "/home/htic/MLN/PIPELINE/ANUAudit_Pipeline/12_Full_Image_Datasets/ClinicalPatient_13_dcm/IMG_20260220_1_85.dcm",
+        "input_filename": "IMG_20260220_1_85.dcm",
+        "plane": "Femur",
+        "plane_quality": "Non-Standard",
+        "mean_structure_confidence": 0.76532,
+        "plane_candidates": [
+          "femur"
+        ],
+        "bone_classification": {
+          "probabilities": {
+            "femur": 0.7653202414512634,
+            "humerus": 0.002109304303303361,
+            "radius_ulna": 0.23191136121749878,
+            "tibia_fibula": 0.000659099780023098
+          }
+        },
+        "polygons": [],
+        "gt_metrics_available": false,
+        "gt_metrics": null
+      }
+    }
+  },
+  "final_plane_prediction": {
+    "single": {
+      "plane": "Femur",
+      "source": "segmentation",
+      "rank": "1st",
+      "plane_quality": "Non-Standard",
+      "confidence": 0.76532
+    }
+  }
+}

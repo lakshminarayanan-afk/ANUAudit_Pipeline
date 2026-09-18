@@ -1,6 +1,5 @@
 import numpy as np
 
-
 ### ABDOMEN
 PALETTE_RGB_ABDOMEN = np.array([
     [  0,   0,   0],   # 0  background
@@ -217,3 +216,83 @@ class Config:
     ## ANONYMIZATION
     ANONYMIZED_IMAGES_DIR=r"C:/Users/laksh/ANU/SHYAM_DEMO/ANONYMIZED_IMAGES"
     ANONYMIZATION_PRESET_DIR=r"C:/Users/laksh/ANU/ANU-Audit/anany_preset"
+
+
+    ET_PLANES = { "Transverse Spine", "Coronal Kidneys", "RSA", "Both Feet", "Open Hands", "Premaxillary Triangle", "Placenta", "Amniotic Fluid or Liquor", "Umbilical Artery", "Situs", "Cervix" }
+    COLOUR_DOPPLER = "colour_doppler"
+    PULSE_DOPPLER = "pulse_doppler"
+
+    plane2idx = {
+        "3 Vessel View or PAS": 0,
+        "4 Chamber View of Heart": 1,
+        "Abdominal Circumference": 2,
+        "Amniotic Fluid or Liquor": 3, #ET
+        "Both Feet": 4, #ET
+        "Cervix": 5, #ET
+        "Cord Insertion": 6,
+        "Coronal Kidneys": 7, #ET
+        "Coronal Spine": 8,
+        "Femur": 9,
+        "Full Body Coronal View": 10,
+        "Humerus": 11,
+        "LVOT": 12,
+        "Median Facial Profile": 13,
+        "Nose and Mouth": 14,
+        "Open Hands": 15, #ET
+        "Orbits and Lenses": 16,
+        "Placenta": 17, #ET
+        "Premaxillary Triangle": 18, #ET
+        "RVOT": 19,
+        "Radius and Ulna": 20,
+        "Sagittal Spine": 21,
+        "Tibia and Fibula": 22,
+        "Transcerebellar plane": 23,
+        "Transthalamic plane": 24,
+        "Transventricular plane": 25,
+        "Transverse Kidneys": 26
+    }
+
+    anatomy2idx = {
+        "Abdomen": 0,
+        "Face": 1,
+        "Fetal Environment": 2,
+        "Head": 3,
+        "Lower Limbs": 4,
+        "Spine": 5,
+        "Thorax": 6,
+        "Upper Limbs": 7
+    }
+
+    valid_planes_for_anatomy = {
+        "0": [2, 6, 7, 26],
+        "3": [25, 24, 23],
+        "6": [1, 12, 19, 0],
+        "7": [11, 20, 15],
+        "4": [9, 22, 4],
+        "1": [13, 14, 16, 18],
+        "5": [21, 8, 10],
+        "2": [3, 17, 5]
+    }
+
+    LABEL_NAMES = ['b-mode', 'tinted', 'colour_doppler', 'pulse_doppler', 'split_screen_only', 'quadrant_images']
+
+    AUDIT_TERMINOLOGY = {
+        "AC": {
+            "Top": "TAD NearField",
+            "Bottom": "TAD FarField",
+            "Left": "Anterio-Posterior point 1",
+            "Right": "Anterio-Posterior point 2",
+        },
+
+        "FL": {
+            "Start": "Diaphysis 1",
+            "End": "Diaphysis 2",
+        },
+
+        "BPD": {
+            "bpd_top": "Parietal bone NearField",
+            "bpd_bottom": "Parietal bone FarField",
+            "ofd_start": "Occipito-Frontal point 1",
+            "ofd_end": "Occipito-Frontal point 2",
+        },
+    }

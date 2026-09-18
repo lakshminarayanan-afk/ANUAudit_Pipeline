@@ -1,0 +1,15 @@
+{
+  "modality": {
+    "split": "single",
+    "type": "colour_doppler"
+  },
+  "classification": {
+    "result": null
+  },
+  "final_plane_prediction": {
+    "single": {
+      "plane": "colour_doppler",
+      "source": "modality"
+    }
+  }
+}

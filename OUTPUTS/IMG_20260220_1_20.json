@@ -1,0 +1,188 @@
+{
+  "image_path": "/home/htic/MLN/PIPELINE/ANUAudit_Pipeline/12_Full_Image_Datasets/ClinicalPatient_13_dcm/IMG_20260220_1_20.dcm",
+  "modality": {
+    "split": "bi-split",
+    "type": {
+      "left": "b-mode",
+      "right": "b-mode"
+    }
+  },
+  "classification": {
+    "left": {
+      "1st": {
+        "Anatomy": "Upper Limbs",
+        "Standard plane": "Humerus",
+        "Standard_plane_confidence": 0.9533541798591614
+      },
+      "2nd": {
+        "Anatomy": "Thorax",
+        "Standard plane": "3 Vessel View or PAS",
+        "Standard_plane_confidence": 0.3516639471054077
+      },
+      "3rd": {
+        "Anatomy": "Head",
+        "Standard plane": "Transthalamic plane",
+        "Standard_plane_confidence": 0.36507710814476013
+      }
+    },
+    "right": {
+      "1st": {
+        "Anatomy": "Upper Limbs",
+        "Standard plane": "Humerus",
+        "Standard_plane_confidence": 0.9891063570976257
+      },
+      "2nd": {
+        "Anatomy": "Head",
+        "Standard plane": "Transthalamic plane",
+        "Standard_plane_confidence": 0.3428657352924347
+      },
+      "3rd": {
+        "Anatomy": "Thorax",
+        "Standard plane": "3 Vessel View or PAS",
+        "Standard_plane_confidence": 0.3392508327960968
+      }
+    }
+  },
+  "segmentation": {
+    "left": {
+      "1st": {
+        "image_path": "/home/htic/MLN/PIPELINE/ANUAudit_Pipeline/12_Full_Image_Datasets/ClinicalPatient_13_dcm/IMG_20260220_1_20.dcm",
+        "input_filename": "IMG_20260220_1_20.dcm",
+        "plane": "Humerus",
+        "plane_quality": "Standard",
+        "mean_structure_confidence": 0.999385,
+        "plane_candidates": [
+          "humerus"
+        ],
+        "bone_classification": {
+          "probabilities": {
+            "femur": 1.723145214782562e-05,
+            "humerus": 0.9993846416473389,
+            "radius_ulna": 0.0005978936678729951,
+            "tibia_fibula": 8.527868544661033e-08
+          }
+        },
+        "polygons": [
+          {
+            "structure": "Humerus",
+            "type": "polygon",
+            "points": [
+              {
+                "x": 163.0,
+                "y": 251.0
+              },
+              {
+                "x": 165.0,
+                "y": 259.0
+              },
+              {
+                "x": 177.0,
+                "y": 267.0
+              },
+              {
+                "x": 210.0,
+                "y": 272.0
+              },
+              {
+                "x": 288.0,
+                "y": 272.0
+              },
+              {
+                "x": 316.0,
+                "y": 261.0
+              },
+              {
+                "x": 312.0,
+                "y": 251.0
+              },
+              {
+                "x": 219.0,
+                "y": 257.0
+              },
+              {
+                "x": 179.0,
+                "y": 248.0
+              }
+            ]
+          }
+        ],
+        "gt_metrics_available": false,
+        "gt_metrics": null
+      }
+    },
+    "right": {
+      "1st": {
+        "image_path": "/home/htic/MLN/PIPELINE/ANUAudit_Pipeline/12_Full_Image_Datasets/ClinicalPatient_13_dcm/IMG_20260220_1_20.dcm",
+        "input_filename": "IMG_20260220_1_20.dcm",
+        "plane": "Humerus",
+        "plane_quality": "Standard",
+        "mean_structure_confidence": 0.999909,
+        "plane_candidates": [
+          "humerus"
+        ],
+        "bone_classification": {
+          "probabilities": {
+            "femur": 5.399283327278681e-05,
+            "humerus": 0.9999094009399414,
+            "radius_ulna": 3.6616114812204614e-05,
+            "tibia_fibula": 1.2896518519767142e-08
+          }
+        },
+        "polygons": [
+          {
+            "structure": "Humerus",
+            "type": "polygon",
+            "points": [
+              {
+                "x": 260.0,
+                "y": 335.0
+              },
+              {
+                "x": 250.0,
+                "y": 328.0
+              },
+              {
+                "x": 119.0,
+                "y": 333.0
+              },
+              {
+                "x": 118.0,
+                "y": 341.0
+              },
+              {
+                "x": 128.0,
+                "y": 350.0
+              },
+              {
+                "x": 252.0,
+                "y": 346.0
+              },
+              {
+                "x": 259.0,
+                "y": 343.0
+              }
+            ]
+          }
+        ],
+        "gt_metrics_available": false,
+        "gt_metrics": null
+      }
+    }
+  },
+  "final_plane_prediction": {
+    "left": {
+      "plane": "Humerus",
+      "source": "segmentation",
+      "rank": "1st",
+      "plane_quality": "Standard",
+      "confidence": 0.999385
+    },
+    "right": {
+      "plane": "Humerus",
+      "source": "segmentation",
+      "rank": "1st",
+      "plane_quality": "Standard",
+      "confidence": 0.999909
+    }
+  }
+}

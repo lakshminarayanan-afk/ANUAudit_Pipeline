@@ -1,10 +1,15 @@
 import json
 from pathlib import Path
+from config import Config
 
 RANKS = ["1st", "2nd", "3rd"]
 SKIP_MODALITIES = {
     "colour_doppler",
     "pulse_doppler"
+}
+UNAVAILABLE_ANATOMY = {
+    "Thorax",
+    "Spine"
 }
 
 def generate_candidates(data):
@@ -49,6 +54,28 @@ def build_side_candidates(predictions):
             print("There is no prediction. SOMME error in the json strcuture/code")
             continue
         anatomy = prediction.get("Anatomy")
+        standard_plane = prediction.get("Standard plane")
+        # ========================================================
+        # ET PLANE
+        # Do NOT send ET planes to segmentation.
+        # ========================================================
+        if standard_plane in Config.ET_PLANES:
+            print(
+                f"[ET PLANE] {standard_plane} "
+                f"({rank}) -> classification result, "
+                f"no segmentation"
+            )
+            continue
+        # ========================================================
+        # UNAVAILABLE ANATOMY
+        # ========================================================
+        if anatomy in UNAVAILABLE_ANATOMY:
+            print(
+                f"[NO MODEL] Anatomy={anatomy} "
+                f"({rank}) -> no segmentation model, "
+                f"candidate ignored"
+            )
+            continue
         if not anatomy:
             continue
         if anatomy in seen:

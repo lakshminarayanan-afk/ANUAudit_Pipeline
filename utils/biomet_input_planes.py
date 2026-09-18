@@ -42,6 +42,31 @@ def prepare_plane_inputs(json_directory, model_plane_config=BIOM_MODEL_PLANE_CON
 
         for panel, prediction in final_prediction.items():
 
+            if prediction is None:
+                print(
+                    f"[SKIP] {json_path.name} | "
+                    f"panel={panel} | "
+                    f"prediction=None"
+                )
+                continue
+            
+            plane = prediction.get("plane")
+            if str(plane).lower() == "unknown":
+                print(
+                    f"[SKIP] {json_path.name} | "
+                    f"panel={panel} | "
+                    f"plane=Unknown"
+                )
+                continue
+
+            if str(plane).lower() == "colour_doppler":
+                print(
+                    f"[SKIP] {json_path.name} | "
+                    f"panel={panel} | "
+                    f"plane=colour_doppler"
+                )
+                continue
+
             plane_quality = prediction.get("plane_quality")
             if plane_quality != "Standard":
                 print(

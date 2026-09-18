@@ -1,5 +1,5 @@
 {
-  "image_path": "/home/htic/MLN/PIPELINE/ANUAudit_Pipeline/12_Full_Image_Datasets/TEST_DICOM/IMG_20260220_1_34.dcm",
+  "image_path": "/home/htic/MLN/PIPELINE/ANUAudit_Pipeline/12_Full_Image_Datasets/ClinicalPatient_13_dcm/IMG_20260220_1_34.dcm",
   "modality": {
     "split": "single",
     "type": "b-mode"
@@ -24,7 +24,7 @@
   "segmentation": {
     "single": {
       "1st": {
-        "image_path": "/home/htic/MLN/PIPELINE/ANUAudit_Pipeline/12_Full_Image_Datasets/TEST_DICOM/IMG_20260220_1_34.dcm",
+        "image_path": "/home/htic/MLN/PIPELINE/ANUAudit_Pipeline/12_Full_Image_Datasets/ClinicalPatient_13_dcm/IMG_20260220_1_34.dcm",
         "input_filename": "IMG_20260220_1_34.dcm",
         "plane": "Abdominal Circumference",
         "plane_quality": "Non-Standard",
@@ -348,70 +348,6 @@
           "axis_ratio": 1.225124
         },
         "quality_reasons": []
-      },
-      "2nd": {
-        "image_path": "/home/htic/MLN/PIPELINE/ANUAudit_Pipeline/12_Full_Image_Datasets/TEST_DICOM/IMG_20260220_1_34.dcm",
-        "input_filename": "IMG_20260220_1_34.dcm",
-        "plane": "Femur",
-        "plane_quality": "Standard",
-        "mean_structure_confidence": 1.0,
-        "plane_candidates": [
-          "femur"
-        ],
-        "bone_classification": {
-          "probabilities": {
-            "femur": 1.0,
-            "humerus": 1.5453964496980888e-10,
-            "radius_ulna": 4.0629526409929895e-09,
-            "tibia_fibula": 4.422621296962248e-11
-          }
-        },
-        "polygons": [
-          {
-            "structure": "Femur",
-            "type": "polygon",
-            "points": [
-              {
-                "x": 621.0,
-                "y": 318.0
-              },
-              {
-                "x": 616.0,
-                "y": 314.0
-              },
-              {
-                "x": 600.0,
-                "y": 318.0
-              },
-              {
-                "x": 556.0,
-                "y": 337.0
-              },
-              {
-                "x": 533.0,
-                "y": 341.0
-              },
-              {
-                "x": 519.0,
-                "y": 349.0
-              },
-              {
-                "x": 518.0,
-                "y": 353.0
-              },
-              {
-                "x": 542.0,
-                "y": 351.0
-              },
-              {
-                "x": 612.0,
-                "y": 326.0
-              }
-            ]
-          }
-        ],
-        "gt_metrics_available": false,
-        "gt_metrics": null
       }
     }
   },
@@ -419,128 +355,9 @@
     "single": {
       "plane": "Abdominal Circumference",
       "source": "segmentation",
-      "rank": "2nd",
-      "plane_quality": "Standard",
-      "confidence": 1.0
-    }
-  },
-  "biometry": {
-    "single": {
-      "Abdominal Circumference": {
-        "AC": 140.19,
-        "units": "mm",
-        "confidence": 0.9728,
-        "points": [
-          [
-            445.0,
-            373.0
-          ],
-          [
-            479.0,
-            386.0
-          ],
-          [
-            518.0,
-            412.0
-          ],
-          [
-            535.0,
-            431.0
-          ],
-          [
-            548.0,
-            454.0
-          ],
-          [
-            548.0,
-            498.0
-          ],
-          [
-            518.0,
-            581.0
-          ],
-          [
-            501.0,
-            620.0
-          ],
-          [
-            449.0,
-            662.0
-          ],
-          [
-            419.0,
-            671.0
-          ],
-          [
-            365.0,
-            671.0
-          ],
-          [
-            330.0,
-            662.0
-          ],
-          [
-            279.0,
-            626.0
-          ],
-          [
-            258.0,
-            607.0
-          ],
-          [
-            240.0,
-            584.0
-          ],
-          [
-            232.0,
-            556.0
-          ],
-          [
-            232.0,
-            495.0
-          ],
-          [
-            245.0,
-            450.0
-          ],
-          [
-            262.0,
-            418.0
-          ],
-          [
-            275.0,
-            405.0
-          ],
-          [
-            288.0,
-            396.0
-          ],
-          [
-            365.0,
-            364.0
-          ],
-          [
-            394.0,
-            364.0
-          ]
-        ],
-        "audit": {
-          "name": "IMG_20260220_1_34.dcm",
-          "no of points": 4,
-          "points": "(458, 380) (305, 644) (249, 440) (519, 579)",
-          "type": "AC",
-          "yolo detection": "correct",
-          "point misplaced": "1",
-          "intersection mismatch": "1",
-          "APAD range": "1",
-          "TAD length": "1",
-          "misplaced caliper": "Bottom",
-          "mismatched APAD angle": "",
-          "mismatched intersection angle": "",
-          "TAD difference": "",
-          "RESULTS": "GOOD"
-        }
-      }
+      "rank": "1st",
+      "plane_quality": "Non-Standard",
+      "confidence": 0.978483
     }
   }
 }

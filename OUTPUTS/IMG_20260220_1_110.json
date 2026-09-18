@@ -1,0 +1,374 @@
+{
+  "image_path": "/home/htic/MLN/PIPELINE/ANUAudit_Pipeline/12_Full_Image_Datasets/ClinicalPatient_13_dcm/IMG_20260220_1_110.dcm",
+  "modality": {
+    "split": "single",
+    "type": "b-mode"
+  },
+  "classification": {
+    "1st": {
+      "Anatomy": "Face",
+      "Standard plane": "Nose and Mouth",
+      "Standard_plane_confidence": 0.99607914686203
+    },
+    "2nd": {
+      "Anatomy": "Lower Limbs",
+      "Standard plane": "Both Feet",
+      "Standard_plane_confidence": 0.7949397563934326
+    },
+    "3rd": {
+      "Anatomy": "Upper Limbs",
+      "Standard plane": "Open Hands",
+      "Standard_plane_confidence": 0.7729462385177612
+    }
+  },
+  "segmentation": {
+    "single": {
+      "1st": {
+        "image_path": "/home/htic/MLN/PIPELINE/ANUAudit_Pipeline/12_Full_Image_Datasets/ClinicalPatient_13_dcm/IMG_20260220_1_110.dcm",
+        "input_filename": "IMG_20260220_1_110.dcm",
+        "view": "Unknown",
+        "plane": "Nose and Mouth",
+        "plane_quality": "Non-Standard",
+        "plane_candidates": [
+          "Nose and Mouth"
+        ],
+        "plane_mandatory_structures": {
+          "Nose and Mouth": {
+            "required": [
+              "Nose",
+              "Upper Lip",
+              "Lower Lip",
+              "Chin"
+            ],
+            "present": [
+              "Nose",
+              "Upper Lip",
+              "Lower Lip"
+            ],
+            "missing": [
+              "Chin"
+            ],
+            "detected_fraction": 0.75,
+            "anchor_pass": true
+          },
+          "Orbits and Lenses": {
+            "required": [
+              "Orbits",
+              "Lenses"
+            ],
+            "present": [],
+            "missing": [
+              "Orbits",
+              "Lenses"
+            ],
+            "detected_fraction": 0.0,
+            "anchor_pass": false
+          },
+          "Median Facial Profile": {
+            "required": [
+              "Diencephalon",
+              "Forehead",
+              "Maxilla",
+              "Nasal_Bone",
+              "Skinline",
+              "Mandible",
+              "Chin",
+              "Vomer_bone",
+              "Lips"
+            ],
+            "present": [],
+            "missing": [
+              "Diencephalon",
+              "Forehead",
+              "Maxilla",
+              "Nasal_Bone",
+              "Skinline",
+              "Mandible",
+              "Chin",
+              "Vomer_bone",
+              "Lips"
+            ],
+            "detected_fraction": 0.0,
+            "anchor_pass": false
+          }
+        },
+        "mean_structure_confidence": 0.9971,
+        "structures": [
+          {
+            "name": "Forehead",
+            "predicted_present": false,
+            "confidence": 0.6202,
+            "confidence_pass": false
+          },
+          {
+            "name": "Nose",
+            "predicted_present": true,
+            "confidence": 0.9995,
+            "confidence_pass": true
+          },
+          {
+            "name": "Maxilla",
+            "predicted_present": false,
+            "confidence": 0.008,
+            "confidence_pass": false
+          },
+          {
+            "name": "Nasal_Bone",
+            "predicted_present": false,
+            "confidence": 0.0026,
+            "confidence_pass": false
+          },
+          {
+            "name": "Skinline",
+            "predicted_present": false,
+            "confidence": 0.0509,
+            "confidence_pass": false
+          },
+          {
+            "name": "Lips",
+            "predicted_present": false,
+            "confidence": 0.0286,
+            "confidence_pass": false
+          },
+          {
+            "name": "Mandible",
+            "predicted_present": false,
+            "confidence": 0.0051,
+            "confidence_pass": false
+          },
+          {
+            "name": "Chin",
+            "predicted_present": false,
+            "confidence": 0.0121,
+            "confidence_pass": false
+          },
+          {
+            "name": "Vomer_bone",
+            "predicted_present": false,
+            "confidence": 0.0434,
+            "confidence_pass": false
+          },
+          {
+            "name": "Diencephalon",
+            "predicted_present": false,
+            "confidence": 0.2517,
+            "confidence_pass": false
+          },
+          {
+            "name": "Orbits",
+            "predicted_present": false,
+            "confidence": 0.9893,
+            "confidence_pass": false
+          },
+          {
+            "name": "Lenses",
+            "predicted_present": false,
+            "confidence": 0.9662,
+            "confidence_pass": false
+          },
+          {
+            "name": "Upper Lip",
+            "predicted_present": true,
+            "confidence": 0.9955,
+            "confidence_pass": true
+          },
+          {
+            "name": "Lower Lip",
+            "predicted_present": true,
+            "confidence": 0.9963,
+            "confidence_pass": true
+          }
+        ],
+        "polygons": [
+          {
+            "points": [
+              {
+                "x": 454.0,
+                "y": 279.0
+              },
+              {
+                "x": 428.0,
+                "y": 296.0
+              },
+              {
+                "x": 426.0,
+                "y": 314.0
+              },
+              {
+                "x": 443.0,
+                "y": 336.0
+              },
+              {
+                "x": 458.0,
+                "y": 343.0
+              },
+              {
+                "x": 466.0,
+                "y": 343.0
+              },
+              {
+                "x": 472.0,
+                "y": 337.0
+              },
+              {
+                "x": 470.0,
+                "y": 318.0
+              },
+              {
+                "x": 481.0,
+                "y": 302.0
+              },
+              {
+                "x": 481.0,
+                "y": 285.0
+              },
+              {
+                "x": 472.0,
+                "y": 279.0
+              }
+            ],
+            "structure": "Nose",
+            "type": "polygon"
+          },
+          {
+            "points": [
+              {
+                "x": 495.0,
+                "y": 261.0
+              },
+              {
+                "x": 490.0,
+                "y": 265.0
+              },
+              {
+                "x": 492.0,
+                "y": 286.0
+              },
+              {
+                "x": 482.0,
+                "y": 303.0
+              },
+              {
+                "x": 486.0,
+                "y": 343.0
+              },
+              {
+                "x": 501.0,
+                "y": 371.0
+              },
+              {
+                "x": 519.0,
+                "y": 381.0
+              },
+              {
+                "x": 536.0,
+                "y": 374.0
+              },
+              {
+                "x": 536.0,
+                "y": 368.0
+              },
+              {
+                "x": 502.0,
+                "y": 326.0
+              },
+              {
+                "x": 508.0,
+                "y": 317.0
+              },
+              {
+                "x": 509.0,
+                "y": 296.0
+              },
+              {
+                "x": 498.0,
+                "y": 283.0
+              },
+              {
+                "x": 511.0,
+                "y": 277.0
+              },
+              {
+                "x": 515.0,
+                "y": 265.0
+              }
+            ],
+            "structure": "Upper Lip",
+            "type": "polygon"
+          },
+          {
+            "points": [
+              {
+                "x": 535.0,
+                "y": 297.0
+              },
+              {
+                "x": 527.0,
+                "y": 317.0
+              },
+              {
+                "x": 529.0,
+                "y": 323.0
+              },
+              {
+                "x": 535.0,
+                "y": 327.0
+              },
+              {
+                "x": 553.0,
+                "y": 324.0
+              },
+              {
+                "x": 568.0,
+                "y": 330.0
+              },
+              {
+                "x": 576.0,
+                "y": 338.0
+              },
+              {
+                "x": 581.0,
+                "y": 337.0
+              },
+              {
+                "x": 583.0,
+                "y": 334.0
+              },
+              {
+                "x": 581.0,
+                "y": 323.0
+              },
+              {
+                "x": 559.0,
+                "y": 314.0
+              },
+              {
+                "x": 549.0,
+                "y": 293.0
+              },
+              {
+                "x": 540.0,
+                "y": 293.0
+              }
+            ],
+            "structure": "Lower Lip",
+            "type": "polygon"
+          }
+        ],
+        "gt_metrics_available": false,
+        "gt_metrics": null,
+        "gt_summary": null,
+        "postprocessing": null
+      }
+    }
+  },
+  "final_plane_prediction": {
+    "single": {
+      "plane": "Nose and Mouth",
+      "source": "segmentation",
+      "rank": "1st",
+      "plane_quality": "Non-Standard",
+      "confidence": 0.9971
+    }
+  }
+}

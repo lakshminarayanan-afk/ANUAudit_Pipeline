@@ -1,33 +1,40 @@
 import json
 from pathlib import Path
-
+from config import Config
 
 def final_plane(json_directory):
     """
     Generate final_plane_prediction for every JSON file.
 
-    Processing rules per panel:
+    Rules:
 
-    B-mode:
-        1. If a Standard segmentation prediction exists,
-           select it.
-        2. Otherwise, if Non-Standard predictions exist,
-           select the one with the highest
-           mean_structure_confidence.
-        3. If all available predictions are Unknown,
-           use classification 1st prediction.
+    1. ET PLANES
+       - Do NOT use segmentation.
+       - Use classification 1st prediction directly.
 
-    Colour Doppler:
-        Use classification 1st prediction directly.
+    2. B-MODE / TINTED
+       - If Standard segmentation prediction exists:
+             select Standard.
+       - Otherwise, if Non-Standard predictions exist:
+             select highest mean_structure_confidence.
+       - If all available predictions are Unknown:
+             use classification 1st prediction.
+       - If there is no segmentation result:
+             use classification 1st prediction.
 
-    Pulse Doppler:
-        Skip. No final_plane_prediction is written for
-        that panel.
+    3. COLOUR DOPPLER
+       - No classification result.
+       - No segmentation result.
+       - final_plane_prediction[panel] = from modality
+
+    4. PULSE DOPPLER
+       - Skip completely.
+       - No final_plane_prediction is written for that panel.
 
     Supports:
-        - single
-        - bi-split
-        - quad-split
+       - single
+       - bi-split
+       - quad-split
     """
 
     json_directory = Path(json_directory)
@@ -44,10 +51,6 @@ def final_plane(json_directory):
     for json_path in json_files:
 
         try:
-            # ====================================================
-            # LOAD JSON
-            # ====================================================
-
             with open(json_path, "r") as f:
                 data = json.load(f)
 
@@ -63,11 +66,9 @@ def final_plane(json_directory):
             # ====================================================
 
             if split == "single":
-
                 panels = ["single"]
 
             elif split in ["bi-split", "quad-split"]:
-
                 # For split images, the panel names are the keys
                 # present in modality["type"].
                 if isinstance(modality_type, dict):
@@ -76,7 +77,6 @@ def final_plane(json_directory):
                     panels = []
 
             else:
-
                 print(
                     f"[WARNING] {json_path.name} - "
                     f"Unknown split type: {split}"
@@ -136,6 +136,24 @@ def final_plane(json_directory):
 
                     continue
 
+                # =================================================
+                # 2. COLOUR DOPPLER
+                # =================================================
+
+                if current_modality_type == Config.COLOUR_DOPPLER:
+
+                    final_predictions[panel] = {
+                        "plane": "colour_doppler",
+                        "source": "modality"
+                    }
+
+                    print(
+                        f"[DOPPLER] {json_path.name} | "
+                        f"{panel} -> colour_doppler"
+                    )
+
+                    continue
+
                 # ------------------------------------------------
                 # CLASSIFICATION 1ST
                 # ------------------------------------------------
@@ -154,43 +172,69 @@ def final_plane(json_directory):
                     )
                 )
 
+                # # =================================================
+                # # COLOUR DOPPLER
+                # # =================================================
+
+                # if current_modality_type == "colour_doppler":
+
+                #     if classification_plane is not None:
+
+                #         final_prediction = {
+                #             "plane": classification_plane,
+                #             "source": "classification",
+                #             "rank": "1st",
+                #             "confidence": classification_confidence
+                #         }
+
+                #         final_predictions[panel] = final_prediction
+
+                #         print(
+                #             f"[COLOUR] {json_path.name} | "
+                #             f"{panel} -> {classification_plane}"
+                #         )
+
+                #     else:
+
+                #         print(
+                #             f"[WARNING] {json_path.name} | "
+                #             f"{panel} - classification 1st "
+                #             f"prediction missing"
+                #         )
+
+                #     continue
+
                 # =================================================
-                # COLOUR DOPPLER
+                # 3. ET PLANE
+                # =================================================
+                #
+                # ET planes NEVER go through segmentation.
+                #
+                # Classification itself is the final result.
                 # =================================================
 
-                if current_modality_type == "colour_doppler":
+                if classification_plane in Config.ET_PLANES:
 
-                    if classification_plane is not None:
+                    final_predictions[panel] = {
+                        "plane": classification_plane,
+                        "source": "classification",
+                        "rank": "1st",
+                        "confidence": classification_confidence
+                    }
 
-                        final_prediction = {
-                            "plane": classification_plane,
-                            "source": "classification",
-                            "rank": "1st",
-                            "confidence": classification_confidence
-                        }
-
-                        final_predictions[panel] = final_prediction
-
-                        print(
-                            f"[COLOUR] {json_path.name} | "
-                            f"{panel} -> {classification_plane}"
-                        )
-
-                    else:
-
-                        print(
-                            f"[WARNING] {json_path.name} | "
-                            f"{panel} - classification 1st "
-                            f"prediction missing"
-                        )
+                    print(
+                        f"[ET PLANE] {json_path.name} | "
+                        f"{panel} -> "
+                        f"{classification_plane} "
+                        f"(classification)"
+                    )
 
                     continue
-
                 # =================================================
                 # B-MODE
                 # =================================================
 
-                if current_modality_type == "b-mode" or "tinted":
+                if current_modality_type in ["b-mode", "tinted"]:
 
                     candidates = []
 

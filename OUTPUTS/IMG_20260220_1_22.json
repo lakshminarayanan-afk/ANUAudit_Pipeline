@@ -1,0 +1,479 @@
+{
+  "image_path": "/home/htic/MLN/PIPELINE/ANUAudit_Pipeline/12_Full_Image_Datasets/ClinicalPatient_13_dcm/IMG_20260220_1_22.dcm",
+  "modality": {
+    "split": "bi-split",
+    "type": {
+      "left": "b-mode",
+      "right": "b-mode"
+    }
+  },
+  "classification": {
+    "left": {
+      "1st": {
+        "Anatomy": "Upper Limbs",
+        "Standard plane": "Radius and Ulna",
+        "Standard_plane_confidence": 0.9933831095695496
+      },
+      "2nd": {
+        "Anatomy": "Lower Limbs",
+        "Standard plane": "Both Feet",
+        "Standard_plane_confidence": 0.8216158747673035
+      },
+      "3rd": {
+        "Anatomy": "Abdomen",
+        "Standard plane": "Coronal Kidneys",
+        "Standard_plane_confidence": 0.7881610989570618
+      }
+    },
+    "right": {
+      "1st": {
+        "Anatomy": "Upper Limbs",
+        "Standard plane": "Open Hands",
+        "Standard_plane_confidence": 0.9946160912513733
+      },
+      "2nd": {
+        "Anatomy": "Head",
+        "Standard plane": "Transventricular plane",
+        "Standard_plane_confidence": 0.3655727803707123
+      },
+      "3rd": {
+        "Anatomy": "Lower Limbs",
+        "Standard plane": "Both Feet",
+        "Standard_plane_confidence": 0.7396715879440308
+      }
+    }
+  },
+  "segmentation": {
+    "right": {
+      "2nd": {
+        "image_path": "/home/htic/MLN/PIPELINE/ANUAudit_Pipeline/12_Full_Image_Datasets/ClinicalPatient_13_dcm/IMG_20260220_1_22.dcm",
+        "vis_path": null,
+        "input_filename": "IMG_20260220_1_22.dcm",
+        "plane": "Unclassified",
+        "plane_quality": "N/A",
+        "mean_structure_confidence": 0.94535,
+        "plane_candidates": [],
+        "plane_mandatory_structures": {
+          "Transthalamic": {
+            "required": [
+              "thalamus 1",
+              "thalamus 2",
+              "arrow sign",
+              "csp (cavum septum pellucidum)",
+              "midline falx",
+              "anterior horn of lateral ventricles 2",
+              "inner calvarium",
+              "outer calvarium"
+            ],
+            "present": [
+              "inner calvarium"
+            ],
+            "missing": [
+              "thalamus 1",
+              "thalamus 2",
+              "arrow sign",
+              "csp (cavum septum pellucidum)",
+              "midline falx",
+              "anterior horn of lateral ventricles 2",
+              "outer calvarium"
+            ],
+            "detected_fraction": 0.125,
+            "anchor_pass": false
+          },
+          "Transventricular": {
+            "required": [
+              "lateral ventricle 2",
+              "csp (cavum septum pellucidum)",
+              "choroid plexus 2",
+              "posterior horn of lateral ventricle 2",
+              "midline falx",
+              "anterior horn of lateral ventricles 2",
+              "inner calvarium",
+              "outer calvarium"
+            ],
+            "present": [
+              "inner calvarium"
+            ],
+            "missing": [
+              "lateral ventricle 2",
+              "csp (cavum septum pellucidum)",
+              "choroid plexus 2",
+              "posterior horn of lateral ventricle 2",
+              "midline falx",
+              "anterior horn of lateral ventricles 2",
+              "outer calvarium"
+            ],
+            "detected_fraction": 0.125,
+            "anchor_pass": false
+          },
+          "Transcerebellar": {
+            "required": [
+              "cerebellum",
+              "cerebellar vermis",
+              "cisternae magna",
+              "csp (cavum septum pellucidum)",
+              "cerebral peduncle 1",
+              "cerebral peduncle 2",
+              "anterior horn of lateral ventricles 2",
+              "inner calvarium",
+              "outer calvarium"
+            ],
+            "present": [
+              "inner calvarium"
+            ],
+            "missing": [
+              "cerebellum",
+              "cerebellar vermis",
+              "cisternae magna",
+              "csp (cavum septum pellucidum)",
+              "cerebral peduncle 1",
+              "cerebral peduncle 2",
+              "anterior horn of lateral ventricles 2",
+              "outer calvarium"
+            ],
+            "detected_fraction": 0.111111,
+            "anchor_pass": false
+          }
+        },
+        "polygons": [
+          {
+            "structure": "Hemisphere 1",
+            "type": "polygon",
+            "points": [
+              {
+                "x": 627.0,
+                "y": 341.0
+              },
+              {
+                "x": 667.0,
+                "y": 334.0
+              },
+              {
+                "x": 683.0,
+                "y": 351.0
+              },
+              {
+                "x": 719.0,
+                "y": 353.0
+              },
+              {
+                "x": 718.0,
+                "y": 368.0
+              },
+              {
+                "x": 696.0,
+                "y": 369.0
+              },
+              {
+                "x": 707.0,
+                "y": 392.0
+              },
+              {
+                "x": 660.0,
+                "y": 412.0
+              },
+              {
+                "x": 721.0,
+                "y": 431.0
+              },
+              {
+                "x": 737.0,
+                "y": 465.0
+              },
+              {
+                "x": 783.0,
+                "y": 464.0
+              },
+              {
+                "x": 784.0,
+                "y": 483.0
+              },
+              {
+                "x": 845.0,
+                "y": 478.0
+              },
+              {
+                "x": 850.0,
+                "y": 438.0
+              },
+              {
+                "x": 873.0,
+                "y": 442.0
+              },
+              {
+                "x": 682.0,
+                "y": 315.0
+              }
+            ]
+          },
+          {
+            "structure": "Inner Calvarium",
+            "type": "polygon",
+            "points": [
+              {
+                "x": 600.0,
+                "y": 467.0
+              },
+              {
+                "x": 640.0,
+                "y": 474.0
+              },
+              {
+                "x": 637.0,
+                "y": 484.0
+              },
+              {
+                "x": 599.0,
+                "y": 487.0
+              },
+              {
+                "x": 608.0,
+                "y": 500.0
+              },
+              {
+                "x": 640.0,
+                "y": 494.0
+              },
+              {
+                "x": 667.0,
+                "y": 500.0
+              },
+              {
+                "x": 689.0,
+                "y": 489.0
+              },
+              {
+                "x": 663.0,
+                "y": 467.0
+              },
+              {
+                "x": 645.0,
+                "y": 463.0
+              },
+              {
+                "x": 624.0,
+                "y": 443.0
+              },
+              {
+                "x": 614.0,
+                "y": 443.0
+              },
+              {
+                "x": 610.0,
+                "y": 452.0
+              },
+              {
+                "x": 614.0,
+                "y": 464.0
+              }
+            ]
+          },
+          {
+            "structure": "Inner Calvarium",
+            "type": "polygon",
+            "points": [
+              {
+                "x": 612.0,
+                "y": 341.0
+              },
+              {
+                "x": 643.0,
+                "y": 351.0
+              },
+              {
+                "x": 674.0,
+                "y": 337.0
+              },
+              {
+                "x": 675.0,
+                "y": 350.0
+              },
+              {
+                "x": 719.0,
+                "y": 356.0
+              },
+              {
+                "x": 708.0,
+                "y": 393.0
+              },
+              {
+                "x": 651.0,
+                "y": 413.0
+              },
+              {
+                "x": 725.0,
+                "y": 434.0
+              },
+              {
+                "x": 745.0,
+                "y": 494.0
+              },
+              {
+                "x": 836.0,
+                "y": 489.0
+              },
+              {
+                "x": 851.0,
+                "y": 449.0
+              },
+              {
+                "x": 873.0,
+                "y": 444.0
+              },
+              {
+                "x": 851.0,
+                "y": 415.0
+              },
+              {
+                "x": 661.0,
+                "y": 301.0
+              },
+              {
+                "x": 658.0,
+                "y": 337.0
+              }
+            ]
+          }
+        ],
+        "gt_metrics_available": false,
+        "gt_metrics": null,
+        "image_quality_summary": {
+          "n_structures_predicted": 2,
+          "n_structures_ok": 0,
+          "n_structures_low_contrast": 2,
+          "n_structures_low_conf": 0,
+          "n_structures_locally_blurry": 0,
+          "overall_image_quality": "poor"
+        },
+        "structures": [
+          {
+            "structure_name": "Hemisphere 1",
+            "segmentation_confidence": {
+              "value": 0.938,
+              "qualitative": "high",
+              "threshold": 0.5
+            },
+            "local_contrast": {
+              "value": 4.51,
+              "qualitative": "low",
+              "threshold": 10.0
+            },
+            "local_blur": {
+              "value": 41.18,
+              "qualitative": "sharp",
+              "threshold": 10.0
+            }
+          },
+          {
+            "structure_name": "Inner Calvarium",
+            "segmentation_confidence": {
+              "value": 0.9527,
+              "qualitative": "high",
+              "threshold": 0.95
+            },
+            "local_contrast": {
+              "value": 0.07,
+              "qualitative": "low",
+              "threshold": 30.0
+            },
+            "local_blur": {
+              "value": 40.94,
+              "qualitative": "sharp",
+              "threshold": 25.0
+            }
+          }
+        ],
+        "quality_reasons": []
+      }
+    },
+    "left": {
+      "1st": {
+        "image_path": "/home/htic/MLN/PIPELINE/ANUAudit_Pipeline/12_Full_Image_Datasets/ClinicalPatient_13_dcm/IMG_20260220_1_22.dcm",
+        "input_filename": "IMG_20260220_1_22.dcm",
+        "plane": "Radius and Ulna",
+        "plane_quality": "Standard",
+        "mean_structure_confidence": 0.999975,
+        "plane_candidates": [
+          "radius_ulna"
+        ],
+        "bone_classification": {
+          "probabilities": {
+            "femur": 3.181397090212812e-10,
+            "humerus": 1.9402352988140414e-11,
+            "radius_ulna": 0.9999749660491943,
+            "tibia_fibula": 2.5061601263587363e-05
+          }
+        },
+        "polygons": [
+          {
+            "structure": "Radius_Ulna",
+            "type": "polygon",
+            "points": [
+              {
+                "x": 123.0,
+                "y": 338.0
+              },
+              {
+                "x": 130.0,
+                "y": 356.0
+              },
+              {
+                "x": 120.0,
+                "y": 364.0
+              },
+              {
+                "x": 125.0,
+                "y": 375.0
+              },
+              {
+                "x": 250.0,
+                "y": 421.0
+              },
+              {
+                "x": 250.0,
+                "y": 404.0
+              },
+              {
+                "x": 239.0,
+                "y": 395.0
+              },
+              {
+                "x": 247.0,
+                "y": 386.0
+              },
+              {
+                "x": 244.0,
+                "y": 378.0
+              },
+              {
+                "x": 212.0,
+                "y": 371.0
+              },
+              {
+                "x": 137.0,
+                "y": 337.0
+              }
+            ]
+          }
+        ],
+        "gt_metrics_available": false,
+        "gt_metrics": null
+      }
+    }
+  },
+  "final_plane_prediction": {
+    "left": {
+      "plane": "Radius and Ulna",
+      "source": "segmentation",
+      "rank": "1st",
+      "plane_quality": "Standard",
+      "confidence": 0.999975
+    },
+    "right": {
+      "plane": "Open Hands",
+      "source": "classification",
+      "rank": "1st",
+      "confidence": 0.9946160912513733
+    }
+  }
+}

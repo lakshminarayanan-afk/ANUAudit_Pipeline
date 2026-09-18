@@ -1,0 +1,2466 @@
+{
+  "image_path": "/home/htic/MLN/PIPELINE/ANUAudit_Pipeline/12_Full_Image_Datasets/ClinicalPatient_13_dcm/IMG_20260220_1_91.dcm",
+  "modality": {
+    "split": "quad-split",
+    "type": {
+      "top_left": "b-mode",
+      "top_right": "b-mode",
+      "bottom_left": "b-mode",
+      "bottom_right": "b-mode"
+    }
+  },
+  "classification": {
+    "top_left": {
+      "1st": {
+        "Anatomy": "Spine",
+        "Standard plane": "Full Body Coronal View",
+        "Standard_plane_confidence": 0.9943459630012512
+      },
+      "2nd": {
+        "Anatomy": "Lower Limbs",
+        "Standard plane": "Both Feet",
+        "Standard_plane_confidence": 0.8139428496360779
+      },
+      "3rd": {
+        "Anatomy": "Upper Limbs",
+        "Standard plane": "Open Hands",
+        "Standard_plane_confidence": 0.7549566626548767
+      }
+    },
+    "top_right": {
+      "1st": {
+        "Anatomy": "Abdomen",
+        "Standard plane": "Abdominal Circumference",
+        "Standard_plane_confidence": 0.9798889756202698
+      },
+      "2nd": {
+        "Anatomy": "Upper Limbs",
+        "Standard plane": "Open Hands",
+        "Standard_plane_confidence": 0.7830933332443237
+      },
+      "3rd": {
+        "Anatomy": "Lower Limbs",
+        "Standard plane": "Both Feet",
+        "Standard_plane_confidence": 0.7964788675308228
+      }
+    },
+    "bottom_left": {
+      "1st": {
+        "Anatomy": "Head",
+        "Standard plane": "Transthalamic plane",
+        "Standard_plane_confidence": 0.920644998550415
+      },
+      "2nd": {
+        "Anatomy": "Upper Limbs",
+        "Standard plane": "Open Hands",
+        "Standard_plane_confidence": 0.7458914518356323
+      },
+      "3rd": {
+        "Anatomy": "Lower Limbs",
+        "Standard plane": "Both Feet",
+        "Standard_plane_confidence": 0.8078934550285339
+      }
+    },
+    "bottom_right": {
+      "1st": {
+        "Anatomy": "Abdomen",
+        "Standard plane": "Abdominal Circumference",
+        "Standard_plane_confidence": 0.9615034461021423
+      },
+      "2nd": {
+        "Anatomy": "Fetal Environment",
+        "Standard plane": "Amniotic Fluid or Liquor",
+        "Standard_plane_confidence": 0.5787600874900818
+      },
+      "3rd": {
+        "Anatomy": "Face",
+        "Standard plane": "Nose and Mouth",
+        "Standard_plane_confidence": 0.5167871713638306
+      }
+    }
+  },
+  "segmentation": {
+    "bottom_left": {
+      "1st": {
+        "image_path": "/home/htic/MLN/PIPELINE/ANUAudit_Pipeline/12_Full_Image_Datasets/ClinicalPatient_13_dcm/IMG_20260220_1_91.dcm",
+        "vis_path": null,
+        "input_filename": "IMG_20260220_1_91.dcm",
+        "plane": "Transthalamic",
+        "plane_quality": "Non-Standard",
+        "mean_structure_confidence": 0.95778,
+        "plane_candidates": [
+          "Transthalamic"
+        ],
+        "plane_mandatory_structures": {
+          "Transthalamic": {
+            "required": [
+              "thalamus 1",
+              "thalamus 2",
+              "arrow sign",
+              "csp (cavum septum pellucidum)",
+              "midline falx",
+              "anterior horn of lateral ventricles 2",
+              "inner calvarium",
+              "outer calvarium"
+            ],
+            "present": [
+              "thalamus 1",
+              "thalamus 2",
+              "arrow sign",
+              "midline falx",
+              "anterior horn of lateral ventricles 2",
+              "inner calvarium",
+              "outer calvarium"
+            ],
+            "missing": [
+              "csp (cavum septum pellucidum)"
+            ],
+            "detected_fraction": 0.875,
+            "anchor_pass": true
+          },
+          "Transventricular": {
+            "required": [
+              "lateral ventricle 2",
+              "csp (cavum septum pellucidum)",
+              "choroid plexus 2",
+              "posterior horn of lateral ventricle 2",
+              "midline falx",
+              "anterior horn of lateral ventricles 2",
+              "inner calvarium",
+              "outer calvarium"
+            ],
+            "present": [
+              "midline falx",
+              "anterior horn of lateral ventricles 2",
+              "inner calvarium",
+              "outer calvarium"
+            ],
+            "missing": [
+              "lateral ventricle 2",
+              "csp (cavum septum pellucidum)",
+              "choroid plexus 2",
+              "posterior horn of lateral ventricle 2"
+            ],
+            "detected_fraction": 0.5,
+            "anchor_pass": false
+          },
+          "Transcerebellar": {
+            "required": [
+              "cerebellum",
+              "cerebellar vermis",
+              "cisternae magna",
+              "csp (cavum septum pellucidum)",
+              "cerebral peduncle 1",
+              "cerebral peduncle 2",
+              "anterior horn of lateral ventricles 2",
+              "inner calvarium",
+              "outer calvarium"
+            ],
+            "present": [
+              "cerebral peduncle 2",
+              "anterior horn of lateral ventricles 2",
+              "inner calvarium",
+              "outer calvarium"
+            ],
+            "missing": [
+              "cerebellum",
+              "cerebellar vermis",
+              "cisternae magna",
+              "csp (cavum septum pellucidum)",
+              "cerebral peduncle 1"
+            ],
+            "detected_fraction": 0.444444,
+            "anchor_pass": false
+          }
+        },
+        "polygons": [
+          {
+            "structure": "Hemisphere 1",
+            "type": "polygon",
+            "points": [
+              {
+                "x": 689.0,
+                "y": 359.0
+              },
+              {
+                "x": 613.0,
+                "y": 266.0
+              },
+              {
+                "x": 454.0,
+                "y": 238.0
+              },
+              {
+                "x": 330.0,
+                "y": 293.0
+              },
+              {
+                "x": 250.0,
+                "y": 390.0
+              },
+              {
+                "x": 231.0,
+                "y": 455.0
+              },
+              {
+                "x": 283.0,
+                "y": 471.0
+              },
+              {
+                "x": 348.0,
+                "y": 459.0
+              },
+              {
+                "x": 357.0,
+                "y": 435.0
+              },
+              {
+                "x": 427.0,
+                "y": 437.0
+              },
+              {
+                "x": 450.0,
+                "y": 383.0
+              },
+              {
+                "x": 529.0,
+                "y": 348.0
+              },
+              {
+                "x": 533.0,
+                "y": 374.0
+              },
+              {
+                "x": 688.0,
+                "y": 381.0
+              }
+            ]
+          },
+          {
+            "structure": "Hemisphere 2",
+            "type": "polygon",
+            "points": [
+              {
+                "x": 703.0,
+                "y": 413.0
+              },
+              {
+                "x": 653.0,
+                "y": 405.0
+              },
+              {
+                "x": 581.0,
+                "y": 446.0
+              },
+              {
+                "x": 552.0,
+                "y": 429.0
+              },
+              {
+                "x": 459.0,
+                "y": 510.0
+              },
+              {
+                "x": 399.0,
+                "y": 466.0
+              },
+              {
+                "x": 244.0,
+                "y": 509.0
+              },
+              {
+                "x": 293.0,
+                "y": 565.0
+              },
+              {
+                "x": 458.0,
+                "y": 629.0
+              },
+              {
+                "x": 545.0,
+                "y": 621.0
+              },
+              {
+                "x": 584.0,
+                "y": 596.0
+              },
+              {
+                "x": 580.0,
+                "y": 566.0
+              },
+              {
+                "x": 631.0,
+                "y": 554.0
+              },
+              {
+                "x": 671.0,
+                "y": 516.0
+              }
+            ]
+          },
+          {
+            "structure": "Midline Falx",
+            "type": "polygon",
+            "points": [
+              {
+                "x": 383.0,
+                "y": 457.0
+              },
+              {
+                "x": 385.0,
+                "y": 458.0
+              },
+              {
+                "x": 401.0,
+                "y": 458.0
+              },
+              {
+                "x": 404.0,
+                "y": 457.0
+              },
+              {
+                "x": 405.0,
+                "y": 455.0
+              },
+              {
+                "x": 408.0,
+                "y": 455.0
+              },
+              {
+                "x": 408.0,
+                "y": 453.0
+              },
+              {
+                "x": 412.0,
+                "y": 451.0
+              },
+              {
+                "x": 412.0,
+                "y": 449.0
+              },
+              {
+                "x": 407.0,
+                "y": 448.0
+              },
+              {
+                "x": 406.0,
+                "y": 446.0
+              },
+              {
+                "x": 390.0,
+                "y": 446.0
+              },
+              {
+                "x": 389.0,
+                "y": 449.0
+              },
+              {
+                "x": 387.0,
+                "y": 450.0
+              },
+              {
+                "x": 387.0,
+                "y": 452.0
+              },
+              {
+                "x": 385.0,
+                "y": 453.0
+              },
+              {
+                "x": 385.0,
+                "y": 455.0
+              }
+            ]
+          },
+          {
+            "structure": "Midline Falx",
+            "type": "polygon",
+            "points": [
+              {
+                "x": 536.0,
+                "y": 425.0
+              },
+              {
+                "x": 526.0,
+                "y": 422.0
+              },
+              {
+                "x": 484.0,
+                "y": 424.0
+              },
+              {
+                "x": 455.0,
+                "y": 434.0
+              },
+              {
+                "x": 428.0,
+                "y": 436.0
+              },
+              {
+                "x": 422.0,
+                "y": 445.0
+              },
+              {
+                "x": 438.0,
+                "y": 448.0
+              },
+              {
+                "x": 464.0,
+                "y": 442.0
+              },
+              {
+                "x": 519.0,
+                "y": 438.0
+              },
+              {
+                "x": 536.0,
+                "y": 430.0
+              }
+            ]
+          },
+          {
+            "structure": "Midline Falx",
+            "type": "polygon",
+            "points": [
+              {
+                "x": 548.0,
+                "y": 384.0
+              },
+              {
+                "x": 572.0,
+                "y": 402.0
+              },
+              {
+                "x": 579.0,
+                "y": 403.0
+              },
+              {
+                "x": 582.0,
+                "y": 406.0
+              },
+              {
+                "x": 594.0,
+                "y": 407.0
+              },
+              {
+                "x": 614.0,
+                "y": 400.0
+              },
+              {
+                "x": 614.0,
+                "y": 394.0
+              },
+              {
+                "x": 605.0,
+                "y": 390.0
+              },
+              {
+                "x": 580.0,
+                "y": 386.0
+              },
+              {
+                "x": 562.0,
+                "y": 380.0
+              },
+              {
+                "x": 552.0,
+                "y": 380.0
+              }
+            ]
+          },
+          {
+            "structure": "Thalamus 2",
+            "type": "polygon",
+            "points": [
+              {
+                "x": 534.0,
+                "y": 443.0
+              },
+              {
+                "x": 452.0,
+                "y": 446.0
+              },
+              {
+                "x": 439.0,
+                "y": 450.0
+              },
+              {
+                "x": 425.0,
+                "y": 465.0
+              },
+              {
+                "x": 413.0,
+                "y": 467.0
+              },
+              {
+                "x": 430.0,
+                "y": 502.0
+              },
+              {
+                "x": 459.0,
+                "y": 509.0
+              },
+              {
+                "x": 488.0,
+                "y": 487.0
+              },
+              {
+                "x": 521.0,
+                "y": 471.0
+              }
+            ]
+          },
+          {
+            "structure": "Thalamus 2",
+            "type": "polygon",
+            "points": [
+              {
+                "x": 449.0,
+                "y": 405.0
+              },
+              {
+                "x": 452.0,
+                "y": 412.0
+              },
+              {
+                "x": 471.0,
+                "y": 420.0
+              },
+              {
+                "x": 491.0,
+                "y": 419.0
+              },
+              {
+                "x": 504.0,
+                "y": 413.0
+              },
+              {
+                "x": 506.0,
+                "y": 410.0
+              },
+              {
+                "x": 500.0,
+                "y": 404.0
+              },
+              {
+                "x": 479.0,
+                "y": 405.0
+              },
+              {
+                "x": 474.0,
+                "y": 401.0
+              },
+              {
+                "x": 468.0,
+                "y": 400.0
+              }
+            ]
+          },
+          {
+            "structure": "Hippocampal Gyrus 2",
+            "type": "polygon",
+            "points": [
+              {
+                "x": 571.0,
+                "y": 500.0
+              },
+              {
+                "x": 568.0,
+                "y": 495.0
+              },
+              {
+                "x": 561.0,
+                "y": 495.0
+              },
+              {
+                "x": 553.0,
+                "y": 507.0
+              },
+              {
+                "x": 531.0,
+                "y": 515.0
+              },
+              {
+                "x": 520.0,
+                "y": 522.0
+              },
+              {
+                "x": 518.0,
+                "y": 528.0
+              },
+              {
+                "x": 520.0,
+                "y": 530.0
+              },
+              {
+                "x": 528.0,
+                "y": 530.0
+              },
+              {
+                "x": 564.0,
+                "y": 513.0
+              }
+            ]
+          },
+          {
+            "structure": "Thalamus 1",
+            "type": "polygon",
+            "points": [
+              {
+                "x": 422.0,
+                "y": 430.0
+              },
+              {
+                "x": 430.0,
+                "y": 434.0
+              },
+              {
+                "x": 453.0,
+                "y": 433.0
+              },
+              {
+                "x": 483.0,
+                "y": 421.0
+              },
+              {
+                "x": 465.0,
+                "y": 420.0
+              },
+              {
+                "x": 449.0,
+                "y": 411.0
+              },
+              {
+                "x": 422.0,
+                "y": 425.0
+              }
+            ]
+          },
+          {
+            "structure": "Anterior Horn of Lateral Ventricles 2",
+            "type": "polygon",
+            "points": [
+              {
+                "x": 367.0,
+                "y": 495.0
+              },
+              {
+                "x": 358.0,
+                "y": 491.0
+              },
+              {
+                "x": 345.0,
+                "y": 491.0
+              },
+              {
+                "x": 340.0,
+                "y": 499.0
+              },
+              {
+                "x": 332.0,
+                "y": 505.0
+              },
+              {
+                "x": 329.0,
+                "y": 516.0
+              },
+              {
+                "x": 314.0,
+                "y": 524.0
+              },
+              {
+                "x": 315.0,
+                "y": 527.0
+              },
+              {
+                "x": 334.0,
+                "y": 532.0
+              },
+              {
+                "x": 352.0,
+                "y": 530.0
+              },
+              {
+                "x": 363.0,
+                "y": 523.0
+              },
+              {
+                "x": 367.0,
+                "y": 517.0
+              }
+            ]
+          },
+          {
+            "structure": "Anterior Midline Falx",
+            "type": "polygon",
+            "points": [
+              {
+                "x": 350.0,
+                "y": 462.0
+              },
+              {
+                "x": 348.0,
+                "y": 460.0
+              },
+              {
+                "x": 345.0,
+                "y": 460.0
+              },
+              {
+                "x": 343.0,
+                "y": 456.0
+              },
+              {
+                "x": 334.0,
+                "y": 456.0
+              },
+              {
+                "x": 333.0,
+                "y": 458.0
+              },
+              {
+                "x": 317.0,
+                "y": 460.0
+              },
+              {
+                "x": 310.0,
+                "y": 465.0
+              },
+              {
+                "x": 310.0,
+                "y": 469.0
+              },
+              {
+                "x": 312.0,
+                "y": 471.0
+              },
+              {
+                "x": 318.0,
+                "y": 472.0
+              },
+              {
+                "x": 318.0,
+                "y": 469.0
+              },
+              {
+                "x": 323.0,
+                "y": 465.0
+              },
+              {
+                "x": 333.0,
+                "y": 466.0
+              },
+              {
+                "x": 334.0,
+                "y": 468.0
+              },
+              {
+                "x": 344.0,
+                "y": 468.0
+              },
+              {
+                "x": 345.0,
+                "y": 466.0
+              },
+              {
+                "x": 350.0,
+                "y": 465.0
+              }
+            ]
+          },
+          {
+            "structure": "Arrow Sign",
+            "type": "polygon",
+            "points": [
+              {
+                "x": 661.0,
+                "y": 394.0
+              },
+              {
+                "x": 652.0,
+                "y": 387.0
+              },
+              {
+                "x": 612.0,
+                "y": 383.0
+              },
+              {
+                "x": 617.0,
+                "y": 399.0
+              },
+              {
+                "x": 595.0,
+                "y": 410.0
+              },
+              {
+                "x": 598.0,
+                "y": 417.0
+              },
+              {
+                "x": 577.0,
+                "y": 428.0
+              },
+              {
+                "x": 555.0,
+                "y": 421.0
+              },
+              {
+                "x": 555.0,
+                "y": 434.0
+              },
+              {
+                "x": 569.0,
+                "y": 445.0
+              },
+              {
+                "x": 581.0,
+                "y": 445.0
+              },
+              {
+                "x": 626.0,
+                "y": 430.0
+              },
+              {
+                "x": 641.0,
+                "y": 420.0
+              }
+            ]
+          },
+          {
+            "structure": "Arrow Sign",
+            "type": "polygon",
+            "points": [
+              {
+                "x": 530.0,
+                "y": 349.0
+              },
+              {
+                "x": 524.0,
+                "y": 351.0
+              },
+              {
+                "x": 524.0,
+                "y": 355.0
+              },
+              {
+                "x": 519.0,
+                "y": 358.0
+              },
+              {
+                "x": 501.0,
+                "y": 355.0
+              },
+              {
+                "x": 499.0,
+                "y": 358.0
+              },
+              {
+                "x": 503.0,
+                "y": 363.0
+              },
+              {
+                "x": 501.0,
+                "y": 367.0
+              },
+              {
+                "x": 520.0,
+                "y": 376.0
+              },
+              {
+                "x": 519.0,
+                "y": 382.0
+              },
+              {
+                "x": 510.0,
+                "y": 382.0
+              },
+              {
+                "x": 514.0,
+                "y": 388.0
+              },
+              {
+                "x": 537.0,
+                "y": 382.0
+              },
+              {
+                "x": 551.0,
+                "y": 382.0
+              },
+              {
+                "x": 545.0,
+                "y": 377.0
+              },
+              {
+                "x": 529.0,
+                "y": 373.0
+              },
+              {
+                "x": 524.0,
+                "y": 367.0
+              },
+              {
+                "x": 524.0,
+                "y": 360.0
+              },
+              {
+                "x": 532.0,
+                "y": 354.0
+              }
+            ]
+          },
+          {
+            "structure": "Lateral Sulcus 2",
+            "type": "polygon",
+            "points": [
+              {
+                "x": 353.0,
+                "y": 556.0
+              },
+              {
+                "x": 362.0,
+                "y": 568.0
+              },
+              {
+                "x": 383.0,
+                "y": 575.0
+              },
+              {
+                "x": 404.0,
+                "y": 577.0
+              },
+              {
+                "x": 430.0,
+                "y": 586.0
+              },
+              {
+                "x": 440.0,
+                "y": 586.0
+              },
+              {
+                "x": 446.0,
+                "y": 579.0
+              },
+              {
+                "x": 444.0,
+                "y": 569.0
+              },
+              {
+                "x": 387.0,
+                "y": 562.0
+              },
+              {
+                "x": 363.0,
+                "y": 555.0
+              }
+            ]
+          },
+          {
+            "structure": "Cerebral Peduncle 2",
+            "type": "polygon",
+            "points": [
+              {
+                "x": 552.0,
+                "y": 396.0
+              },
+              {
+                "x": 554.0,
+                "y": 397.0
+              },
+              {
+                "x": 554.0,
+                "y": 400.0
+              },
+              {
+                "x": 550.0,
+                "y": 403.0
+              },
+              {
+                "x": 550.0,
+                "y": 406.0
+              },
+              {
+                "x": 563.0,
+                "y": 418.0
+              },
+              {
+                "x": 567.0,
+                "y": 426.0
+              },
+              {
+                "x": 583.0,
+                "y": 426.0
+              },
+              {
+                "x": 590.0,
+                "y": 421.0
+              },
+              {
+                "x": 588.0,
+                "y": 411.0
+              },
+              {
+                "x": 583.0,
+                "y": 408.0
+              },
+              {
+                "x": 574.0,
+                "y": 407.0
+              },
+              {
+                "x": 573.0,
+                "y": 405.0
+              },
+              {
+                "x": 565.0,
+                "y": 403.0
+              },
+              {
+                "x": 560.0,
+                "y": 398.0
+              }
+            ]
+          },
+          {
+            "structure": "Pillars of Fornix",
+            "type": "polygon",
+            "points": [
+              {
+                "x": 347.0,
+                "y": 448.0
+              },
+              {
+                "x": 349.0,
+                "y": 455.0
+              },
+              {
+                "x": 366.0,
+                "y": 468.0
+              },
+              {
+                "x": 419.0,
+                "y": 465.0
+              },
+              {
+                "x": 427.0,
+                "y": 454.0
+              },
+              {
+                "x": 421.0,
+                "y": 445.0
+              },
+              {
+                "x": 423.0,
+                "y": 439.0
+              },
+              {
+                "x": 402.0,
+                "y": 443.0
+              },
+              {
+                "x": 413.0,
+                "y": 449.0
+              },
+              {
+                "x": 408.0,
+                "y": 456.0
+              },
+              {
+                "x": 385.0,
+                "y": 459.0
+              },
+              {
+                "x": 382.0,
+                "y": 456.0
+              },
+              {
+                "x": 393.0,
+                "y": 445.0
+              },
+              {
+                "x": 373.0,
+                "y": 435.0
+              },
+              {
+                "x": 357.0,
+                "y": 436.0
+              }
+            ]
+          },
+          {
+            "structure": "Anterior Horn of Lateral Ventricle 1",
+            "type": "polygon",
+            "points": [
+              {
+                "x": 304.0,
+                "y": 422.0
+              },
+              {
+                "x": 306.0,
+                "y": 426.0
+              },
+              {
+                "x": 314.0,
+                "y": 428.0
+              },
+              {
+                "x": 321.0,
+                "y": 433.0
+              },
+              {
+                "x": 332.0,
+                "y": 435.0
+              },
+              {
+                "x": 346.0,
+                "y": 435.0
+              },
+              {
+                "x": 350.0,
+                "y": 433.0
+              },
+              {
+                "x": 341.0,
+                "y": 422.0
+              },
+              {
+                "x": 335.0,
+                "y": 418.0
+              },
+              {
+                "x": 329.0,
+                "y": 417.0
+              },
+              {
+                "x": 328.0,
+                "y": 415.0
+              },
+              {
+                "x": 315.0,
+                "y": 415.0
+              }
+            ]
+          },
+          {
+            "structure": "Inner Calvarium",
+            "type": "polygon",
+            "points": [
+              {
+                "x": 473.0,
+                "y": 235.0
+              },
+              {
+                "x": 336.0,
+                "y": 286.0
+              },
+              {
+                "x": 242.0,
+                "y": 398.0
+              },
+              {
+                "x": 227.0,
+                "y": 451.0
+              },
+              {
+                "x": 242.0,
+                "y": 510.0
+              },
+              {
+                "x": 293.0,
+                "y": 568.0
+              },
+              {
+                "x": 494.0,
+                "y": 632.0
+              },
+              {
+                "x": 553.0,
+                "y": 621.0
+              },
+              {
+                "x": 671.0,
+                "y": 524.0
+              },
+              {
+                "x": 704.0,
+                "y": 397.0
+              },
+              {
+                "x": 622.0,
+                "y": 270.0
+              }
+            ]
+          },
+          {
+            "structure": "Outer Calvarium",
+            "type": "polygon",
+            "points": [
+              {
+                "x": 353.0,
+                "y": 235.0
+              },
+              {
+                "x": 210.0,
+                "y": 397.0
+              },
+              {
+                "x": 199.0,
+                "y": 464.0
+              },
+              {
+                "x": 235.0,
+                "y": 549.0
+              },
+              {
+                "x": 409.0,
+                "y": 645.0
+              },
+              {
+                "x": 547.0,
+                "y": 648.0
+              },
+              {
+                "x": 628.0,
+                "y": 606.0
+              },
+              {
+                "x": 703.0,
+                "y": 527.0
+              },
+              {
+                "x": 736.0,
+                "y": 433.0
+              },
+              {
+                "x": 686.0,
+                "y": 282.0
+              },
+              {
+                "x": 519.0,
+                "y": 210.0
+              }
+            ]
+          }
+        ],
+        "gt_metrics_available": false,
+        "gt_metrics": null,
+        "image_quality_summary": {
+          "n_structures_predicted": 15,
+          "n_structures_ok": 6,
+          "n_structures_low_contrast": 9,
+          "n_structures_low_conf": 0,
+          "n_structures_locally_blurry": 0,
+          "overall_image_quality": "poor"
+        },
+        "structures": [
+          {
+            "structure_name": "Hemisphere 1",
+            "segmentation_confidence": {
+              "value": 0.9688,
+              "qualitative": "high",
+              "threshold": 0.5
+            },
+            "local_contrast": {
+              "value": 22.79,
+              "qualitative": "good",
+              "threshold": 10.0
+            },
+            "local_blur": {
+              "value": 1741.8,
+              "qualitative": "sharp",
+              "threshold": 10.0
+            }
+          },
+          {
+            "structure_name": "Hemisphere 2",
+            "segmentation_confidence": {
+              "value": 0.9546,
+              "qualitative": "high",
+              "threshold": 0.5
+            },
+            "local_contrast": {
+              "value": 0.79,
+              "qualitative": "low",
+              "threshold": 10.0
+            },
+            "local_blur": {
+              "value": 848.42,
+              "qualitative": "sharp",
+              "threshold": 10.0
+            }
+          },
+          {
+            "structure_name": "Midline Falx",
+            "segmentation_confidence": {
+              "value": 0.9727,
+              "qualitative": "high",
+              "threshold": 0.5
+            },
+            "local_contrast": {
+              "value": 9.65,
+              "qualitative": "low",
+              "threshold": 12.0
+            },
+            "local_blur": {
+              "value": 2336.43,
+              "qualitative": "sharp",
+              "threshold": 15.0
+            }
+          },
+          {
+            "structure_name": "Thalamus 2",
+            "segmentation_confidence": {
+              "value": 0.9702,
+              "qualitative": "high",
+              "threshold": 0.5
+            },
+            "local_contrast": {
+              "value": 10.81,
+              "qualitative": "good",
+              "threshold": 10.0
+            },
+            "local_blur": {
+              "value": 2241.7,
+              "qualitative": "sharp",
+              "threshold": 15.0
+            }
+          },
+          {
+            "structure_name": "Hippocampal Gyrus 2",
+            "segmentation_confidence": {
+              "value": 0.9859,
+              "qualitative": "high",
+              "threshold": 0.5
+            },
+            "local_contrast": {
+              "value": 2.87,
+              "qualitative": "low",
+              "threshold": 12.0
+            },
+            "local_blur": {
+              "value": 334.66,
+              "qualitative": "sharp",
+              "threshold": 15.0
+            }
+          },
+          {
+            "structure_name": "Thalamus 1",
+            "segmentation_confidence": {
+              "value": 0.9437,
+              "qualitative": "high",
+              "threshold": 0.5
+            },
+            "local_contrast": {
+              "value": 9.43,
+              "qualitative": "low",
+              "threshold": 10.0
+            },
+            "local_blur": {
+              "value": 439.38,
+              "qualitative": "sharp",
+              "threshold": 15.0
+            }
+          },
+          {
+            "structure_name": "Anterior Horn of Lateral Ventricles 2",
+            "segmentation_confidence": {
+              "value": 0.9639,
+              "qualitative": "high",
+              "threshold": 0.5
+            },
+            "local_contrast": {
+              "value": 48.23,
+              "qualitative": "good",
+              "threshold": 12.0
+            },
+            "local_blur": {
+              "value": 198.44,
+              "qualitative": "sharp",
+              "threshold": 15.0
+            }
+          },
+          {
+            "structure_name": "Anterior Midline Falx",
+            "segmentation_confidence": {
+              "value": 0.7352,
+              "qualitative": "high",
+              "threshold": 0.5
+            },
+            "local_contrast": {
+              "value": 36.84,
+              "qualitative": "good",
+              "threshold": 12.0
+            },
+            "local_blur": {
+              "value": 458.44,
+              "qualitative": "sharp",
+              "threshold": 15.0
+            }
+          },
+          {
+            "structure_name": "Arrow Sign",
+            "segmentation_confidence": {
+              "value": 0.9337,
+              "qualitative": "high",
+              "threshold": 0.5
+            },
+            "local_contrast": {
+              "value": 0.13,
+              "qualitative": "low",
+              "threshold": 12.0
+            },
+            "local_blur": {
+              "value": 3806.81,
+              "qualitative": "sharp",
+              "threshold": 15.0
+            }
+          },
+          {
+            "structure_name": "Lateral Sulcus 2",
+            "segmentation_confidence": {
+              "value": 0.9917,
+              "qualitative": "high",
+              "threshold": 0.5
+            },
+            "local_contrast": {
+              "value": 10.01,
+              "qualitative": "low",
+              "threshold": 12.0
+            },
+            "local_blur": {
+              "value": 258.92,
+              "qualitative": "sharp",
+              "threshold": 15.0
+            }
+          },
+          {
+            "structure_name": "Cerebral Peduncle 2",
+            "segmentation_confidence": {
+              "value": 0.9769,
+              "qualitative": "high",
+              "threshold": 0.5
+            },
+            "local_contrast": {
+              "value": 6.61,
+              "qualitative": "low",
+              "threshold": 12.0
+            },
+            "local_blur": {
+              "value": 3963.68,
+              "qualitative": "sharp",
+              "threshold": 15.0
+            }
+          },
+          {
+            "structure_name": "Pillars of Fornix",
+            "segmentation_confidence": {
+              "value": 0.9961,
+              "qualitative": "high",
+              "threshold": 0.5
+            },
+            "local_contrast": {
+              "value": 33.94,
+              "qualitative": "good",
+              "threshold": 12.0
+            },
+            "local_blur": {
+              "value": 812.31,
+              "qualitative": "sharp",
+              "threshold": 15.0
+            }
+          },
+          {
+            "structure_name": "Anterior Horn of Lateral Ventricle 1",
+            "segmentation_confidence": {
+              "value": 0.9917,
+              "qualitative": "high",
+              "threshold": 0.5
+            },
+            "local_contrast": {
+              "value": 19.71,
+              "qualitative": "good",
+              "threshold": 12.0
+            },
+            "local_blur": {
+              "value": 505.31,
+              "qualitative": "sharp",
+              "threshold": 15.0
+            }
+          },
+          {
+            "structure_name": "Inner Calvarium",
+            "segmentation_confidence": {
+              "value": 0.993,
+              "qualitative": "high",
+              "threshold": 0.95
+            },
+            "local_contrast": {
+              "value": 11.43,
+              "qualitative": "low",
+              "threshold": 30.0
+            },
+            "local_blur": {
+              "value": 1278.0,
+              "qualitative": "sharp",
+              "threshold": 25.0
+            }
+          },
+          {
+            "structure_name": "Outer Calvarium",
+            "segmentation_confidence": {
+              "value": 0.9886,
+              "qualitative": "high",
+              "threshold": 0.95
+            },
+            "local_contrast": {
+              "value": 7.87,
+              "qualitative": "low",
+              "threshold": 30.0
+            },
+            "local_blur": {
+              "value": 1217.38,
+              "qualitative": "sharp",
+              "threshold": 25.0
+            }
+          }
+        ],
+        "quality_reasons": []
+      }
+    },
+    "top_right": {
+      "1st": {
+        "image_path": "/home/htic/MLN/PIPELINE/ANUAudit_Pipeline/12_Full_Image_Datasets/ClinicalPatient_13_dcm/IMG_20260220_1_91.dcm",
+        "input_filename": "IMG_20260220_1_91.dcm",
+        "plane": "Cord Insertion",
+        "plane_quality": "Non-Standard",
+        "mean_structure_confidence": 0.867659,
+        "plane_candidates": [
+          "Cord Insertion",
+          "Transverse Kidneys",
+          "Abdominal Circumference"
+        ],
+        "plane_mandatory_structures": {
+          "Abdominal Circumference": {
+            "required": [
+              "Umbilical Vein",
+              "Skin Line",
+              "Vertebrae",
+              "Stomach",
+              "Adrenal"
+            ],
+            "present": [
+              "Skin Line",
+              "Vertebrae",
+              "Stomach"
+            ],
+            "missing": [
+              "Umbilical Vein",
+              "Adrenal"
+            ],
+            "detected_fraction": 0.6,
+            "anchor_pass": true
+          },
+          "Cord Insertion": {
+            "required": [
+              "Cord Insertion",
+              "Skin Line",
+              "Vertebrae"
+            ],
+            "present": [
+              "Skin Line",
+              "Vertebrae"
+            ],
+            "missing": [
+              "Cord Insertion"
+            ],
+            "detected_fraction": 0.666667,
+            "anchor_pass": false
+          },
+          "Transverse Kidneys": {
+            "required": [
+              "Kidney Cortex",
+              "Renal Pelvis",
+              "Vertebrae"
+            ],
+            "present": [
+              "Kidney Cortex",
+              "Vertebrae"
+            ],
+            "missing": [
+              "Renal Pelvis"
+            ],
+            "detected_fraction": 0.666667,
+            "anchor_pass": true
+          }
+        },
+        "polygons": [
+          {
+            "structure": "Stomach",
+            "type": "polygon",
+            "points": [
+              {
+                "x": 428.0,
+                "y": 453.0
+              },
+              {
+                "x": 417.0,
+                "y": 497.0
+              },
+              {
+                "x": 426.0,
+                "y": 516.0
+              },
+              {
+                "x": 487.0,
+                "y": 516.0
+              },
+              {
+                "x": 502.0,
+                "y": 506.0
+              },
+              {
+                "x": 513.0,
+                "y": 489.0
+              },
+              {
+                "x": 508.0,
+                "y": 466.0
+              },
+              {
+                "x": 487.0,
+                "y": 446.0
+              },
+              {
+                "x": 452.0,
+                "y": 438.0
+              }
+            ]
+          },
+          {
+            "structure": "Vertebrae",
+            "type": "polygon",
+            "points": [
+              {
+                "x": 621.0,
+                "y": 425.0
+              },
+              {
+                "x": 604.0,
+                "y": 436.0
+              },
+              {
+                "x": 602.0,
+                "y": 468.0
+              },
+              {
+                "x": 595.0,
+                "y": 483.0
+              },
+              {
+                "x": 600.0,
+                "y": 504.0
+              },
+              {
+                "x": 621.0,
+                "y": 530.0
+              },
+              {
+                "x": 656.0,
+                "y": 530.0
+              },
+              {
+                "x": 678.0,
+                "y": 507.0
+              },
+              {
+                "x": 673.0,
+                "y": 474.0
+              },
+              {
+                "x": 667.0,
+                "y": 466.0
+              },
+              {
+                "x": 667.0,
+                "y": 443.0
+              },
+              {
+                "x": 641.0,
+                "y": 425.0
+              }
+            ]
+          },
+          {
+            "structure": "Aorta",
+            "type": "polygon",
+            "points": [
+              {
+                "x": 576.0,
+                "y": 504.0
+              },
+              {
+                "x": 576.0,
+                "y": 506.0
+              },
+              {
+                "x": 574.0,
+                "y": 507.0
+              },
+              {
+                "x": 574.0,
+                "y": 514.0
+              },
+              {
+                "x": 576.0,
+                "y": 515.0
+              },
+              {
+                "x": 576.0,
+                "y": 517.0
+              },
+              {
+                "x": 581.0,
+                "y": 518.0
+              },
+              {
+                "x": 585.0,
+                "y": 523.0
+              },
+              {
+                "x": 592.0,
+                "y": 525.0
+              },
+              {
+                "x": 593.0,
+                "y": 527.0
+              },
+              {
+                "x": 595.0,
+                "y": 525.0
+              },
+              {
+                "x": 598.0,
+                "y": 525.0
+              },
+              {
+                "x": 598.0,
+                "y": 519.0
+              },
+              {
+                "x": 594.0,
+                "y": 517.0
+              },
+              {
+                "x": 594.0,
+                "y": 515.0
+              },
+              {
+                "x": 590.0,
+                "y": 511.0
+              },
+              {
+                "x": 590.0,
+                "y": 508.0
+              },
+              {
+                "x": 588.0,
+                "y": 507.0
+              },
+              {
+                "x": 588.0,
+                "y": 505.0
+              },
+              {
+                "x": 583.0,
+                "y": 503.0
+              }
+            ]
+          },
+          {
+            "structure": "Kidney Cortex",
+            "type": "polygon",
+            "points": [
+              {
+                "x": 441.0,
+                "y": 552.0
+              },
+              {
+                "x": 442.0,
+                "y": 552.0
+              },
+              {
+                "x": 443.0,
+                "y": 553.0
+              },
+              {
+                "x": 443.0,
+                "y": 554.0
+              },
+              {
+                "x": 444.0,
+                "y": 554.0
+              },
+              {
+                "x": 447.0,
+                "y": 556.0
+              },
+              {
+                "x": 451.0,
+                "y": 556.0
+              },
+              {
+                "x": 452.0,
+                "y": 555.0
+              },
+              {
+                "x": 453.0,
+                "y": 555.0
+              },
+              {
+                "x": 453.0,
+                "y": 553.0
+              },
+              {
+                "x": 452.0,
+                "y": 553.0
+              },
+              {
+                "x": 451.0,
+                "y": 552.0
+              },
+              {
+                "x": 449.0,
+                "y": 552.0
+              },
+              {
+                "x": 448.0,
+                "y": 551.0
+              },
+              {
+                "x": 448.0,
+                "y": 550.0
+              },
+              {
+                "x": 443.0,
+                "y": 550.0
+              },
+              {
+                "x": 443.0,
+                "y": 551.0
+              },
+              {
+                "x": 442.0,
+                "y": 552.0
+              }
+            ]
+          },
+          {
+            "structure": "Skin Line",
+            "type": "polygon",
+            "points": [
+              {
+                "x": 379.0,
+                "y": 429.0
+              },
+              {
+                "x": 323.0,
+                "y": 511.0
+              },
+              {
+                "x": 347.0,
+                "y": 559.0
+              },
+              {
+                "x": 340.0,
+                "y": 604.0
+              },
+              {
+                "x": 402.0,
+                "y": 689.0
+              },
+              {
+                "x": 464.0,
+                "y": 719.0
+              },
+              {
+                "x": 614.0,
+                "y": 719.0
+              },
+              {
+                "x": 704.0,
+                "y": 648.0
+              },
+              {
+                "x": 729.0,
+                "y": 532.0
+              },
+              {
+                "x": 658.0,
+                "y": 405.0
+              },
+              {
+                "x": 512.0,
+                "y": 370.0
+              }
+            ]
+          }
+        ],
+        "gt_metrics_available": false,
+        "gt_metrics": null,
+        "uv_standard": false,
+        "uv_metrics": {
+          "area": 0.0,
+          "aspect_ratio": NaN,
+          "skeleton_length": 0
+        },
+        "skin_line_shape": {
+          "circularity": 0.835404,
+          "axis_ratio": 1.182287
+        },
+        "quality_reasons": []
+      }
+    },
+    "bottom_right": {
+      "1st": {
+        "image_path": "/home/htic/MLN/PIPELINE/ANUAudit_Pipeline/12_Full_Image_Datasets/ClinicalPatient_13_dcm/IMG_20260220_1_91.dcm",
+        "input_filename": "IMG_20260220_1_91.dcm",
+        "plane": "Cord Insertion",
+        "plane_quality": "Non-Standard",
+        "mean_structure_confidence": 0.974274,
+        "plane_candidates": [
+          "Cord Insertion"
+        ],
+        "plane_mandatory_structures": {
+          "Abdominal Circumference": {
+            "required": [
+              "Umbilical Vein",
+              "Skin Line",
+              "Vertebrae",
+              "Stomach",
+              "Adrenal"
+            ],
+            "present": [
+              "Skin Line",
+              "Vertebrae"
+            ],
+            "missing": [
+              "Umbilical Vein",
+              "Stomach",
+              "Adrenal"
+            ],
+            "detected_fraction": 0.4,
+            "anchor_pass": true
+          },
+          "Cord Insertion": {
+            "required": [
+              "Cord Insertion",
+              "Skin Line",
+              "Vertebrae"
+            ],
+            "present": [
+              "Skin Line",
+              "Vertebrae"
+            ],
+            "missing": [
+              "Cord Insertion"
+            ],
+            "detected_fraction": 0.666667,
+            "anchor_pass": false
+          },
+          "Transverse Kidneys": {
+            "required": [
+              "Kidney Cortex",
+              "Renal Pelvis",
+              "Vertebrae"
+            ],
+            "present": [
+              "Vertebrae"
+            ],
+            "missing": [
+              "Kidney Cortex",
+              "Renal Pelvis"
+            ],
+            "detected_fraction": 0.333333,
+            "anchor_pass": false
+          }
+        },
+        "polygons": [
+          {
+            "structure": "Vertebrae",
+            "type": "polygon",
+            "points": [
+              {
+                "x": 610.0,
+                "y": 405.0
+              },
+              {
+                "x": 597.0,
+                "y": 415.0
+              },
+              {
+                "x": 589.0,
+                "y": 429.0
+              },
+              {
+                "x": 589.0,
+                "y": 444.0
+              },
+              {
+                "x": 580.0,
+                "y": 460.0
+              },
+              {
+                "x": 582.0,
+                "y": 482.0
+              },
+              {
+                "x": 595.0,
+                "y": 492.0
+              },
+              {
+                "x": 618.0,
+                "y": 490.0
+              },
+              {
+                "x": 650.0,
+                "y": 497.0
+              },
+              {
+                "x": 656.0,
+                "y": 490.0
+              },
+              {
+                "x": 659.0,
+                "y": 468.0
+              },
+              {
+                "x": 654.0,
+                "y": 438.0
+              },
+              {
+                "x": 643.0,
+                "y": 420.0
+              },
+              {
+                "x": 628.0,
+                "y": 408.0
+              }
+            ]
+          },
+          {
+            "structure": "Aorta",
+            "type": "polygon",
+            "points": [
+              {
+                "x": 540.0,
+                "y": 480.0
+              },
+              {
+                "x": 539.0,
+                "y": 487.0
+              },
+              {
+                "x": 542.0,
+                "y": 492.0
+              },
+              {
+                "x": 552.0,
+                "y": 494.0
+              },
+              {
+                "x": 562.0,
+                "y": 494.0
+              },
+              {
+                "x": 568.0,
+                "y": 492.0
+              },
+              {
+                "x": 569.0,
+                "y": 490.0
+              },
+              {
+                "x": 568.0,
+                "y": 483.0
+              },
+              {
+                "x": 561.0,
+                "y": 479.0
+              },
+              {
+                "x": 560.0,
+                "y": 477.0
+              },
+              {
+                "x": 548.0,
+                "y": 476.0
+              },
+              {
+                "x": 544.0,
+                "y": 477.0
+              },
+              {
+                "x": 543.0,
+                "y": 479.0
+              }
+            ]
+          },
+          {
+            "structure": "Placenta",
+            "type": "polygon",
+            "points": [
+              {
+                "x": 774.0,
+                "y": 238.0
+              },
+              {
+                "x": 757.0,
+                "y": 200.0
+              },
+              {
+                "x": 591.0,
+                "y": 178.0
+              },
+              {
+                "x": 572.0,
+                "y": 197.0
+              },
+              {
+                "x": 582.0,
+                "y": 219.0
+              },
+              {
+                "x": 435.0,
+                "y": 241.0
+              },
+              {
+                "x": 345.0,
+                "y": 221.0
+              },
+              {
+                "x": 285.0,
+                "y": 241.0
+              },
+              {
+                "x": 270.0,
+                "y": 267.0
+              },
+              {
+                "x": 347.0,
+                "y": 320.0
+              },
+              {
+                "x": 439.0,
+                "y": 340.0
+              },
+              {
+                "x": 659.0,
+                "y": 322.0
+              },
+              {
+                "x": 709.0,
+                "y": 248.0
+              },
+              {
+                "x": 763.0,
+                "y": 254.0
+              }
+            ]
+          },
+          {
+            "structure": "Skin Line",
+            "type": "polygon",
+            "points": [
+              {
+                "x": 594.0,
+                "y": 339.0
+              },
+              {
+                "x": 488.0,
+                "y": 338.0
+              },
+              {
+                "x": 435.0,
+                "y": 360.0
+              },
+              {
+                "x": 345.0,
+                "y": 456.0
+              },
+              {
+                "x": 344.0,
+                "y": 582.0
+              },
+              {
+                "x": 414.0,
+                "y": 621.0
+              },
+              {
+                "x": 458.0,
+                "y": 696.0
+              },
+              {
+                "x": 560.0,
+                "y": 676.0
+              },
+              {
+                "x": 703.0,
+                "y": 583.0
+              },
+              {
+                "x": 703.0,
+                "y": 463.0
+              },
+              {
+                "x": 658.0,
+                "y": 386.0
+              }
+            ]
+          }
+        ],
+        "gt_metrics_available": false,
+        "gt_metrics": null,
+        "uv_standard": false,
+        "uv_metrics": {
+          "area": 0.0,
+          "aspect_ratio": NaN,
+          "skeleton_length": 0
+        },
+        "skin_line_shape": {
+          "circularity": 0.805852,
+          "axis_ratio": 1.265767
+        },
+        "quality_reasons": []
+      },
+      "3rd": {
+        "image_path": "/home/htic/MLN/PIPELINE/ANUAudit_Pipeline/12_Full_Image_Datasets/ClinicalPatient_13_dcm/IMG_20260220_1_91.dcm",
+        "input_filename": "IMG_20260220_1_91.dcm",
+        "view": "Unknown",
+        "plane": "Median Facial Profile",
+        "plane_quality": "Non-Standard",
+        "plane_candidates": [
+          "Median Facial Profile"
+        ],
+        "plane_mandatory_structures": {
+          "Nose and Mouth": {
+            "required": [
+              "Nose",
+              "Upper Lip",
+              "Lower Lip",
+              "Chin"
+            ],
+            "present": [],
+            "missing": [
+              "Nose",
+              "Upper Lip",
+              "Lower Lip",
+              "Chin"
+            ],
+            "detected_fraction": 0.0,
+            "anchor_pass": false
+          },
+          "Orbits and Lenses": {
+            "required": [
+              "Orbits",
+              "Lenses"
+            ],
+            "present": [],
+            "missing": [
+              "Orbits",
+              "Lenses"
+            ],
+            "detected_fraction": 0.0,
+            "anchor_pass": false
+          },
+          "Median Facial Profile": {
+            "required": [
+              "Diencephalon",
+              "Forehead",
+              "Maxilla",
+              "Nasal_Bone",
+              "Skinline",
+              "Mandible",
+              "Chin",
+              "Vomer_bone",
+              "Lips"
+            ],
+            "present": [
+              "Forehead",
+              "Skinline"
+            ],
+            "missing": [
+              "Diencephalon",
+              "Maxilla",
+              "Nasal_Bone",
+              "Mandible",
+              "Chin",
+              "Vomer_bone",
+              "Lips"
+            ],
+            "detected_fraction": 0.222222,
+            "anchor_pass": false
+          }
+        },
+        "mean_structure_confidence": 0.99595,
+        "structures": [
+          {
+            "name": "Forehead",
+            "predicted_present": true,
+            "confidence": 0.9976,
+            "confidence_pass": true
+          },
+          {
+            "name": "Nose",
+            "predicted_present": false,
+            "confidence": 0.0073,
+            "confidence_pass": false
+          },
+          {
+            "name": "Maxilla",
+            "predicted_present": false,
+            "confidence": 0.0527,
+            "confidence_pass": false
+          },
+          {
+            "name": "Nasal_Bone",
+            "predicted_present": false,
+            "confidence": 0.0033,
+            "confidence_pass": false
+          },
+          {
+            "name": "Skinline",
+            "predicted_present": true,
+            "confidence": 0.9943,
+            "confidence_pass": true
+          },
+          {
+            "name": "Lips",
+            "predicted_present": false,
+            "confidence": 0.0042,
+            "confidence_pass": false
+          },
+          {
+            "name": "Mandible",
+            "predicted_present": false,
+            "confidence": 0.0033,
+            "confidence_pass": false
+          },
+          {
+            "name": "Chin",
+            "predicted_present": false,
+            "confidence": 0.0085,
+            "confidence_pass": false
+          },
+          {
+            "name": "Vomer_bone",
+            "predicted_present": false,
+            "confidence": 0.0034,
+            "confidence_pass": false
+          },
+          {
+            "name": "Diencephalon",
+            "predicted_present": false,
+            "confidence": 0.0116,
+            "confidence_pass": false
+          },
+          {
+            "name": "Orbits",
+            "predicted_present": false,
+            "confidence": 0.9934,
+            "confidence_pass": true
+          },
+          {
+            "name": "Lenses",
+            "predicted_present": false,
+            "confidence": 0.0291,
+            "confidence_pass": false
+          },
+          {
+            "name": "Upper Lip",
+            "predicted_present": false,
+            "confidence": 0.2238,
+            "confidence_pass": false
+          },
+          {
+            "name": "Lower Lip",
+            "predicted_present": false,
+            "confidence": 0.0107,
+            "confidence_pass": false
+          }
+        ],
+        "polygons": [
+          {
+            "points": [
+              {
+                "x": 146.0,
+                "y": 238.0
+              },
+              {
+                "x": 134.0,
+                "y": 233.0
+              },
+              {
+                "x": 105.0,
+                "y": 234.0
+              },
+              {
+                "x": 90.0,
+                "y": 240.0
+              },
+              {
+                "x": 78.0,
+                "y": 251.0
+              },
+              {
+                "x": 81.0,
+                "y": 252.0
+              },
+              {
+                "x": 91.0,
+                "y": 243.0
+              },
+              {
+                "x": 99.0,
+                "y": 241.0
+              }
+            ],
+            "structure": "Forehead",
+            "type": "polygon"
+          }
+        ],
+        "gt_metrics_available": false,
+        "gt_metrics": null,
+        "gt_summary": null,
+        "postprocessing": null
+      }
+    }
+  },
+  "final_plane_prediction": {
+    "top_left": {
+      "plane": "Full Body Coronal View",
+      "source": "classification",
+      "rank": "1st",
+      "confidence": 0.9943459630012512
+    },
+    "top_right": {
+      "plane": "Cord Insertion",
+      "source": "segmentation",
+      "rank": "1st",
+      "plane_quality": "Non-Standard",
+      "confidence": 0.867659
+    },
+    "bottom_left": {
+      "plane": "Transthalamic",
+      "source": "segmentation",
+      "rank": "1st",
+      "plane_quality": "Non-Standard",
+      "confidence": 0.95778
+    },
+    "bottom_right": {
+      "plane": "Median Facial Profile",
+      "source": "segmentation",
+      "rank": "3rd",
+      "plane_quality": "Non-Standard",
+      "confidence": 0.99595
+    }
+  }
+}

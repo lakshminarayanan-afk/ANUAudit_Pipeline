@@ -1,0 +1,32 @@
+{
+  "image_path": "/home/htic/MLN/PIPELINE/ANUAudit_Pipeline/12_Full_Image_Datasets/ClinicalPatient_13_dcm/IMG_20260220_1_97.dcm",
+  "modality": {
+    "split": "single",
+    "type": "b-mode"
+  },
+  "classification": {
+    "1st": {
+      "Anatomy": "Fetal Environment",
+      "Standard plane": "Cervix",
+      "Standard_plane_confidence": 0.996801495552063
+    },
+    "2nd": {
+      "Anatomy": "Upper Limbs",
+      "Standard plane": "Open Hands",
+      "Standard_plane_confidence": 0.7408416867256165
+    },
+    "3rd": {
+      "Anatomy": "Lower Limbs",
+      "Standard plane": "Both Feet",
+      "Standard_plane_confidence": 0.766348659992218
+    }
+  },
+  "final_plane_prediction": {
+    "single": {
+      "plane": "Cervix",
+      "source": "classification",
+      "rank": "1st",
+      "confidence": 0.996801495552063
+    }
+  }
+}
