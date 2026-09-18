@@ -80,44 +80,44 @@ STRUCTURE_PALETTE_IDX_LOWER_LIMBS = {
 class Config:
 
     ## ML
-    # CLASS_MODEL_PATH= r"C:/Users/laksh/ANU/weights/swa_final_27-classes-DACL+ContrLoss+DeeperClsHead#1.pth"
-    CLASS_MODEL_PATH = r"C:/Users/laksh/ANU/weights/CLASS/hierarchicalmodel27 (1).pt"
-    DOPPLER_MODEL_PATH=r"C:/Users/laksh/ANU/weights/best_doppler_model.pth"
+    # CLASS_MODEL_PATH= r"C:/Users/laksh/ANU/MAIN_WEIGHTS/swa_final_27-classes-DACL+ContrLoss+DeeperClsHead#1.pth"
+    CLASS_MODEL_PATH = r"C:/Users/laksh/ANU/MAIN_WEIGHTS/CLASS/hierarchicalmodel27 (1).pt"
+    DOPPLER_MODEL_PATH=r"C:/Users/laksh/ANU/MAIN_WEIGHTS/best_doppler_model.pth"
 
     ## SEG
-    # SEG_MODEL_PATH_MEDSAM= '/home/htic/MLN/weights/best_model.pth'
-    SEG_MODEL_HEAD= r"/home/htic/MLN/PIPELINE/ANUAudit_Pipeline/weights/SEG/best_model_unet.pth"
-    SEG_MODEL_ABD = r"/home/htic/MLN/PIPELINE/ANUAudit_Pipeline/weights/SEG/abdomen_best.pth"
-    SEG_MODEL_LIMBS = r"/home/htic/MLN/PIPELINE/ANUAudit_Pipeline/weights/SEG/limbs_best.pt"
-    SEG_MODEL_FACE = r"/home/htic/MLN/PIPELINE/ANUAudit_Pipeline/weights/SEG/face_best.pt"
+    # SEG_MODEL_PATH_MEDSAM= '/home/htic/MLN/MAIN_WEIGHTS/best_model.pth'
+    SEG_MODEL_HEAD= r"/home/htic/MLN/PIPELINE/ANUAudit_Pipeline/MAIN_WEIGHTS/SEG/best_model_unet.pth"
+    SEG_MODEL_ABD = r"/home/htic/MLN/PIPELINE/ANUAudit_Pipeline/MAIN_WEIGHTS/SEG/abdomen_best.pth"
+    SEG_MODEL_LIMBS = r"/home/htic/MLN/PIPELINE/ANUAudit_Pipeline/MAIN_WEIGHTS/SEG/limbs_best.pt"
+    SEG_MODEL_FACE = r"/home/htic/MLN/PIPELINE/ANUAudit_Pipeline/MAIN_WEIGHTS/SEG/face_best.pt"
 
     ## BIOMETRY
 
     # MODE 1
     #BPD
-    UNET_CHECKPOINT_PATH = r"/home/htic/MLN/PIPELINE/ANUAudit_Pipeline/weights/AUTOMATE/head/head_unet/best_model_head.pth"
+    UNET_CHECKPOINT_PATH = r"/home/htic/MLN/PIPELINE/ANUAudit_Pipeline/MAIN_WEIGHTS/AUTOMATE/head/head_unet/best_model_head.pth"
     #FL
-    FEMUR_CHECKPOINT= r"/home/htic/MLN/PIPELINE/ANUAudit_Pipeline/weights/AUTOMATE/femur/new_fuvai_best.pt"
+    FEMUR_CHECKPOINT= r"/home/htic/MLN/PIPELINE/ANUAudit_Pipeline/MAIN_WEIGHTS/AUTOMATE/femur/new_fuvai_best.pt"
     # ABD
-    ABD_CHECKPOINT= r"/home/htic/MLN/PIPELINE/ANUAudit_Pipeline/weights/AUTOMATE/abd/best_ac_skin_line.pt"
+    ABD_CHECKPOINT= r"/home/htic/MLN/PIPELINE/ANUAudit_Pipeline/MAIN_WEIGHTS/AUTOMATE/abd/best_ac_skin_line.pt"
     # SDVP
     SDVP_LIQUOR_CHECKPOINT_PATH = r""
 
 
     # AUDIT
-    YOLO_AC_BPD= r"/home/htic/MLN/PIPELINE/ANUAudit_Pipeline/weights/AUDIT/yolo_ac_bpd.pt"
-    YOLO_FL= r"/home/htic/MLN/PIPELINE/ANUAudit_Pipeline/weights/AUDIT/yolo_fl.pt"
-    BPD_MASK= r"/home/htic/MLN/PIPELINE/ANUAudit_Pipeline/weights/AUDIT/mask_bpd.pth"
-    AC_MASK= r"/home/htic/MLN/PIPELINE/ANUAudit_Pipeline/weights/AUDIT/mask_ac.pt"
-    FL_MASK= r"/home/htic/MLN/PIPELINE/ANUAudit_Pipeline/weights/AUDIT/mask_fl.pt"
+    YOLO_AC_BPD= r"/home/htic/MLN/PIPELINE/ANUAudit_Pipeline/MAIN_WEIGHTS/AUDIT/yolo_ac_bpd.pt"
+    YOLO_FL= r"/home/htic/MLN/PIPELINE/ANUAudit_Pipeline/MAIN_WEIGHTS/AUDIT/yolo_fl.pt"
+    BPD_MASK= r"/home/htic/MLN/PIPELINE/ANUAudit_Pipeline/MAIN_WEIGHTS/AUDIT/mask_bpd.pth"
+    AC_MASK= r"/home/htic/MLN/PIPELINE/ANUAudit_Pipeline/MAIN_WEIGHTS/AUDIT/mask_ac.pt"
+    FL_MASK= r"/home/htic/MLN/PIPELINE/ANUAudit_Pipeline/MAIN_WEIGHTS/AUDIT/mask_fl.pt"
 
     # MODE 2
     TEMP_SEG= '/home/htic/MLN/ANU-Audit/seg/output_final1'
 
     # FROM OTHERS
-    PATH_FETALCLIP_CONFIG = r"C:/Users/laksh/ANU/weights/FetalCLIP_config.json"
-    PATH_FETALCLIP_WEIGHT = r"C:/Users/laksh/ANU/weights/FetalCLIP_weights.pt"
-    BI0MET_CSV_PATH = r"/home/htic/MLN/PIPELINE/ANUAudit_Pipeline/weights/AUTOMATE/coefficientsGlobalV3.csv"
+    PATH_FETALCLIP_CONFIG = r"C:/Users/laksh/ANU/MAIN_WEIGHTS/FetalCLIP_config.json"
+    PATH_FETALCLIP_WEIGHT = r"C:/Users/laksh/ANU/MAIN_WEIGHTS/FetalCLIP_weights.pt"
+    BI0MET_CSV_PATH = r"/home/htic/MLN/PIPELINE/ANUAudit_Pipeline/MAIN_WEIGHTS/AUTOMATE/coefficientsGlobalV3.csv"
 
     MISC_ANATOMY = "Miscellaneous"
     MISC_PLANE = "Miscellaneous"
