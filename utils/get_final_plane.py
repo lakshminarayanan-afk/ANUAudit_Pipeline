@@ -127,29 +127,11 @@ def final_plane(json_directory):
                 # PULSE DOPPLER
                 # ------------------------------------------------
 
-                if current_modality_type == "pulse_doppler":
+                if current_modality_type == Config.PULSE_DOPPLER:
 
                     print(
                         f"[SKIP] {json_path.name} | "
                         f"{panel} | pulse_doppler"
-                    )
-
-                    continue
-
-                # =================================================
-                # 2. COLOUR DOPPLER
-                # =================================================
-
-                if current_modality_type == Config.COLOUR_DOPPLER:
-
-                    final_predictions[panel] = {
-                        "plane": "colour_doppler",
-                        "source": "modality"
-                    }
-
-                    print(
-                        f"[DOPPLER] {json_path.name} | "
-                        f"{panel} -> colour_doppler"
                     )
 
                     continue
@@ -172,37 +154,34 @@ def final_plane(json_directory):
                     )
                 )
 
-                # # =================================================
-                # # COLOUR DOPPLER
-                # # =================================================
+                # =================================================
+                # 2. COLOUR DOPPLER
+                # =================================================
 
-                # if current_modality_type == "colour_doppler":
+                if current_modality_type == Config.COLOUR_DOPPLER:
 
-                #     if classification_plane is not None:
+                    if classification_plane is not None:
 
-                #         final_prediction = {
-                #             "plane": classification_plane,
-                #             "source": "classification",
-                #             "rank": "1st",
-                #             "confidence": classification_confidence
-                #         }
+                        final_predictions[panel] = {
+                            "plane": classification_plane,
+                            "source": "classification",
+                            "rank": "1st",
+                            "confidence": classification_confidence
+                        }
 
-                #         final_predictions[panel] = final_prediction
+                        print(
+                            f"[COLOUR DOPPLER] {json_path.name} | "
+                            f"{panel} -> {classification_plane}"
+                        )
 
-                #         print(
-                #             f"[COLOUR] {json_path.name} | "
-                #             f"{panel} -> {classification_plane}"
-                #         )
+                    else:
 
-                #     else:
+                        print(
+                            f"[WARNING] {json_path.name} | "
+                            f"{panel} - Colour Doppler prediction missing"
+                        )
 
-                #         print(
-                #             f"[WARNING] {json_path.name} | "
-                #             f"{panel} - classification 1st "
-                #             f"prediction missing"
-                #         )
-
-                #     continue
+                    continue
 
                 # =================================================
                 # 3. ET PLANE

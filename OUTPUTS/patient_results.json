@@ -1,25 +1,25 @@
 {
-    "ClinicalPatient_13_dcm": {
+    "20260330_105556": {
         "measurements": {
-            "BPD": 47.91,
-            "OFD": 60.2,
-            "AC": 160.79,
-            "FL": 31.21,
-            "CI": 79.58
+            "BPD": 57.5,
+            "OFD": 76.5,
+            "AC": 203.82,
+            "FL": 43.48,
+            "CI": 75.16
         },
-        "EFW_g": 354.63,
-        "GA_weeks": 20,
+        "EFW_g": 705.82,
+        "GA_weeks": 24,
         "GA_days": 3,
         "units": "mm",
         "confidence": {
-            "BPD": 0.9868,
-            "AC": 0.9836,
-            "FL": 0.9735
+            "BPD": 0.9859,
+            "AC": 0.9842,
+            "FL": 0.9732
         },
         "source_images": {
-            "BPD": "/home/htic/MLN/PIPELINE/ANUAudit_Pipeline/12_Full_Image_Datasets/ClinicalPatient_13_dcm/IMG_20260220_1_66.dcm",
-            "AC": "/home/htic/MLN/PIPELINE/ANUAudit_Pipeline/12_Full_Image_Datasets/ClinicalPatient_13_dcm/IMG_20260220_1_93.dcm",
-            "FL": "/home/htic/MLN/PIPELINE/ANUAudit_Pipeline/12_Full_Image_Datasets/ClinicalPatient_13_dcm/IMG_20260220_1_57.dcm"
+            "BPD": "/home/htic/MLN/PIPELINE/ANUAudit_Pipeline/AUDITop/some/K63220_RANJETHA_V/20260330_105556/IMG_20260507_20_15.dcm",
+            "AC": "/home/htic/MLN/PIPELINE/ANUAudit_Pipeline/AUDITop/some/K63220_RANJETHA_V/20260330_105556/IMG_20260507_20_65.dcm",
+            "FL": "/home/htic/MLN/PIPELINE/ANUAudit_Pipeline/AUDITop/some/K63220_RANJETHA_V/20260330_105556/IMG_20260507_20_66.dcm"
         }
     }
 }

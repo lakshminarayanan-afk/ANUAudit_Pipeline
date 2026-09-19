@@ -1,0 +1,287 @@
+{
+  "image_path": "/home/htic/MLN/PIPELINE/ANUAudit_Pipeline/AUDITop/some/K63220_RANJETHA_V/20260330_105556/IMG_20260507_20_18.dcm",
+  "modality": {
+    "split": "single",
+    "type": "b-mode"
+  },
+  "classification": {
+    "1st": {
+      "Anatomy": "Thorax",
+      "Standard plane": "RVOT",
+      "Standard_plane_confidence": 0.7665085196495056
+    },
+    "2nd": {
+      "Anatomy": "Spine",
+      "Standard plane": "Full Body Coronal View",
+      "Standard_plane_confidence": 0.95682293176651
+    },
+    "3rd": {
+      "Anatomy": "Abdomen",
+      "Standard plane": "Cord Insertion",
+      "Standard_plane_confidence": 0.637333869934082
+    }
+  },
+  "segmentation": {
+    "single": {
+      "3rd": {
+        "image_path": "/home/htic/MLN/PIPELINE/ANUAudit_Pipeline/AUDITop/some/K63220_RANJETHA_V/20260330_105556/IMG_20260507_20_18.dcm",
+        "input_filename": "IMG_20260507_20_18.dcm",
+        "plane": "Transverse Kidneys",
+        "plane_quality": "Non-Standard",
+        "mean_structure_confidence": 0.931501,
+        "plane_candidates": [
+          "Transverse Kidneys"
+        ],
+        "plane_mandatory_structures": {
+          "Abdominal Circumference": {
+            "required": [
+              "Umbilical Vein",
+              "Skin Line",
+              "Vertebrae",
+              "Stomach",
+              "Adrenal"
+            ],
+            "present": [
+              "Vertebrae",
+              "Stomach"
+            ],
+            "missing": [
+              "Umbilical Vein",
+              "Skin Line",
+              "Adrenal"
+            ],
+            "detected_fraction": 0.4,
+            "anchor_pass": false
+          },
+          "Cord Insertion": {
+            "required": [
+              "Cord Insertion",
+              "Skin Line",
+              "Vertebrae"
+            ],
+            "present": [
+              "Vertebrae"
+            ],
+            "missing": [
+              "Cord Insertion",
+              "Skin Line"
+            ],
+            "detected_fraction": 0.333333,
+            "anchor_pass": false
+          },
+          "Transverse Kidneys": {
+            "required": [
+              "Kidney Cortex",
+              "Renal Pelvis",
+              "Vertebrae"
+            ],
+            "present": [
+              "Kidney Cortex",
+              "Vertebrae"
+            ],
+            "missing": [
+              "Renal Pelvis"
+            ],
+            "detected_fraction": 0.666667,
+            "anchor_pass": true
+          }
+        },
+        "polygons": [
+          {
+            "structure": "Stomach",
+            "type": "polygon",
+            "points": [
+              {
+                "x": 592.0,
+                "y": 387.0
+              },
+              {
+                "x": 585.0,
+                "y": 383.0
+              },
+              {
+                "x": 555.0,
+                "y": 387.0
+              },
+              {
+                "x": 526.0,
+                "y": 403.0
+              },
+              {
+                "x": 520.0,
+                "y": 421.0
+              },
+              {
+                "x": 531.0,
+                "y": 434.0
+              },
+              {
+                "x": 544.0,
+                "y": 439.0
+              },
+              {
+                "x": 583.0,
+                "y": 429.0
+              },
+              {
+                "x": 590.0,
+                "y": 425.0
+              },
+              {
+                "x": 590.0,
+                "y": 417.0
+              },
+              {
+                "x": 599.0,
+                "y": 409.0
+              },
+              {
+                "x": 599.0,
+                "y": 400.0
+              },
+              {
+                "x": 594.0,
+                "y": 397.0
+              }
+            ]
+          },
+          {
+            "structure": "Vertebrae",
+            "type": "polygon",
+            "points": [
+              {
+                "x": 664.0,
+                "y": 290.0
+              },
+              {
+                "x": 655.0,
+                "y": 295.0
+              },
+              {
+                "x": 657.0,
+                "y": 319.0
+              },
+              {
+                "x": 668.0,
+                "y": 329.0
+              },
+              {
+                "x": 676.0,
+                "y": 329.0
+              },
+              {
+                "x": 678.0,
+                "y": 323.0
+              },
+              {
+                "x": 683.0,
+                "y": 321.0
+              },
+              {
+                "x": 683.0,
+                "y": 318.0
+              },
+              {
+                "x": 687.0,
+                "y": 314.0
+              },
+              {
+                "x": 685.0,
+                "y": 305.0
+              },
+              {
+                "x": 681.0,
+                "y": 301.0
+              },
+              {
+                "x": 683.0,
+                "y": 292.0
+              },
+              {
+                "x": 681.0,
+                "y": 290.0
+              }
+            ]
+          },
+          {
+            "structure": "Kidney Cortex",
+            "type": "polygon",
+            "points": [
+              {
+                "x": 708.0,
+                "y": 367.0
+              },
+              {
+                "x": 713.0,
+                "y": 386.0
+              },
+              {
+                "x": 739.0,
+                "y": 401.0
+              },
+              {
+                "x": 769.0,
+                "y": 406.0
+              },
+              {
+                "x": 785.0,
+                "y": 401.0
+              },
+              {
+                "x": 792.0,
+                "y": 394.0
+              },
+              {
+                "x": 794.0,
+                "y": 382.0
+              },
+              {
+                "x": 785.0,
+                "y": 368.0
+              },
+              {
+                "x": 774.0,
+                "y": 362.0
+              },
+              {
+                "x": 753.0,
+                "y": 362.0
+              },
+              {
+                "x": 732.0,
+                "y": 348.0
+              },
+              {
+                "x": 717.0,
+                "y": 353.0
+              }
+            ]
+          }
+        ],
+        "mask_path": "/home/htic/MLN/PIPELINE/ANUAudit_Pipeline/AUDITop/some/K63220_RANJETHA_V/20260330_105556/IMG_20260507_20_18.npz",
+        "gt_metrics_available": false,
+        "gt_metrics": null,
+        "uv_standard": false,
+        "uv_metrics": {
+          "area": 0.0,
+          "aspect_ratio": NaN,
+          "skeleton_length": 0
+        },
+        "skin_line_shape": {
+          "circularity": 0.386296,
+          "axis_ratio": 1.365715
+        },
+        "quality_reasons": []
+      }
+    }
+  },
+  "final_plane_prediction": {
+    "single": {
+      "plane": "Transverse Kidneys",
+      "source": "segmentation",
+      "rank": "3rd",
+      "plane_quality": "Non-Standard",
+      "confidence": 0.931501
+    }
+  }
+}

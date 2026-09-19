@@ -1,0 +1,129 @@
+{
+  "image_path": "/home/htic/MLN/PIPELINE/ANUAudit_Pipeline/AUDITop/some/K63220_RANJETHA_V/20260330_105556/IMG_20260507_20_42.dcm",
+  "modality": {
+    "split": "single",
+    "type": "b-mode"
+  },
+  "classification": {
+    "1st": {
+      "Anatomy": "Thorax",
+      "Standard plane": "4 Chamber View of Heart",
+      "Standard_plane_confidence": 0.9972467422485352
+    },
+    "2nd": {
+      "Anatomy": "Upper Limbs",
+      "Standard plane": "Open Hands",
+      "Standard_plane_confidence": 0.7606455087661743
+    },
+    "3rd": {
+      "Anatomy": "Head",
+      "Standard plane": "Transventricular Plane",
+      "Standard_plane_confidence": 0.37232622504234314
+    }
+  },
+  "segmentation": {
+    "single": {
+      "3rd": {
+        "image_path": "/home/htic/MLN/PIPELINE/ANUAudit_Pipeline/AUDITop/some/K63220_RANJETHA_V/20260330_105556/IMG_20260507_20_42.dcm",
+        "vis_path": null,
+        "input_filename": "IMG_20260507_20_42.dcm",
+        "plane": "Unclassified",
+        "plane_quality": "N/A",
+        "mean_structure_confidence": 0.0,
+        "plane_candidates": [],
+        "plane_mandatory_structures": {
+          "Transthalamic Plane": {
+            "required": [
+              "thalamus 1",
+              "thalamus 2",
+              "arrow sign",
+              "csp (cavum septum pellucidum)",
+              "midline falx",
+              "anterior horn of lateral ventricles 2",
+              "inner calvarium",
+              "outer calvarium"
+            ],
+            "present": [],
+            "missing": [
+              "thalamus 1",
+              "thalamus 2",
+              "arrow sign",
+              "csp (cavum septum pellucidum)",
+              "midline falx",
+              "anterior horn of lateral ventricles 2",
+              "inner calvarium",
+              "outer calvarium"
+            ],
+            "detected_fraction": 0.0,
+            "anchor_pass": false
+          },
+          "Transventricular Plane": {
+            "required": [
+              "lateral ventricle 2",
+              "csp (cavum septum pellucidum)",
+              "choroid plexus 2",
+              "posterior horn of lateral ventricle 2",
+              "midline falx",
+              "anterior horn of lateral ventricles 2",
+              "inner calvarium",
+              "outer calvarium"
+            ],
+            "present": [],
+            "missing": [
+              "lateral ventricle 2",
+              "csp (cavum septum pellucidum)",
+              "choroid plexus 2",
+              "posterior horn of lateral ventricle 2",
+              "midline falx",
+              "anterior horn of lateral ventricles 2",
+              "inner calvarium",
+              "outer calvarium"
+            ],
+            "detected_fraction": 0.0,
+            "anchor_pass": false
+          },
+          "Transcerebellar Plane": {
+            "required": [
+              "cerebellum",
+              "cerebellar vermis",
+              "cisternae magna",
+              "csp (cavum septum pellucidum)",
+              "cerebral peduncle 1",
+              "cerebral peduncle 2",
+              "anterior horn of lateral ventricles 2",
+              "inner calvarium",
+              "outer calvarium"
+            ],
+            "present": [],
+            "missing": [
+              "cerebellum",
+              "cerebellar vermis",
+              "cisternae magna",
+              "csp (cavum septum pellucidum)",
+              "cerebral peduncle 1",
+              "cerebral peduncle 2",
+              "anterior horn of lateral ventricles 2",
+              "inner calvarium",
+              "outer calvarium"
+            ],
+            "detected_fraction": 0.0,
+            "anchor_pass": false
+          }
+        },
+        "polygons": [],
+        "gt_metrics_available": false,
+        "gt_metrics": null,
+        "image_quality_summary": {
+          "n_structures_predicted": 0,
+          "n_structures_ok": 0,
+          "n_structures_low_contrast": 0,
+          "n_structures_low_conf": 0,
+          "n_structures_locally_blurry": 0,
+          "overall_image_quality": "no_predictions"
+        },
+        "structures": [],
+        "quality_reasons": []
+      }
+    }
+  }
+}

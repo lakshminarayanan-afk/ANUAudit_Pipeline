@@ -16,7 +16,9 @@ try:
 except ImportError:
     _DICOM_AVAILABLE = False
 
-from source_codes.seg.LIMBS.config import Config
+# from source_codes.seg.LIMBS.config import Config
+from config import Seg_Config
+CONFIG= Seg_Config.Limbs
 from source_codes.seg.LIMBS.model import MultiTaskSwinUNet
 from source_codes.seg.LIMBS.dataset import load_bone_mask_from_npz, LABEL_MAP, NUM_SEG_CLASSES, IGNORE_INDEX
 from utils.extract_panels import extract_panel
@@ -184,16 +186,16 @@ def discover_images(image_dir: str) -> list[Path]:
 def build_model(device: torch.device) -> MultiTaskSwinUNet:
     """Exact same constructor call the existing limbs training/inference code uses."""
     return MultiTaskSwinUNet(
-        in_chans=Config.IN_CHANNELS,
-        num_seg_classes=Config.NUM_SEG_CLASSES,
-        num_bone_classes=Config.NUM_BONE_CLASSES,
-        embed_dim=Config.EMBED_DIM,
-        depths=Config.DEPTHS,
-        num_heads=Config.NUM_HEADS,
-        window_size=Config.WINDOW_SIZE,
-        fpn_channels=Config.FPN_CHANNELS,
-        proj_dim=Config.PROJ_DIM,
-        ccdc_proj_dim=Config.CCDC_PROJ_DIM,
+        in_chans=CONFIG.IN_CHANNELS,
+        num_seg_classes=CONFIG.NUM_SEG_CLASSES,
+        num_bone_classes=CONFIG.NUM_BONE_CLASSES,
+        embed_dim=CONFIG.EMBED_DIM,
+        depths=CONFIG.DEPTHS,
+        num_heads=CONFIG.NUM_HEADS,
+        window_size=CONFIG.WINDOW_SIZE,
+        fpn_channels=CONFIG.FPN_CHANNELS,
+        proj_dim=CONFIG.PROJ_DIM,
+        ccdc_proj_dim=CONFIG.CCDC_PROJ_DIM,
     ).to(device)
 
 
@@ -254,7 +256,7 @@ def load_checkpoint_strict(model: torch.nn.Module, checkpoint_path: str, device:
 #  PREPROCESSING
 # ═══════════════════════════════════════════════════════════════════════
 
-PAD_MULTIPLE = Config.PAD_MULTIPLE  # 32
+PAD_MULTIPLE = CONFIG.PAD_MULTIPLE  # 32
 
 
 def pad_to_multiple_image(image: np.ndarray, multiple: int = PAD_MULTIPLE) -> tuple[np.ndarray, int, int]:

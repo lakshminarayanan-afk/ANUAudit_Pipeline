@@ -4,8 +4,7 @@ from config import Config
 
 RANKS = ["1st", "2nd", "3rd"]
 SKIP_MODALITIES = {
-    "colour_doppler",
-    "pulse_doppler"
+    "pulse_doppler", "colour_doppler"
 }
 UNAVAILABLE_ANATOMY = {
     "Thorax",
@@ -96,17 +95,17 @@ def load_pipeline_inputs(json_folder):
     json_paths = list(json_folder.glob("*.json"))
     print(f"[LOAD] Found {len(json_paths)} JSON files")
     for json_path in json_paths:
-        print(f"\n[PROCESSING] {json_path}")
+        # print(f"\n[PROCESSING] {json_path}")
         with open(json_path, "r") as f:
             data = json.load(f)
         modality = data.get("modality", {})
         candidates = generate_candidates(data)
         if not candidates:
-            print(f"[SKIP] {json_path.name} → no segmentation candidates")
+            # print(f"[SKIP] {json_path.name} → no segmentation candidates")
             continue
         for panel_name, panel_candidates in candidates.items():
             if not panel_candidates:
-                print(f"[SKIP] {json_path.name} / {panel_name} → no candidates")
+                # print(f"[SKIP] {json_path.name} / {panel_name} → no candidates")
                 continue
             split = modality.get("split")
             modality_types = modality.get("type")
@@ -124,6 +123,6 @@ def load_pipeline_inputs(json_folder):
                 "status": "pending",
                 "result": None
             })
-            print(f"[ADDED] {json_path.name} | {panel_name} | {panel_type} | First model: {panel_candidates[0]['anatomy']}")
+            # print(f"[ADDED] {json_path.name} | {panel_name} | {panel_type} | First model: {panel_candidates[0]['anatomy']}")
     print(f"\n[DONE] Total pipeline items: {len(items)}")
     return items

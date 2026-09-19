@@ -25,7 +25,8 @@ from source_codes.seg.ABDOMEN.organ_postprocessing import (
     postprocess_structures,
 )
 
-from config import PALETTE_RGB_ABDOMEN
+from config import Seg_Config
+CONFIG = Seg_Config.Abdomen
 from utils.extract_panels import extract_panel
 from utils.seg_biom_results_json import write_segmentation_result
 
@@ -262,32 +263,8 @@ VIS_CONFIDENCE_THRESHOLD = _VIS_CONF_DEFAULT
 #  Plane Classification  (unchanged from the existing abdomen infer.py)
 # ═════════════════════════════════════════════════════════════════════════════
 
-PLANE_MANDATORY_STRUCTURES: dict[str, list[str]] = {
-    "Abdominal Circumference": [
-        "Umbilical Vein",
-        "Skin Line",
-        "Vertebrae",
-        "Stomach",
-        "Adrenal",
-    ],
-    "Cord Insertion": [
-        "Cord Insertion",
-        "Skin Line",
-        "Vertebrae",
-    ],
-    "Transverse Kidneys": [
-        "Kidney Cortex",
-        "Renal Pelvis",
-        "Vertebrae",
-    ],
-}
-
-PLANE_ANCHOR_STRUCTURES: dict[str, list[str]] = {
-    "Abdominal Circumference": ["Skin Line"],
-    "Cord Insertion": ["Cord Insertion"],
-    "Transverse Kidneys": ["Kidney Cortex"],
-}
-
+PLANE_MANDATORY_STRUCTURES: dict[str, list[str]] = CONFIG.mandatory_structures
+PLANE_ANCHOR_STRUCTURES: dict[str, list[str]] = CONFIG.plane_anchor_structures
 PLANE_DETECT_THRESHOLD   = 0.50   # >= 50% -> candidate plane
 PLANE_STANDARD_THRESHOLD = 0.90   # >= 90% -> Standard quality
 
@@ -411,7 +388,7 @@ def print_classification(stem: str, result: dict) -> None:
 #  Colour palette (BGR for OpenCV) - unchanged
 # ═════════════════════════════════════════════════════════════════════════════
 
-PALETTE_RGB = PALETTE_RGB_ABDOMEN
+PALETTE_RGB = CONFIG.PALETTE_RGB_ABDOMEN
 
 # SKIN_PALETTE_IDX = len(PALETTE_RGB_ABDOMEN)
 # Palette index 0 = background
@@ -732,6 +709,9 @@ def predict(
     struct_probs = probs[:N_STRUCT]
     ch_masks = postprocess_structures(struct_probs, STRUCT_NAMES, plane=plane)
 
+    # print(f"####################--------ch_mask:{ch_masks.dtype}")
+    # print(f"############# #######--------ch_mask:{ch_masks.shape}")
+
     priority_indices = [ch for ch, name in enumerate(STRUCT_NAMES) if name in PRIORITY_CHANNEL_NAMES]
     label_map = masks_to_exclusive_label_map(ch_masks, struct_probs, priority_indices=priority_indices)
 
@@ -742,7 +722,10 @@ def predict(
         label_map[label_map == _excluded_label] = 0
 
     skin_raw = (probs[SKIN_CH] >= threshold).astype(np.uint8)
+
     skin_bin = _postprocess_skinline(skin_raw)
+    print(f"####################--------ch_mask:{skin_bin.dtype}")
+    print(f"############# #######--------ch_mask:{skin_bin.shape}")
 
     skin_circularity, skin_axis_ratio = compute_skinline_shape_metrics(skin_bin)
 
@@ -1146,6 +1129,7 @@ def build_per_image_json_entry(
     gt_metrics: dict | None,
     skin_circularity: float,
     skin_axis_ratio: float,
+    mask_path
 ) -> dict:
     """
     Builds ONE image's entry for the single aggregate inference_results.json. Field names
@@ -1164,6 +1148,7 @@ def build_per_image_json_entry(
         "plane_candidates": build_plane_candidates(plane_result),
         "plane_mandatory_structures": build_plane_mandatory_structures_json(plane_result),
         "polygons": polygons,
+        "mask_path":mask_path,
         "gt_metrics_available": gt_metrics is not None,
         "gt_metrics": gt_metrics,
         "uv_standard": plane_result["uv_standard"],
@@ -1259,47 +1244,55 @@ def run_inference_abdomen(
         label_map, skin_bin, probs, (skin_circularity, skin_axis_ratio) = predict(
             model, panel_gray, device, threshold
         )
+        print(f"HEYYYYimg_path:{img_path}")
+        mask_path = img_path.with_suffix(".npz")
+        np.savez_compressed(
+            mask_path,
+            label_map=label_map,
+            skin_bin=skin_bin
+        )
+        mask_path=str(mask_path)
 
-        # ── GT (optional; never crashes the run) ──
-        gt_metrics: dict | None = None
-        image_mean_struct_dice: float | None = None
-        if gt_dir is not None:
-            gt_label_orig, gt_skin_orig = load_gt(gt_dir, stem)
-            if gt_label_orig is not None:
-                gt_label = cv2.resize(
-                    gt_label_orig.astype(np.uint8), (mW, mH), interpolation=cv2.INTER_NEAREST
-                ).astype(np.int32)
-                gt_skin_arr = (
-                    cv2.resize(gt_skin_orig, (mW, mH), interpolation=cv2.INTER_NEAREST)
-                    if gt_skin_orig is not None else np.zeros((mH, mW), dtype=np.uint8)
-                )
-                rows = compute_metrics(label_map, skin_bin, gt_label, gt_skin_arr)
-                gt_metrics = gt_metrics_rows_to_dict(rows)
-                n_with_gt += 1
+        # # ── GT (optional; never crashes the run) ──
+        # gt_metrics: dict | None = None
+        # image_mean_struct_dice: float | None = None
+        # if gt_dir is not None:
+        #     gt_label_orig, gt_skin_orig = load_gt(gt_dir, stem)
+        #     if gt_label_orig is not None:
+        #         gt_label = cv2.resize(
+        #             gt_label_orig.astype(np.uint8), (mW, mH), interpolation=cv2.INTER_NEAREST
+        #         ).astype(np.int32)
+        #         gt_skin_arr = (
+        #             cv2.resize(gt_skin_orig, (mW, mH), interpolation=cv2.INTER_NEAREST)
+        #             if gt_skin_orig is not None else np.zeros((mH, mW), dtype=np.uint8)
+        #         )
+        #         rows = compute_metrics(label_map, skin_bin, gt_label, gt_skin_arr)
+        #         gt_metrics = gt_metrics_rows_to_dict(rows)
+        #         n_with_gt += 1
 
-                for r in rows:
-                    gt_metrics_csv_rows.append({
-                        "input_filename": img_path.name,
-                        "structure":       r["structure"],
-                        "dice":            r["dice"],
-                        "iou":             r["iou"],
-                        "sensitivity":     r["sensitivity"],
-                        "specificity":     r["specificity"],
-                        "gt_present":      bool(r["gt_present"]),
-                        "pred_present":    bool(r["pred_present"]),
-                    })
+        #         for r in rows:
+        #             gt_metrics_csv_rows.append({
+        #                 "input_filename": img_path.name,
+        #                 "structure":       r["structure"],
+        #                 "dice":            r["dice"],
+        #                 "iou":             r["iou"],
+        #                 "sensitivity":     r["sensitivity"],
+        #                 "specificity":     r["specificity"],
+        #                 "gt_present":      bool(r["gt_present"]),
+        #                 "pred_present":    bool(r["pred_present"]),
+        #             })
 
-                struct_dices = [r["dice"] for r in rows if r["structure"] != SKIN_NAME
-                                and r["gt_present"] and r["dice"] is not None]
-                if struct_dices:
-                    image_mean_struct_dice = float(np.mean(struct_dices))
-                    gt_dice_all.append(image_mean_struct_dice)
-                    logging.info(f"    mean_struct_dice={image_mean_struct_dice:.4f}")
-            else:
-                gt_label = gt_skin_arr = None
-                logging.info(f"    [GT] no NPZ found for '{stem}' - gt_metrics_available=false")
-        else:
-            gt_label = gt_skin_arr = None
+        #         struct_dices = [r["dice"] for r in rows if r["structure"] != SKIN_NAME
+        #                         and r["gt_present"] and r["dice"] is not None]
+        #         if struct_dices:
+        #             image_mean_struct_dice = float(np.mean(struct_dices))
+        #             gt_dice_all.append(image_mean_struct_dice)
+        #             logging.info(f"    mean_struct_dice={image_mean_struct_dice:.4f}")
+        #     else:
+        #         gt_label = gt_skin_arr = None
+        #         logging.info(f"    [GT] no NPZ found for '{stem}' - gt_metrics_available=false")
+        # else:
+        #     gt_label = gt_skin_arr = None
 
         # ── Plane classification (EXISTING abdomen logic, untouched) ──
         plane_result = classify_plane(label_map, skin_bin, skin_circularity, skin_axis_ratio)
@@ -1340,8 +1333,8 @@ def run_inference_abdomen(
 
         # ── One JSON entry, appended to the SHARED aggregate list (never a per-image file) ──
         entry = build_per_image_json_entry(
-            img_path, plane_result, mean_structure_confidence, polygons, gt_metrics,
-            skin_circularity, skin_axis_ratio,
+            img_path, plane_result, mean_structure_confidence, polygons, None,
+            skin_circularity, skin_axis_ratio,mask_path,
         )
         if plane_result["quality"] == "Standard":
             status = "standard"

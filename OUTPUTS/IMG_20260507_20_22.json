@@ -1,0 +1,9 @@
+{
+  "modality": {
+    "split": "single",
+    "type": "colour_doppler"
+  },
+  "classification": {
+    "result": null
+  }
+}

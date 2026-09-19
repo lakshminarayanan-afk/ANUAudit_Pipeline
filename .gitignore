@@ -14,9 +14,12 @@ env/
 *.onnx
 *.engine
 *.trt
+*.ckpt
 
 # Outputs
 outputs/
+OUTPUTS/
+AUDITop/
 results/
 runs/
 TEMP_OUTPUT/

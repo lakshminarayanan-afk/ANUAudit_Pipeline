@@ -26,6 +26,9 @@ from source_codes.seg.UNET_SoftMAk.model import build_model
 from utils.extract_panels import extract_panel
 from utils.seg_biom_results_json import write_segmentation_result
 
+from config import Seg_Config
+CONFIG = Seg_Config.Head
+
 # from UNET_SoftMAk.config import Config
 # from UNET_SoftMAk.model import build_model
 
@@ -73,42 +76,7 @@ def title_case_structure(name: str) -> str:
     return " ".join(result)
 
 
-STRUCTURE_COLORS_RGB: dict[str, tuple[int, int, int]] = {
-    'thalamus 2':                             (255,   0,   0),
-    'hemisphere 1':                           (  0,   0, 255),
-    'hemisphere 2':                           (  0, 255, 255),
-    'inner calvarium':                        (255, 140,   0),
-    'midline falx':                           (128,   0, 128),
-    'arrow sign':                             (  0, 100,   0),
-    'anterior midline falx':                  ( 50, 205,  50),
-    'thalamus 1':                             (255, 255,   0),
-    'lateral sulcus 1':                       (255,  20, 147),
-    'outer calvarium':                        (255, 105, 180),
-    'cavum septum pellucidum':                (  0, 128, 128),
-    'csp (cavum septum pellucidum)':          (  0, 128, 128),
-    'lateral sulcus 2':                       (220,  20,  60),
-    'hippocampal gyrus 1':                    (139,  69,  19),
-    'hippocampal gyrus 2':                    (238, 130, 238),
-    'anterior horn of lateral ventricles 2':  (  0, 255,   0),
-    'anterior horn of lateral ventricles 1':  (255, 215,   0),
-    'pillars of fornix':                      (255,   0, 255),
-    'posterior horn of lv 1':                 (160,  82,  45),
-    'posterior horn of lv 2':                 (218, 112, 214),
-    'lateral ventricle 2':                    ( 75,   0, 130),
-    'choroid plexus 1':                       ( 70, 130, 180),
-    'choroid plexus 2':                       (  0,   0, 128),
-    'lv measurement':                         ( 60, 179, 113),
-    'cerebellum':                             (233, 150, 122),
-    'cerebral vermis':                        (255, 127,  80),
-    'cerebellar vermis':                      (255, 127,  80),
-    'petrous part of temporal bone 1':        (244, 164,  96),
-    'nuchal fold':                            (255,   0, 255),
-    'petrous part of temporal bone 2':        (154, 205,  50),
-    'cisternae magna':                        (173, 255,  47),
-    'dural fold':                             (153,  50, 204),
-    'cerebral peduncle 1':                    (128,   0,   0),
-    'cerebral peduncle 2':                    (178,  34,  34),
-}
+STRUCTURE_COLORS_RGB: dict[str, tuple[int, int, int]] = CONFIG.structure_colours
 
 
 def _rgb_for_structure(name: str, class_idx: int) -> tuple[int, int, int]:
@@ -146,21 +114,7 @@ VISUALISE_SKIP_STRUCTURES = {"hemisphere 1", "hemisphere 2"}
 
 JAGGEDNESS_MAX = 1.181
 
-STRUCTURE_THRESHOLDS: dict[str, dict[str, float]] = {
-    "inner calvarium":                       {"contrast": 30.0, "blur": 25.0, "conf": 0.95},
-    "outer calvarium":                       {"contrast": 30.0, "blur": 25.0, "conf": 0.95},
-    "csp (cavum septum pellucidum)":         {"contrast": 10.0, "blur": 15.0, "conf": 0.65},
-    "thalamus 1":                            {"contrast": 10.0, "blur": 15.0, "conf": 0.50},
-    "thalamus 2":                            {"contrast": 10.0, "blur": 15.0, "conf": 0.50},
-    "choroid plexus 2":                      {"contrast": 15.0, "blur": 15.0, "conf": 0.50},
-    "hemisphere 1":                          {"contrast": 10.0, "blur": 10.0, "conf": 0.50},
-    "hemisphere 2":                          {"contrast": 10.0, "blur": 10.0, "conf": 0.50},
-    "lateral ventricle 2":                   {"contrast":  5.0, "blur": 10.0, "conf": 0.50},
-    "cerebellum":                            {"contrast": 12.0, "blur": 15.0, "conf": 0.50},
-    "cerebellar vermis":                     {"contrast": 12.0, "blur": 15.0, "conf": 0.50},
-    "cisternae magna":                       {"contrast": 10.0, "blur": 10.0, "conf": 0.50},
-    "_default":                              {"contrast": 12.0, "blur": 15.0, "conf": 0.50},
-}
+STRUCTURE_THRESHOLDS: dict[str, dict[str, float]] = CONFIG.structure_thresholds
 
 STRUCT_VIS_COLUMNS = [
     "vis_n_structures_predicted",
@@ -182,23 +136,7 @@ def _get_thresh(name: str, key: str) -> float:
 PLANE_MATCH_THRESH    = 0.60
 PLANE_STANDARD_THRESH = 0.90
 
-PLANE_MANDATORY: dict[str, list[str]] = {
-    "Transthalamic": [
-        "thalamus 1", "thalamus 2", "arrow sign",
-        "csp (cavum septum pellucidum)", "midline falx",
-        "anterior horn of lateral ventricles 2", "inner calvarium" , "outer calvarium"
-    ],
-    "Transventricular": [
-        "lateral ventricle 2", "csp (cavum septum pellucidum)",
-        "choroid plexus 2", "posterior horn of lateral ventricle 2",
-        "midline falx", "anterior horn of lateral ventricles 2",  "inner calvarium" , "outer calvarium"
-    ],
-    "Transcerebellar": [
-        "cerebellum", "cerebellar vermis", "cisternae magna",
-        "csp (cavum septum pellucidum)", "cerebral peduncle 1",
-        "cerebral peduncle 2", "anterior horn of lateral ventricles 2",  "inner calvarium" , "outer calvarium"
-    ],
-}
+PLANE_MANDATORY: dict[str, list[str]] = CONFIG.mandatory_structures
 
 
 def classify_plane(struct_results: list[dict]) -> dict:

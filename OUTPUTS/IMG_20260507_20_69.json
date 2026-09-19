@@ -1,0 +1,222 @@
+{
+  "image_path": "/home/htic/MLN/PIPELINE/ANUAudit_Pipeline/AUDITop/some/K63220_RANJETHA_V/20260330_105556/IMG_20260507_20_69.dcm",
+  "modality": {
+    "split": "bi-split",
+    "type": {
+      "left": "b-mode",
+      "right": "b-mode"
+    }
+  },
+  "classification": {
+    "left": {
+      "1st": {
+        "Anatomy": "Upper Limbs",
+        "Standard plane": "Humerus",
+        "Standard_plane_confidence": 0.991752564907074
+      },
+      "2nd": {
+        "Anatomy": "Lower Limbs",
+        "Standard plane": "Both Feet",
+        "Standard_plane_confidence": 0.7692559361457825
+      },
+      "3rd": {
+        "Anatomy": "Thorax",
+        "Standard plane": "3 Vessel View or PAS",
+        "Standard_plane_confidence": 0.36141887307167053
+      }
+    },
+    "right": {
+      "1st": {
+        "Anatomy": "Upper Limbs",
+        "Standard plane": "Radius and Ulna",
+        "Standard_plane_confidence": 0.9893235564231873
+      },
+      "2nd": {
+        "Anatomy": "Lower Limbs",
+        "Standard plane": "Both Feet",
+        "Standard_plane_confidence": 0.8002753853797913
+      },
+      "3rd": {
+        "Anatomy": "Thorax",
+        "Standard plane": "3 Vessel View or PAS",
+        "Standard_plane_confidence": 0.3333047926425934
+      }
+    }
+  },
+  "segmentation": {
+    "left": {
+      "1st": {
+        "image_path": "/home/htic/MLN/PIPELINE/ANUAudit_Pipeline/AUDITop/some/K63220_RANJETHA_V/20260330_105556/IMG_20260507_20_69.dcm",
+        "input_filename": "IMG_20260507_20_69.dcm",
+        "plane": "Humerus",
+        "plane_quality": "Standard",
+        "mean_structure_confidence": 0.999987,
+        "plane_candidates": [
+          "humerus"
+        ],
+        "bone_classification": {
+          "probabilities": {
+            "femur": 5.873263120292904e-08,
+            "humerus": 0.9999867677688599,
+            "radius_ulna": 1.3187586773710791e-05,
+            "tibia_fibula": 4.975048845112795e-11
+          }
+        },
+        "polygons": [
+          {
+            "structure": "Humerus",
+            "type": "polygon",
+            "points": [
+              {
+                "x": 125.0,
+                "y": 378.0
+              },
+              {
+                "x": 138.0,
+                "y": 407.0
+              },
+              {
+                "x": 213.0,
+                "y": 423.0
+              },
+              {
+                "x": 379.0,
+                "y": 438.0
+              },
+              {
+                "x": 438.0,
+                "y": 425.0
+              },
+              {
+                "x": 429.0,
+                "y": 415.0
+              },
+              {
+                "x": 267.0,
+                "y": 407.0
+              }
+            ]
+          }
+        ],
+        "gt_metrics_available": false,
+        "gt_metrics": null
+      }
+    },
+    "right": {
+      "1st": {
+        "image_path": "/home/htic/MLN/PIPELINE/ANUAudit_Pipeline/AUDITop/some/K63220_RANJETHA_V/20260330_105556/IMG_20260507_20_69.dcm",
+        "input_filename": "IMG_20260507_20_69.dcm",
+        "plane": "Radius and Ulna",
+        "plane_quality": "Standard",
+        "mean_structure_confidence": 1.0,
+        "plane_candidates": [
+          "radius_ulna"
+        ],
+        "bone_classification": {
+          "probabilities": {
+            "femur": 1.3126252307316122e-09,
+            "humerus": 5.45480327573955e-12,
+            "radius_ulna": 1.0,
+            "tibia_fibula": 1.308341701644622e-08
+          }
+        },
+        "polygons": [
+          {
+            "structure": "Radius_Ulna",
+            "type": "polygon",
+            "points": [
+              {
+                "x": 55.0,
+                "y": 442.0
+              },
+              {
+                "x": 63.0,
+                "y": 456.0
+              },
+              {
+                "x": 163.0,
+                "y": 453.0
+              },
+              {
+                "x": 269.0,
+                "y": 483.0
+              },
+              {
+                "x": 332.0,
+                "y": 487.0
+              },
+              {
+                "x": 351.0,
+                "y": 473.0
+              },
+              {
+                "x": 348.0,
+                "y": 463.0
+              },
+              {
+                "x": 76.0,
+                "y": 426.0
+              }
+            ]
+          },
+          {
+            "structure": "Radius_Ulna",
+            "type": "polygon",
+            "points": [
+              {
+                "x": 93.0,
+                "y": 398.0
+              },
+              {
+                "x": 98.0,
+                "y": 420.0
+              },
+              {
+                "x": 141.0,
+                "y": 432.0
+              },
+              {
+                "x": 221.0,
+                "y": 436.0
+              },
+              {
+                "x": 333.0,
+                "y": 459.0
+              },
+              {
+                "x": 348.0,
+                "y": 453.0
+              },
+              {
+                "x": 334.0,
+                "y": 429.0
+              },
+              {
+                "x": 103.0,
+                "y": 393.0
+              }
+            ]
+          }
+        ],
+        "gt_metrics_available": false,
+        "gt_metrics": null
+      }
+    }
+  },
+  "final_plane_prediction": {
+    "left": {
+      "plane": "Humerus",
+      "source": "segmentation",
+      "rank": "1st",
+      "plane_quality": "Standard",
+      "confidence": 0.999987
+    },
+    "right": {
+      "plane": "Radius and Ulna",
+      "source": "segmentation",
+      "rank": "1st",
+      "plane_quality": "Standard",
+      "confidence": 1.0
+    }
+  }
+}

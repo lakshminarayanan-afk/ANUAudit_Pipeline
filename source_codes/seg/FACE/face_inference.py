@@ -52,18 +52,9 @@ STRUCTURE_CONFIDENCE_THRESHOLD = 0.99
 PREDICTION_THRESHOLD = 0.45
 VISUALIZATION_THRESHOLD = 0.45
 
-# NUM_VIS_IMAGES_DEFAULT = 
-
-CHECKPOINT_PATH_DEFAULT = (
-    "/mnt/data4tb/anusha/Face_Nose_Mouth_MODEL/"
-    "srivibha/run_2/checkpoints/best_model.pth"
-)
-
-OUTPUT_DIR_DEFAULT = "./test_results_newcode_0109_2"
 
 CLASS_NAMES = CLASS_NAMES_FACE
 assert len(CLASS_NAMES) == NUM_CLASSES
-
 
 # Model input resolution
 MODEL_INPUT_SIZE = (512, 512)

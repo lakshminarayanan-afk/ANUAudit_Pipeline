@@ -1,0 +1,878 @@
+{
+  "image_path": "/home/htic/MLN/PIPELINE/ANUAudit_Pipeline/AUDITop/some/K63220_RANJETHA_V/20260330_105556/IMG_20260507_20_23.dcm",
+  "modality": {
+    "split": "single",
+    "type": "b-mode"
+  },
+  "classification": {
+    "1st": {
+      "Anatomy": "Thorax",
+      "Standard plane": "4 Chamber View of Heart",
+      "Standard_plane_confidence": 0.9953658580780029
+    },
+    "2nd": {
+      "Anatomy": "Upper Limbs",
+      "Standard plane": "Open Hands",
+      "Standard_plane_confidence": 0.7218721508979797
+    },
+    "3rd": {
+      "Anatomy": "Head",
+      "Standard plane": "Transventricular Plane",
+      "Standard_plane_confidence": 0.4322306513786316
+    }
+  },
+  "segmentation": {
+    "single": {
+      "3rd": {
+        "image_path": "/home/htic/MLN/PIPELINE/ANUAudit_Pipeline/AUDITop/some/K63220_RANJETHA_V/20260330_105556/IMG_20260507_20_23.dcm",
+        "vis_path": null,
+        "input_filename": "IMG_20260507_20_23.dcm",
+        "plane": "Unclassified",
+        "plane_quality": "N/A",
+        "mean_structure_confidence": 0.8155,
+        "plane_candidates": [],
+        "plane_mandatory_structures": {
+          "Transthalamic Plane": {
+            "required": [
+              "thalamus 1",
+              "thalamus 2",
+              "arrow sign",
+              "csp (cavum septum pellucidum)",
+              "midline falx",
+              "anterior horn of lateral ventricles 2",
+              "inner calvarium",
+              "outer calvarium"
+            ],
+            "present": [
+              "arrow sign",
+              "csp (cavum septum pellucidum)",
+              "midline falx",
+              "outer calvarium"
+            ],
+            "missing": [
+              "thalamus 1",
+              "thalamus 2",
+              "anterior horn of lateral ventricles 2",
+              "inner calvarium"
+            ],
+            "detected_fraction": 0.5,
+            "anchor_pass": false
+          },
+          "Transventricular Plane": {
+            "required": [
+              "lateral ventricle 2",
+              "csp (cavum septum pellucidum)",
+              "choroid plexus 2",
+              "posterior horn of lateral ventricle 2",
+              "midline falx",
+              "anterior horn of lateral ventricles 2",
+              "inner calvarium",
+              "outer calvarium"
+            ],
+            "present": [
+              "csp (cavum septum pellucidum)",
+              "midline falx",
+              "outer calvarium"
+            ],
+            "missing": [
+              "lateral ventricle 2",
+              "choroid plexus 2",
+              "posterior horn of lateral ventricle 2",
+              "anterior horn of lateral ventricles 2",
+              "inner calvarium"
+            ],
+            "detected_fraction": 0.375,
+            "anchor_pass": false
+          },
+          "Transcerebellar Plane": {
+            "required": [
+              "cerebellum",
+              "cerebellar vermis",
+              "cisternae magna",
+              "csp (cavum septum pellucidum)",
+              "cerebral peduncle 1",
+              "cerebral peduncle 2",
+              "anterior horn of lateral ventricles 2",
+              "inner calvarium",
+              "outer calvarium"
+            ],
+            "present": [
+              "cerebellar vermis",
+              "cisternae magna",
+              "csp (cavum septum pellucidum)",
+              "outer calvarium"
+            ],
+            "missing": [
+              "cerebellum",
+              "cerebral peduncle 1",
+              "cerebral peduncle 2",
+              "anterior horn of lateral ventricles 2",
+              "inner calvarium"
+            ],
+            "detected_fraction": 0.444444,
+            "anchor_pass": false
+          }
+        },
+        "polygons": [
+          {
+            "structure": "Hemisphere 1",
+            "type": "polygon",
+            "points": [
+              {
+                "x": 783.0,
+                "y": 503.0
+              },
+              {
+                "x": 750.0,
+                "y": 503.0
+              },
+              {
+                "x": 714.0,
+                "y": 558.0
+              },
+              {
+                "x": 637.0,
+                "y": 591.0
+              },
+              {
+                "x": 615.0,
+                "y": 623.0
+              },
+              {
+                "x": 617.0,
+                "y": 638.0
+              },
+              {
+                "x": 584.0,
+                "y": 661.0
+              },
+              {
+                "x": 591.0,
+                "y": 668.0
+              },
+              {
+                "x": 575.0,
+                "y": 688.0
+              },
+              {
+                "x": 630.0,
+                "y": 677.0
+              },
+              {
+                "x": 674.0,
+                "y": 652.0
+              },
+              {
+                "x": 716.0,
+                "y": 591.0
+              },
+              {
+                "x": 745.0,
+                "y": 574.0
+              }
+            ]
+          },
+          {
+            "structure": "Hemisphere 2",
+            "type": "polygon",
+            "points": [
+              {
+                "x": 783.0,
+                "y": 380.0
+              },
+              {
+                "x": 775.0,
+                "y": 380.0
+              },
+              {
+                "x": 774.0,
+                "y": 388.0
+              },
+              {
+                "x": 755.0,
+                "y": 388.0
+              },
+              {
+                "x": 748.0,
+                "y": 393.0
+              },
+              {
+                "x": 754.0,
+                "y": 398.0
+              },
+              {
+                "x": 739.0,
+                "y": 403.0
+              },
+              {
+                "x": 742.0,
+                "y": 412.0
+              },
+              {
+                "x": 767.0,
+                "y": 417.0
+              },
+              {
+                "x": 777.0,
+                "y": 435.0
+              },
+              {
+                "x": 777.0,
+                "y": 454.0
+              },
+              {
+                "x": 768.0,
+                "y": 460.0
+              },
+              {
+                "x": 775.0,
+                "y": 470.0
+              },
+              {
+                "x": 748.0,
+                "y": 485.0
+              },
+              {
+                "x": 755.0,
+                "y": 502.0
+              },
+              {
+                "x": 769.0,
+                "y": 495.0
+              },
+              {
+                "x": 777.0,
+                "y": 475.0
+              },
+              {
+                "x": 796.0,
+                "y": 469.0
+              },
+              {
+                "x": 803.0,
+                "y": 430.0
+              },
+              {
+                "x": 812.0,
+                "y": 421.0
+              },
+              {
+                "x": 778.0,
+                "y": 392.0
+              }
+            ]
+          },
+          {
+            "structure": "Midline Falx",
+            "type": "polygon",
+            "points": [
+              {
+                "x": 327.0,
+                "y": 550.0
+              },
+              {
+                "x": 329.0,
+                "y": 554.0
+              },
+              {
+                "x": 377.0,
+                "y": 557.0
+              },
+              {
+                "x": 407.0,
+                "y": 567.0
+              },
+              {
+                "x": 454.0,
+                "y": 562.0
+              },
+              {
+                "x": 470.0,
+                "y": 555.0
+              },
+              {
+                "x": 470.0,
+                "y": 551.0
+              },
+              {
+                "x": 452.0,
+                "y": 546.0
+              },
+              {
+                "x": 397.0,
+                "y": 543.0
+              },
+              {
+                "x": 361.0,
+                "y": 550.0
+              }
+            ]
+          },
+          {
+            "structure": "CSP (Cavum Septum Pellucidum)",
+            "type": "polygon",
+            "points": [
+              {
+                "x": 575.0,
+                "y": 397.0
+              },
+              {
+                "x": 577.0,
+                "y": 398.0
+              },
+              {
+                "x": 575.0,
+                "y": 404.0
+              },
+              {
+                "x": 581.0,
+                "y": 404.0
+              },
+              {
+                "x": 582.0,
+                "y": 402.0
+              },
+              {
+                "x": 585.0,
+                "y": 402.0
+              },
+              {
+                "x": 586.0,
+                "y": 404.0
+              },
+              {
+                "x": 596.0,
+                "y": 404.0
+              },
+              {
+                "x": 597.0,
+                "y": 406.0
+              },
+              {
+                "x": 605.0,
+                "y": 407.0
+              },
+              {
+                "x": 611.0,
+                "y": 414.0
+              },
+              {
+                "x": 619.0,
+                "y": 416.0
+              },
+              {
+                "x": 619.0,
+                "y": 402.0
+              },
+              {
+                "x": 617.0,
+                "y": 402.0
+              },
+              {
+                "x": 616.0,
+                "y": 398.0
+              },
+              {
+                "x": 612.0,
+                "y": 395.0
+              },
+              {
+                "x": 586.0,
+                "y": 395.0
+              },
+              {
+                "x": 585.0,
+                "y": 397.0
+              }
+            ]
+          },
+          {
+            "structure": "Arrow Sign",
+            "type": "polygon",
+            "points": [
+              {
+                "x": 728.0,
+                "y": 420.0
+              },
+              {
+                "x": 728.0,
+                "y": 425.0
+              },
+              {
+                "x": 730.0,
+                "y": 426.0
+              },
+              {
+                "x": 730.0,
+                "y": 429.0
+              },
+              {
+                "x": 733.0,
+                "y": 430.0
+              },
+              {
+                "x": 733.0,
+                "y": 432.0
+              },
+              {
+                "x": 730.0,
+                "y": 434.0
+              },
+              {
+                "x": 734.0,
+                "y": 435.0
+              },
+              {
+                "x": 735.0,
+                "y": 437.0
+              },
+              {
+                "x": 743.0,
+                "y": 437.0
+              },
+              {
+                "x": 744.0,
+                "y": 435.0
+              },
+              {
+                "x": 758.0,
+                "y": 434.0
+              },
+              {
+                "x": 761.0,
+                "y": 432.0
+              },
+              {
+                "x": 754.0,
+                "y": 429.0
+              },
+              {
+                "x": 754.0,
+                "y": 426.0
+              },
+              {
+                "x": 758.0,
+                "y": 423.0
+              },
+              {
+                "x": 755.0,
+                "y": 422.0
+              },
+              {
+                "x": 752.0,
+                "y": 417.0
+              },
+              {
+                "x": 748.0,
+                "y": 417.0
+              },
+              {
+                "x": 747.0,
+                "y": 413.0
+              },
+              {
+                "x": 737.0,
+                "y": 413.0
+              }
+            ]
+          },
+          {
+            "structure": "Cerebellar Vermis",
+            "type": "polygon",
+            "points": [
+              {
+                "x": 710.0,
+                "y": 449.0
+              },
+              {
+                "x": 713.0,
+                "y": 450.0
+              },
+              {
+                "x": 713.0,
+                "y": 454.0
+              },
+              {
+                "x": 736.0,
+                "y": 457.0
+              },
+              {
+                "x": 748.0,
+                "y": 449.0
+              },
+              {
+                "x": 756.0,
+                "y": 449.0
+              },
+              {
+                "x": 756.0,
+                "y": 441.0
+              },
+              {
+                "x": 761.0,
+                "y": 439.0
+              },
+              {
+                "x": 761.0,
+                "y": 433.0
+              },
+              {
+                "x": 744.0,
+                "y": 436.0
+              },
+              {
+                "x": 743.0,
+                "y": 438.0
+              },
+              {
+                "x": 735.0,
+                "y": 438.0
+              },
+              {
+                "x": 729.0,
+                "y": 433.0
+              },
+              {
+                "x": 719.0,
+                "y": 433.0
+              },
+              {
+                "x": 713.0,
+                "y": 443.0
+              },
+              {
+                "x": 715.0,
+                "y": 445.0
+              }
+            ]
+          },
+          {
+            "structure": "Cisternae Magna",
+            "type": "polygon",
+            "points": [
+              {
+                "x": 646.0,
+                "y": 348.0
+              },
+              {
+                "x": 646.0,
+                "y": 354.0
+              },
+              {
+                "x": 650.0,
+                "y": 354.0
+              },
+              {
+                "x": 651.0,
+                "y": 356.0
+              },
+              {
+                "x": 653.0,
+                "y": 354.0
+              },
+              {
+                "x": 658.0,
+                "y": 354.0
+              },
+              {
+                "x": 664.0,
+                "y": 358.0
+              },
+              {
+                "x": 664.0,
+                "y": 361.0
+              },
+              {
+                "x": 668.0,
+                "y": 366.0
+              },
+              {
+                "x": 678.0,
+                "y": 367.0
+              },
+              {
+                "x": 683.0,
+                "y": 364.0
+              },
+              {
+                "x": 683.0,
+                "y": 357.0
+              },
+              {
+                "x": 681.0,
+                "y": 356.0
+              },
+              {
+                "x": 681.0,
+                "y": 352.0
+              },
+              {
+                "x": 678.0,
+                "y": 351.0
+              },
+              {
+                "x": 678.0,
+                "y": 348.0
+              },
+              {
+                "x": 673.0,
+                "y": 347.0
+              },
+              {
+                "x": 672.0,
+                "y": 345.0
+              },
+              {
+                "x": 662.0,
+                "y": 345.0
+              },
+              {
+                "x": 661.0,
+                "y": 347.0
+              }
+            ]
+          },
+          {
+            "structure": "Outer Calvarium",
+            "type": "polygon",
+            "points": [
+              {
+                "x": 520.0,
+                "y": 245.0
+              },
+              {
+                "x": 562.0,
+                "y": 265.0
+              },
+              {
+                "x": 540.0,
+                "y": 283.0
+              },
+              {
+                "x": 555.0,
+                "y": 308.0
+              },
+              {
+                "x": 549.0,
+                "y": 324.0
+              },
+              {
+                "x": 565.0,
+                "y": 326.0
+              },
+              {
+                "x": 561.0,
+                "y": 317.0
+              },
+              {
+                "x": 575.0,
+                "y": 307.0
+              },
+              {
+                "x": 585.0,
+                "y": 317.0
+              },
+              {
+                "x": 587.0,
+                "y": 302.0
+              },
+              {
+                "x": 606.0,
+                "y": 291.0
+              },
+              {
+                "x": 624.0,
+                "y": 300.0
+              },
+              {
+                "x": 617.0,
+                "y": 327.0
+              },
+              {
+                "x": 647.0,
+                "y": 326.0
+              },
+              {
+                "x": 667.0,
+                "y": 312.0
+              },
+              {
+                "x": 652.0,
+                "y": 302.0
+              },
+              {
+                "x": 650.0,
+                "y": 285.0
+              },
+              {
+                "x": 600.0,
+                "y": 282.0
+              },
+              {
+                "x": 574.0,
+                "y": 253.0
+              }
+            ]
+          }
+        ],
+        "gt_metrics_available": false,
+        "gt_metrics": null,
+        "image_quality_summary": {
+          "n_structures_predicted": 8,
+          "n_structures_ok": 3,
+          "n_structures_low_contrast": 5,
+          "n_structures_low_conf": 1,
+          "n_structures_locally_blurry": 0,
+          "overall_image_quality": "poor"
+        },
+        "structures": [
+          {
+            "structure_name": "Hemisphere 1",
+            "segmentation_confidence": {
+              "value": 0.8716,
+              "qualitative": "high",
+              "threshold": 0.5
+            },
+            "local_contrast": {
+              "value": 3.96,
+              "qualitative": "low",
+              "threshold": 10.0
+            },
+            "local_blur": {
+              "value": 29.15,
+              "qualitative": "sharp",
+              "threshold": 10.0
+            }
+          },
+          {
+            "structure_name": "Hemisphere 2",
+            "segmentation_confidence": {
+              "value": 0.835,
+              "qualitative": "high",
+              "threshold": 0.5
+            },
+            "local_contrast": {
+              "value": 0.31,
+              "qualitative": "low",
+              "threshold": 10.0
+            },
+            "local_blur": {
+              "value": 44.91,
+              "qualitative": "sharp",
+              "threshold": 10.0
+            }
+          },
+          {
+            "structure_name": "Midline Falx",
+            "segmentation_confidence": {
+              "value": 0.9438,
+              "qualitative": "high",
+              "threshold": 0.5
+            },
+            "local_contrast": {
+              "value": 44.8,
+              "qualitative": "good",
+              "threshold": 12.0
+            },
+            "local_blur": {
+              "value": 82.48,
+              "qualitative": "sharp",
+              "threshold": 15.0
+            }
+          },
+          {
+            "structure_name": "CSP (Cavum Septum Pellucidum)",
+            "segmentation_confidence": {
+              "value": 0.7235,
+              "qualitative": "high",
+              "threshold": 0.65
+            },
+            "local_contrast": {
+              "value": 36.92,
+              "qualitative": "good",
+              "threshold": 10.0
+            },
+            "local_blur": {
+              "value": 41.64,
+              "qualitative": "sharp",
+              "threshold": 15.0
+            }
+          },
+          {
+            "structure_name": "Arrow Sign",
+            "segmentation_confidence": {
+              "value": 0.6933,
+              "qualitative": "high",
+              "threshold": 0.5
+            },
+            "local_contrast": {
+              "value": 6.61,
+              "qualitative": "low",
+              "threshold": 12.0
+            },
+            "local_blur": {
+              "value": 73.48,
+              "qualitative": "sharp",
+              "threshold": 15.0
+            }
+          },
+          {
+            "structure_name": "Cerebellar Vermis",
+            "segmentation_confidence": {
+              "value": 0.7317,
+              "qualitative": "high",
+              "threshold": 0.5
+            },
+            "local_contrast": {
+              "value": 7.07,
+              "qualitative": "low",
+              "threshold": 12.0
+            },
+            "local_blur": {
+              "value": 71.41,
+              "qualitative": "sharp",
+              "threshold": 15.0
+            }
+          },
+          {
+            "structure_name": "Cisternae Magna",
+            "segmentation_confidence": {
+              "value": 0.8145,
+              "qualitative": "high",
+              "threshold": 0.5
+            },
+            "local_contrast": {
+              "value": 34.77,
+              "qualitative": "good",
+              "threshold": 10.0
+            },
+            "local_blur": {
+              "value": 36.93,
+              "qualitative": "sharp",
+              "threshold": 10.0
+            }
+          },
+          {
+            "structure_name": "Outer Calvarium",
+            "segmentation_confidence": {
+              "value": 0.9106,
+              "qualitative": "low",
+              "threshold": 0.95
+            },
+            "local_contrast": {
+              "value": 4.44,
+              "qualitative": "low",
+              "threshold": 30.0
+            },
+            "local_blur": {
+              "value": 42.48,
+              "qualitative": "sharp",
+              "threshold": 25.0
+            }
+          }
+        ],
+        "quality_reasons": []
+      }
+    }
+  }
+}

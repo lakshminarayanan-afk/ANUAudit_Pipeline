@@ -1,0 +1,320 @@
+{
+  "image_path": "/home/htic/MLN/PIPELINE/ANUAudit_Pipeline/AUDITop/some/K63220_RANJETHA_V/20260330_105556/IMG_20260507_20_52.dcm",
+  "modality": {
+    "split": "single",
+    "type": "b-mode"
+  },
+  "classification": {
+    "1st": {
+      "Anatomy": "Face",
+      "Standard plane": "Nose and Mouth",
+      "Standard_plane_confidence": 0.9946163296699524
+    },
+    "2nd": {
+      "Anatomy": "Upper Limbs",
+      "Standard plane": "Open Hands",
+      "Standard_plane_confidence": 0.7584347128868103
+    },
+    "3rd": {
+      "Anatomy": "Lower Limbs",
+      "Standard plane": "Both Feet",
+      "Standard_plane_confidence": 0.7979284524917603
+    }
+  },
+  "segmentation": {
+    "single": {
+      "1st": {
+        "image_path": "/home/htic/MLN/PIPELINE/ANUAudit_Pipeline/AUDITop/some/K63220_RANJETHA_V/20260330_105556/IMG_20260507_20_52.dcm",
+        "input_filename": "IMG_20260507_20_52.dcm",
+        "view": "Unknown",
+        "plane": "Nose and Mouth",
+        "plane_quality": "Non-Standard",
+        "plane_candidates": [
+          "Nose and Mouth"
+        ],
+        "plane_mandatory_structures": {
+          "Nose and Mouth": {
+            "required": [
+              "Nose",
+              "Upper Lip",
+              "Lower Lip",
+              "Chin"
+            ],
+            "present": [
+              "Upper Lip",
+              "Lower Lip"
+            ],
+            "missing": [
+              "Nose",
+              "Chin"
+            ],
+            "detected_fraction": 0.5,
+            "anchor_pass": false
+          },
+          "Orbits and Lenses": {
+            "required": [
+              "Orbits",
+              "Lenses"
+            ],
+            "present": [],
+            "missing": [
+              "Orbits",
+              "Lenses"
+            ],
+            "detected_fraction": 0.0,
+            "anchor_pass": false
+          },
+          "Median Facial Profile": {
+            "required": [
+              "Diencephalon",
+              "Forehead",
+              "Maxilla",
+              "Nasal_Bone",
+              "Skinline",
+              "Mandible",
+              "Chin",
+              "Vomer_bone",
+              "Lips"
+            ],
+            "present": [],
+            "missing": [
+              "Diencephalon",
+              "Forehead",
+              "Maxilla",
+              "Nasal_Bone",
+              "Skinline",
+              "Mandible",
+              "Chin",
+              "Vomer_bone",
+              "Lips"
+            ],
+            "detected_fraction": 0.0,
+            "anchor_pass": false
+          }
+        },
+        "mean_structure_confidence": 0.99815,
+        "structures": [
+          {
+            "name": "Forehead",
+            "predicted_present": false,
+            "confidence": 0.2703,
+            "confidence_pass": false
+          },
+          {
+            "name": "Nose",
+            "predicted_present": false,
+            "confidence": 0.9996,
+            "confidence_pass": true
+          },
+          {
+            "name": "Maxilla",
+            "predicted_present": false,
+            "confidence": 0.0081,
+            "confidence_pass": false
+          },
+          {
+            "name": "Nasal_Bone",
+            "predicted_present": false,
+            "confidence": 0.0089,
+            "confidence_pass": false
+          },
+          {
+            "name": "Skinline",
+            "predicted_present": false,
+            "confidence": 0.8207,
+            "confidence_pass": false
+          },
+          {
+            "name": "Lips",
+            "predicted_present": false,
+            "confidence": 0.0367,
+            "confidence_pass": false
+          },
+          {
+            "name": "Mandible",
+            "predicted_present": false,
+            "confidence": 0.0944,
+            "confidence_pass": false
+          },
+          {
+            "name": "Chin",
+            "predicted_present": false,
+            "confidence": 0.0777,
+            "confidence_pass": false
+          },
+          {
+            "name": "Vomer_bone",
+            "predicted_present": false,
+            "confidence": 0.0039,
+            "confidence_pass": false
+          },
+          {
+            "name": "Diencephalon",
+            "predicted_present": false,
+            "confidence": 0.2742,
+            "confidence_pass": false
+          },
+          {
+            "name": "Orbits",
+            "predicted_present": false,
+            "confidence": 0.0741,
+            "confidence_pass": false
+          },
+          {
+            "name": "Lenses",
+            "predicted_present": false,
+            "confidence": 0.0145,
+            "confidence_pass": false
+          },
+          {
+            "name": "Upper Lip",
+            "predicted_present": true,
+            "confidence": 0.9975,
+            "confidence_pass": true
+          },
+          {
+            "name": "Lower Lip",
+            "predicted_present": true,
+            "confidence": 0.9988,
+            "confidence_pass": true
+          }
+        ],
+        "polygons": [
+          {
+            "points": [
+              {
+                "x": 620.0,
+                "y": 280.0
+              },
+              {
+                "x": 624.0,
+                "y": 291.0
+              },
+              {
+                "x": 651.0,
+                "y": 306.0
+              },
+              {
+                "x": 670.0,
+                "y": 307.0
+              },
+              {
+                "x": 679.0,
+                "y": 334.0
+              },
+              {
+                "x": 699.0,
+                "y": 343.0
+              },
+              {
+                "x": 704.0,
+                "y": 361.0
+              },
+              {
+                "x": 712.0,
+                "y": 359.0
+              },
+              {
+                "x": 709.0,
+                "y": 342.0
+              },
+              {
+                "x": 716.0,
+                "y": 322.0
+              },
+              {
+                "x": 690.0,
+                "y": 302.0
+              },
+              {
+                "x": 690.0,
+                "y": 292.0
+              },
+              {
+                "x": 681.0,
+                "y": 280.0
+              },
+              {
+                "x": 665.0,
+                "y": 275.0
+              }
+            ],
+            "structure": "Upper Lip",
+            "type": "polygon"
+          },
+          {
+            "points": [
+              {
+                "x": 615.0,
+                "y": 287.0
+              },
+              {
+                "x": 615.0,
+                "y": 327.0
+              },
+              {
+                "x": 631.0,
+                "y": 330.0
+              },
+              {
+                "x": 631.0,
+                "y": 356.0
+              },
+              {
+                "x": 624.0,
+                "y": 362.0
+              },
+              {
+                "x": 624.0,
+                "y": 374.0
+              },
+              {
+                "x": 648.0,
+                "y": 382.0
+              },
+              {
+                "x": 692.0,
+                "y": 381.0
+              },
+              {
+                "x": 701.0,
+                "y": 376.0
+              },
+              {
+                "x": 703.0,
+                "y": 363.0
+              },
+              {
+                "x": 692.0,
+                "y": 347.0
+              },
+              {
+                "x": 659.0,
+                "y": 332.0
+              },
+              {
+                "x": 652.0,
+                "y": 308.0
+              }
+            ],
+            "structure": "Lower Lip",
+            "type": "polygon"
+          }
+        ],
+        "gt_metrics_available": false,
+        "gt_metrics": null,
+        "gt_summary": null,
+        "postprocessing": null
+      }
+    }
+  },
+  "final_plane_prediction": {
+    "single": {
+      "plane": "Nose and Mouth",
+      "source": "segmentation",
+      "rank": "1st",
+      "plane_quality": "Non-Standard",
+      "confidence": 0.99815
+    }
+  }
+}

@@ -18,6 +18,8 @@ from tqdm import main
 from source_codes.biometry.weights.head.head_unet.model import UNet
 from source_codes.biometry.weights.abd.model import YNet
 from source_codes.biometry.weights.limbs.model import YNet as YNet_limbs
+from source_codes.seg.ABDOMEN.config import Config_abd
+
 # from weights.abd.model import YNet
 # from weights.limbs.model import YNet as YNet_limbs
 
@@ -565,6 +567,28 @@ def calculate_perfected_ac(mask, original_shape):
     ac_px = cv2.arcLength(smooth_skin_contour, True)
     return ac_px, smooth_skin_contour, mask_res
 
+def build_model() -> UNet:
+    return UNet()
+
+def load_model(checkpoint: str, device: torch.device):
+    ckpt = torch.load(checkpoint, map_location=device, weights_only=False)
+
+    ckpt_state        = ckpt["model"]
+    ckpt_num_channels = ckpt_state["head.9.weight"].shape[0]
+
+    if ckpt_num_channels != Config_abd.NUM_CHANNELS:
+        _orig = Config_abd.NUM_CHANNELS
+        Config_abd.NUM_CHANNELS = ckpt_num_channels
+        model = build_model().to(device)
+        Config_abd.NUM_CHANNELS = _orig
+    else:
+        model = build_model().to(device)
+
+    model.load_state_dict(ckpt_state)
+    model.eval()
+
+    return model
+
 
 # ── MODIFIED: now computes and returns confidence_score ───────────────
 def run_inference_abd(dicom_path=None, image_path=None):
@@ -621,6 +645,9 @@ def run_inference_abd(dicom_path=None, image_path=None):
     # ──────────────────────────────────────────────────────────────────
 
     mask = (pred.squeeze().cpu().numpy() > 0.5).astype(np.uint8) * 255
+    print(f"MASKKKK_type:{mask.dtype}, ")
+    print(f"MASKKKK_type:{mask.shape}, ")
+    print(f"MASKKKK_type:{mask.size}, ")
 
     ac_px_full, smooth_contour, mask_resized = calculate_perfected_ac(mask, img_orig.shape)
     if ac_px_full is None:

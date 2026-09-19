@@ -16,6 +16,7 @@ def run_head_model(items):
         min_pixels=100,
         calv_threshold=0.85,
         calv_min_px=1000,
+        device_str= Config.DEVICE
     )
 
 def run_abdomen_model(items):
@@ -25,16 +26,15 @@ def run_abdomen_model(items):
         items=items,
         threshold=0.5,
         vis_confidence=0.70,
-        device_str= "cuda",
+        device_str= Config.DEVICE,
     )
-
 
 def run_limbs_model(items):
 
     return run_inference_limbs(
         checkpoint=Config.SEG_MODEL_LIMBS,
         items=items,
-        device_str = "cuda",
+        device_str = Config.DEVICE,
         alpha = 0.35,
         # debug = False,
         min_component_thresholds = None,
@@ -48,7 +48,7 @@ def run_face_model(items):
                 items=items,
                 masks_dir = None,
                 seed = 42,
-                device_str= "cuda",
+                device_str= Config.DEVICE,
             )
 
 MODEL_CONFIG = {
@@ -84,25 +84,4 @@ MODEL_CONFIG = {
     # "Fetal Environment": {
     #     "function": run_fetal_environment_model,
     # }
-}
-
-
-BIOM_MODEL_PLANE_CONFIG = {
-    "bpd": [
-        "Transthalamic",
-    ],
-
-    "abdomen": [
-        "Abdominal Circumference",
-    ],
-
-    "limbs": [
-        "Femur",
-    ],
-
-    "tc" : ["Transcerebellar"],
-    "tv" : ["Transventricular"],
-
-    "liquor" : ["Amniotic Fluid or Liquor"]
-
 }

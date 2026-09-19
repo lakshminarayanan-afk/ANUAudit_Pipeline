@@ -39,35 +39,37 @@ from torch.utils.data import Dataset
 import cv2
 # import albumentations as A
 
-from source_codes.seg.LIMBS.config import Config
+# from source_codes.seg.LIMBS.config import Config
 # from LIMBS.config import Config
+from config import Seg_Config
+CONFIG= Seg_Config.Limbs
 
 # Re-exported for convenience so existing imports (`from dataset import LABEL_MAP, ...`) keep working.
-LABEL_MAP = Config.LABEL_MAP
-NUM_SEG_CLASSES = Config.NUM_SEG_CLASSES
-NUM_BONE_CLASSES = Config.NUM_BONE_CLASSES
-IGNORE_INDEX = Config.IGNORE_INDEX
+LABEL_MAP = CONFIG.LABEL_MAP
+NUM_SEG_CLASSES = CONFIG.NUM_SEG_CLASSES
+NUM_BONE_CLASSES = CONFIG.NUM_BONE_CLASSES
+IGNORE_INDEX = CONFIG.IGNORE_INDEX
 
 
 def get_train_augmentations():
     # NOTE: no Resize / RandomResizedCrop here on purpose. Only augmentations that preserve
     # native resolution and pixel spacing (important for ultrasound geometry).
     return A.Compose([
-        A.HorizontalFlip(p=Config.AUG_HFLIP),
-        A.RandomBrightnessContrast(brightness_limit=Config.AUG_BRIGHTNESS_LIMIT,
-                                    contrast_limit=Config.AUG_CONTRAST_LIMIT,
-                                    p=Config.AUG_BRIGHTNESS_CONTRAST),
-        A.GaussNoise(std_range=(0.02, 0.1), p=Config.AUG_GAUSS_NOISE),
-        A.CLAHE(clip_limit=2.0, p=Config.AUG_CLAHE),
-        A.Affine(translate_percent=Config.AUG_AFFINE_TRANSLATE,
-                  rotate=(-Config.AUG_AFFINE_ROTATE_LIMIT, Config.AUG_AFFINE_ROTATE_LIMIT),
-                  scale=Config.AUG_AFFINE_SCALE,
-                  shear=(-Config.AUG_AFFINE_SHEAR, Config.AUG_AFFINE_SHEAR),
+        A.HorizontalFlip(p=CONFIG.AUG_HFLIP),
+        A.RandomBrightnessContrast(brightness_limit=CONFIG.AUG_BRIGHTNESS_LIMIT,
+                                    contrast_limit=CONFIG.AUG_CONTRAST_LIMIT,
+                                    p=CONFIG.AUG_BRIGHTNESS_CONTRAST),
+        A.GaussNoise(std_range=(0.02, 0.1), p=CONFIG.AUG_GAUSS_NOISE),
+        A.CLAHE(clip_limit=2.0, p=CONFIG.AUG_CLAHE),
+        A.Affine(translate_percent=CONFIG.AUG_AFFINE_TRANSLATE,
+                  rotate=(-CONFIG.AUG_AFFINE_ROTATE_LIMIT, CONFIG.AUG_AFFINE_ROTATE_LIMIT),
+                  scale=CONFIG.AUG_AFFINE_SCALE,
+                  shear=(-CONFIG.AUG_AFFINE_SHEAR, CONFIG.AUG_AFFINE_SHEAR),
                   border_mode=cv2.BORDER_REFLECT_101,
                   # FIX (VERIFIED ISSUE #4): this was hardcoded to p=0.0, silently disabling
-                  # affine augmentation regardless of Config.AUG_AFFINE. Use the existing
-                  # configured probability instead.
-                  p=Config.AUG_AFFINE
+                  # affine augmentation regardless of CONFIG.AUG_AFFINE. Use the existing
+                  # CONFIGured probability instead.
+                  p=CONFIG.AUG_AFFINE
                   ),
     ])
 
@@ -104,12 +106,12 @@ def load_bone_mask_from_npz(npz_path, shadow_as_ignore=False):
 
     # Write in REVERSE priority order so the highest-priority name (first in the list) is
     # written last and therefore wins wherever two bone channels overlap.
-    for name in reversed(Config.STRUCTURE_LABEL_PRIORITY):
-        if name not in Config.BONE_NAME_TO_CLASS:
+    for name in reversed(CONFIG.STRUCTURE_LABEL_PRIORITY):
+        if name not in CONFIG.BONE_NAME_TO_CLASS:
             continue  # not one of the 6 bone structures we train on
         if name in name_to_idx:
-            class_idx = Config.BONE_NAME_TO_CLASS[name]
-            channel = structures[name_to_idx[name]] > Config.MASK_THRESHOLD
+            class_idx = CONFIG.BONE_NAME_TO_CLASS[name]
+            channel = structures[name_to_idx[name]] > CONFIG.MASK_THRESHOLD
             combined[channel] = class_idx
 
     if shadow_as_ignore and "mask_artifacts" in data and "artifact_names" in data:
@@ -117,10 +119,10 @@ def load_bone_mask_from_npz(npz_path, shadow_as_ignore=False):
         artifact_names = [str(n) for n in data["artifact_names"]]
         artifacts = _to_channel_first(artifacts, artifact_names)
         art_name_to_idx = {name: i for i, name in enumerate(artifact_names)}
-        for class_idx, shadow_names in Config.BONE_CLASS_TO_SHADOW_NAMES.items():
+        for class_idx, shadow_names in CONFIG.BONE_CLASS_TO_SHADOW_NAMES.items():
             for shadow_name in shadow_names:
                 if shadow_name in art_name_to_idx:
-                    shadow_region = artifacts[art_name_to_idx[shadow_name]] > Config.MASK_THRESHOLD
+                    shadow_region = artifacts[art_name_to_idx[shadow_name]] > CONFIG.MASK_THRESHOLD
                     # only blank out shadow pixels that aren't already a confident bone label
                     combined[shadow_region & (combined == 0)] = IGNORE_INDEX
 

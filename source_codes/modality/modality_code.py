@@ -15,11 +15,11 @@ import torch
 import torchvision.transforms as T
 import json
 from source_codes.modality.models import HierarchicalUltrasoundModel
+from source_codes.doppler.color_doppler import load_color_doppler_model, ColourDopplerAnatomyClassifier
 from utils.image_utils import load_image
 # from models import HierarchicalUltrasoundModel
 from config import Config
 
-device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 # ── CONFIG: set your image folder here ───────────────────────────────────────
 # folder = r"C:\Users\laksh\ANU\12_Full_Image_Datasets\10"
@@ -48,27 +48,6 @@ NUM_ANATOMIES = len(idx2anatomy)
 NUM_PLANES = len(idx2plane)
 
 SUPPORTED_EXTS = {'.jpg', '.jpeg', '.png', '.bmp', '.tif', '.tiff', '.webp', '.dcm', '.dicom'}
-MODEL_PATH= "/home/htic/MLN/PIPELINE/ANUAudit_Pipeline/weights/CLASS/hierarchicalmodel27 (1).pt"
-model = HierarchicalUltrasoundModel(
-num_anatomies=NUM_ANATOMIES,
-num_planes=NUM_PLANES,
-backbone_name='convnext_small',
-pretrained=False,
-dropout=0.3,
-).to(device)
-checkpoint = torch.load(MODEL_PATH, map_location=device)
-
-if isinstance(checkpoint, dict) and "model" in checkpoint:
-    state_dict = checkpoint["model"]
-elif isinstance(checkpoint, dict) and "state_dict" in checkpoint:
-    state_dict = checkpoint["state_dict"]
-else:
-    state_dict = checkpoint
-
-model.load_state_dict(state_dict, strict= True)
-model = model.to(device)
-model.eval()
-
 
 
 def get_image_paths(mode, folder=None, df=None):
@@ -100,9 +79,9 @@ class UltrasoundClassifier(nn.Module):
     def forward(self, x):
         return self.head(self.backbone(x))
 
-def load_modality_model(model_path):
+def load_modality_model(model_path, DEVICE):
     print("Loading Stage 1 Modality Classifier...")
-
+    device= DEVICE
     checkpoint = torch.load(model_path, map_location=device)
 
     if isinstance(checkpoint, dict) and "model" in checkpoint:
@@ -478,10 +457,49 @@ def get_classification_result(panel_bgr):
         }
     }
 
-def get_doppler_placeholder(panel_type):
-    return {
-        "result": None
-    }
+# def get_doppler_placeholder(panel_type):
+#     return {
+#         "result": None
+#     }
+
+def get_doppler_result(panel_bgr, panel_type):
+
+    if panel_type == "colour_doppler":
+
+        modality_result = {
+            "pred_labels": ["colour_doppler"],
+            "dominant_label": "colour_doppler"
+        }
+
+        doppler_result = anatomy_classifier.classify_colour_doppler_panel(
+            panel_bgr=panel_bgr,
+            panel_modality_result=modality_result
+        )
+
+        if doppler_result is None:
+            return {
+                "1st": {
+                    "Anatomy": "Unknown",
+                    "Standard plane": "Unknown",
+                    "Standard_plane_confidence": 0.0
+                }
+            }
+
+        prediction = doppler_result.get("prediction", "unknown")
+        confidence = doppler_result.get("confidence", 0.0)
+        anatomy_doppler = next((k for k, v in Config.DOPPLER_CLASSES.items() if v == prediction), None)
+        return {
+            "1st": {
+                "Anatomy": anatomy_doppler,
+                "Standard plane": prediction,
+                "Standard_plane_confidence": confidence
+            }
+        }
+
+    elif panel_type == "pulse_doppler":
+        return "unknown"
+
+    return "unknown"
 
 # ── Resolve image list from folder or CSV ─────────────────────────────────────
 
@@ -656,7 +674,10 @@ def modality_split(image_folder = None):
                 ]:
 
                     result["classification"][panel_name] = (
-                        get_doppler_placeholder(panel_type)
+                        get_doppler_result(
+                            panel_bgr,
+                            panel_type
+                        )
                     )
 
         elif is_doppler and is_quadsplit:
@@ -705,7 +726,10 @@ def modality_split(image_folder = None):
                 ]:
 
                     result["classification"][panel_name] = (
-                        get_doppler_placeholder(panel_type)
+                        get_doppler_result(
+                            panel_bgr,
+                            panel_type
+                        )
                     )
 
         # ============================================================
@@ -756,13 +780,16 @@ def modality_split(image_folder = None):
 
         # print(f"Saved: {json_path}")
 
-def modality_inference(IMAGE_DIRECTORY, MODEL_PATH, OUTPUT_FOLDER_PATH):
+def modality_inference(IMAGE_DIRECTORY, MODEL_PATH, OUTPUT_FOLDER_PATH, DOPPLER_MODEL_PATH, CLASSIFICATION_MODEL_PATH, DEVICE: str = "cuda"):
 
     global modality_model
     global modality_tf
     global folder
     global model_path
     global output_dir
+    global anatomy_classifier
+    global device
+    device = torch.device(DEVICE if torch.cuda.is_available() else "cpu")
 
     if os.path.exists(OUTPUT_FOLDER_PATH):
         shutil.rmtree(OUTPUT_FOLDER_PATH)
@@ -774,7 +801,7 @@ def modality_inference(IMAGE_DIRECTORY, MODEL_PATH, OUTPUT_FOLDER_PATH):
     output_dir = OUTPUT_FOLDER_PATH
 
     # Load Stage 1 model AFTER MODEL_PATH is available
-    modality_model = load_modality_model(MODEL_PATH)
+    modality_model = load_modality_model(MODEL_PATH, DEVICE= device)
 
     modality_tf = A.Compose([
         A.Resize(224, 224),
@@ -784,6 +811,34 @@ def modality_inference(IMAGE_DIRECTORY, MODEL_PATH, OUTPUT_FOLDER_PATH):
         ),
         ToTensorV2()
     ])
+    global model
+    MODEL_PATH= CLASSIFICATION_MODEL_PATH
+    model = HierarchicalUltrasoundModel(
+    num_anatomies=NUM_ANATOMIES,
+    num_planes=NUM_PLANES,
+    backbone_name='convnext_small',
+    pretrained=False,
+    dropout=0.3,
+    ).to(device)
+    checkpoint = torch.load(MODEL_PATH, map_location=device)
+
+    if isinstance(checkpoint, dict) and "model" in checkpoint:
+        state_dict = checkpoint["model"]
+    elif isinstance(checkpoint, dict) and "state_dict" in checkpoint:
+        state_dict = checkpoint["state_dict"]
+    else:
+        state_dict = checkpoint
+
+    model.load_state_dict(state_dict, strict= True)
+    model = model.to(device)
+    model.eval()
+
+
+    anatomy_model, anatomy_device = load_color_doppler_model(checkpoint_path = DOPPLER_MODEL_PATH)
+    anatomy_classifier = ColourDopplerAnatomyClassifier(
+        anatomy_model,
+        anatomy_device
+    )
 
     modality_split(image_folder=IMAGE_DIRECTORY)
 

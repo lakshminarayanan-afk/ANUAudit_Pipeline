@@ -1,0 +1,86 @@
+{
+  "image_path": "/home/htic/MLN/PIPELINE/ANUAudit_Pipeline/AUDITop/some/K63220_RANJETHA_V/20260330_105556/IMG_20260507_20_71.dcm",
+  "modality": {
+    "split": "bi-split",
+    "type": {
+      "left": "b-mode",
+      "right": "b-mode"
+    }
+  },
+  "classification": {
+    "left": {
+      "1st": {
+        "Anatomy": "Spine",
+        "Standard plane": "Coronal Spine",
+        "Standard_plane_confidence": 0.999174177646637
+      },
+      "2nd": {
+        "Anatomy": "Upper Limbs",
+        "Standard plane": "Humerus",
+        "Standard_plane_confidence": 0.7465017437934875
+      },
+      "3rd": {
+        "Anatomy": "Head",
+        "Standard plane": "Transthalamic Plane",
+        "Standard_plane_confidence": 0.3972773849964142
+      }
+    },
+    "right": {
+      "1st": {
+        "Anatomy": "Abdomen",
+        "Standard plane": "Coronal Kidneys",
+        "Standard_plane_confidence": 0.9439257979393005
+      },
+      "2nd": {
+        "Anatomy": "Lower Limbs",
+        "Standard plane": "Both Feet",
+        "Standard_plane_confidence": 0.9959656000137329
+      },
+      "3rd": {
+        "Anatomy": "Upper Limbs",
+        "Standard plane": "Open Hands",
+        "Standard_plane_confidence": 0.5687693953514099
+      }
+    }
+  },
+  "segmentation": {
+    "left": {
+      "2nd": {
+        "image_path": "/home/htic/MLN/PIPELINE/ANUAudit_Pipeline/AUDITop/some/K63220_RANJETHA_V/20260330_105556/IMG_20260507_20_71.dcm",
+        "input_filename": "IMG_20260507_20_71.dcm",
+        "plane": "Humerus",
+        "plane_quality": "Standard",
+        "mean_structure_confidence": 0.821428,
+        "plane_candidates": [
+          "humerus"
+        ],
+        "bone_classification": {
+          "probabilities": {
+            "femur": 0.16725535690784454,
+            "humerus": 0.8214277029037476,
+            "radius_ulna": 0.011316885240375996,
+            "tibia_fibula": 3.5849403445809e-08
+          }
+        },
+        "polygons": [],
+        "gt_metrics_available": false,
+        "gt_metrics": null
+      }
+    }
+  },
+  "final_plane_prediction": {
+    "left": {
+      "plane": "Humerus",
+      "source": "segmentation",
+      "rank": "2nd",
+      "plane_quality": "Standard",
+      "confidence": 0.821428
+    },
+    "right": {
+      "plane": "Coronal Kidneys",
+      "source": "classification",
+      "rank": "1st",
+      "confidence": 0.9439257979393005
+    }
+  }
+}

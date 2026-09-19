@@ -600,8 +600,7 @@ def compute_falx_orientation(falx_mask):
 def measure_lv(
     image,
     lv_mask,
-    cp_mask,
-    output_path
+    cp_mask
 ):
     """
     *image* is the already-loaded BGR np.ndarray (works uniformly for
@@ -723,11 +722,6 @@ def measure_lv(
         4,
         (255, 0, 0),
         -1
-    )
-
-    cv2.imwrite(
-        output_path,
-        image
     )
 
     return best_length
@@ -1549,16 +1543,15 @@ def process_single_image_tv(image_path, model_unet):
 
     stem = os.path.splitext(os.path.basename(image_path))[0]
 
-    save_mask_overlay(
-        img_bgr, masks, "lv",
-        os.path.join(out_mask_dir, f"{stem}_mask_overlay.png"),
-    )
+    # save_mask_overlay(
+    #     img_bgr, masks, "lv",
+    #     os.path.join(out_mask_dir, f"{stem}_mask_overlay.png"),
+    # )
 
     lv_px = measure_lv(
         img_bgr,
         masks["Lateral ventricle 2"],
-        masks["Choroid Plexus 2"],
-        os.path.join(out_meas_dir, f"{stem}_lv.png"),
+        masks["Choroid Plexus 2"]
     )
 
     return px_to_output_value(lv_px, pixel_spacing, is_dicom)

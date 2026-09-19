@@ -1,0 +1,941 @@
+{
+  "image_path": "/home/htic/MLN/PIPELINE/ANUAudit_Pipeline/AUDITop/some/K63220_RANJETHA_V/20260330_105556/IMG_20260507_20_62.dcm",
+  "modality": {
+    "split": "single",
+    "type": "b-mode"
+  },
+  "classification": {
+    "1st": {
+      "Anatomy": "Head",
+      "Standard plane": "Transventricular Plane",
+      "Standard_plane_confidence": 0.998286783695221
+    },
+    "2nd": {
+      "Anatomy": "Upper Limbs",
+      "Standard plane": "Open Hands",
+      "Standard_plane_confidence": 0.7515843510627747
+    },
+    "3rd": {
+      "Anatomy": "Lower Limbs",
+      "Standard plane": "Both Feet",
+      "Standard_plane_confidence": 0.7933927178382874
+    }
+  },
+  "segmentation": {
+    "single": {
+      "1st": {
+        "image_path": "/home/htic/MLN/PIPELINE/ANUAudit_Pipeline/AUDITop/some/K63220_RANJETHA_V/20260330_105556/IMG_20260507_20_62.dcm",
+        "vis_path": null,
+        "input_filename": "IMG_20260507_20_62.dcm",
+        "plane": "Transventricular Plane",
+        "plane_quality": "Standard",
+        "mean_structure_confidence": 0.983925,
+        "plane_candidates": [
+          "Transventricular Plane",
+          "Transthalamic Plane"
+        ],
+        "plane_mandatory_structures": {
+          "Transthalamic Plane": {
+            "required": [
+              "thalamus 1",
+              "thalamus 2",
+              "arrow sign",
+              "csp (cavum septum pellucidum)",
+              "midline falx",
+              "anterior horn of lateral ventricles 2",
+              "inner calvarium",
+              "outer calvarium"
+            ],
+            "present": [
+              "csp (cavum septum pellucidum)",
+              "midline falx",
+              "anterior horn of lateral ventricles 2",
+              "inner calvarium",
+              "outer calvarium"
+            ],
+            "missing": [
+              "thalamus 1",
+              "thalamus 2",
+              "arrow sign"
+            ],
+            "detected_fraction": 0.625,
+            "anchor_pass": true
+          },
+          "Transventricular Plane": {
+            "required": [
+              "lateral ventricle 2",
+              "csp (cavum septum pellucidum)",
+              "choroid plexus 2",
+              "posterior horn of lateral ventricle 2",
+              "midline falx",
+              "anterior horn of lateral ventricles 2",
+              "inner calvarium",
+              "outer calvarium"
+            ],
+            "present": [
+              "lateral ventricle 2",
+              "csp (cavum septum pellucidum)",
+              "choroid plexus 2",
+              "posterior horn of lateral ventricle 2",
+              "midline falx",
+              "anterior horn of lateral ventricles 2",
+              "inner calvarium",
+              "outer calvarium"
+            ],
+            "missing": [],
+            "detected_fraction": 1.0,
+            "anchor_pass": true
+          },
+          "Transcerebellar Plane": {
+            "required": [
+              "cerebellum",
+              "cerebellar vermis",
+              "cisternae magna",
+              "csp (cavum septum pellucidum)",
+              "cerebral peduncle 1",
+              "cerebral peduncle 2",
+              "anterior horn of lateral ventricles 2",
+              "inner calvarium",
+              "outer calvarium"
+            ],
+            "present": [
+              "csp (cavum septum pellucidum)",
+              "anterior horn of lateral ventricles 2",
+              "inner calvarium",
+              "outer calvarium"
+            ],
+            "missing": [
+              "cerebellum",
+              "cerebellar vermis",
+              "cisternae magna",
+              "cerebral peduncle 1",
+              "cerebral peduncle 2"
+            ],
+            "detected_fraction": 0.444444,
+            "anchor_pass": false
+          }
+        },
+        "polygons": [
+          {
+            "structure": "Hemisphere 1",
+            "type": "polygon",
+            "points": [
+              {
+                "x": 329.0,
+                "y": 382.0
+              },
+              {
+                "x": 342.0,
+                "y": 424.0
+              },
+              {
+                "x": 676.0,
+                "y": 435.0
+              },
+              {
+                "x": 746.0,
+                "y": 412.0
+              },
+              {
+                "x": 826.0,
+                "y": 429.0
+              },
+              {
+                "x": 883.0,
+                "y": 412.0
+              },
+              {
+                "x": 865.0,
+                "y": 332.0
+              },
+              {
+                "x": 814.0,
+                "y": 278.0
+              },
+              {
+                "x": 619.0,
+                "y": 220.0
+              },
+              {
+                "x": 440.0,
+                "y": 248.0
+              },
+              {
+                "x": 367.0,
+                "y": 308.0
+              }
+            ]
+          },
+          {
+            "structure": "Hemisphere 2",
+            "type": "polygon",
+            "points": [
+              {
+                "x": 364.0,
+                "y": 547.0
+              },
+              {
+                "x": 440.0,
+                "y": 604.0
+              },
+              {
+                "x": 663.0,
+                "y": 647.0
+              },
+              {
+                "x": 843.0,
+                "y": 544.0
+              },
+              {
+                "x": 876.0,
+                "y": 461.0
+              },
+              {
+                "x": 407.0,
+                "y": 451.0
+              },
+              {
+                "x": 340.0,
+                "y": 463.0
+              }
+            ]
+          },
+          {
+            "structure": "Midline Falx",
+            "type": "polygon",
+            "points": [
+              {
+                "x": 353.0,
+                "y": 440.0
+              },
+              {
+                "x": 531.0,
+                "y": 457.0
+              },
+              {
+                "x": 656.0,
+                "y": 459.0
+              },
+              {
+                "x": 670.0,
+                "y": 450.0
+              },
+              {
+                "x": 663.0,
+                "y": 440.0
+              },
+              {
+                "x": 535.0,
+                "y": 433.0
+              },
+              {
+                "x": 524.0,
+                "y": 446.0
+              },
+              {
+                "x": 512.0,
+                "y": 440.0
+              },
+              {
+                "x": 514.0,
+                "y": 428.0
+              },
+              {
+                "x": 378.0,
+                "y": 426.0
+              }
+            ]
+          },
+          {
+            "structure": "Anterior Horn of Lateral Ventricles 2",
+            "type": "polygon",
+            "points": [
+              {
+                "x": 744.0,
+                "y": 470.0
+              },
+              {
+                "x": 748.0,
+                "y": 504.0
+              },
+              {
+                "x": 755.0,
+                "y": 510.0
+              },
+              {
+                "x": 774.0,
+                "y": 509.0
+              },
+              {
+                "x": 792.0,
+                "y": 502.0
+              },
+              {
+                "x": 809.0,
+                "y": 487.0
+              },
+              {
+                "x": 805.0,
+                "y": 481.0
+              },
+              {
+                "x": 793.0,
+                "y": 480.0
+              },
+              {
+                "x": 754.0,
+                "y": 463.0
+              },
+              {
+                "x": 746.0,
+                "y": 465.0
+              }
+            ]
+          },
+          {
+            "structure": "Anterior Midline Falx",
+            "type": "polygon",
+            "points": [
+              {
+                "x": 757.0,
+                "y": 452.0
+              },
+              {
+                "x": 767.0,
+                "y": 452.0
+              },
+              {
+                "x": 777.0,
+                "y": 447.0
+              },
+              {
+                "x": 816.0,
+                "y": 447.0
+              },
+              {
+                "x": 827.0,
+                "y": 444.0
+              },
+              {
+                "x": 832.0,
+                "y": 438.0
+              },
+              {
+                "x": 825.0,
+                "y": 435.0
+              },
+              {
+                "x": 793.0,
+                "y": 433.0
+              },
+              {
+                "x": 775.0,
+                "y": 426.0
+              },
+              {
+                "x": 762.0,
+                "y": 431.0
+              },
+              {
+                "x": 759.0,
+                "y": 435.0
+              }
+            ]
+          },
+          {
+            "structure": "CSP (Cavum Septum Pellucidum)",
+            "type": "polygon",
+            "points": [
+              {
+                "x": 761.0,
+                "y": 415.0
+              },
+              {
+                "x": 746.0,
+                "y": 413.0
+              },
+              {
+                "x": 688.0,
+                "y": 428.0
+              },
+              {
+                "x": 677.0,
+                "y": 450.0
+              },
+              {
+                "x": 677.0,
+                "y": 459.0
+              },
+              {
+                "x": 712.0,
+                "y": 459.0
+              },
+              {
+                "x": 752.0,
+                "y": 449.0
+              },
+              {
+                "x": 758.0,
+                "y": 439.0
+              }
+            ]
+          },
+          {
+            "structure": "Choroid Plexus 2",
+            "type": "polygon",
+            "points": [
+              {
+                "x": 665.0,
+                "y": 493.0
+              },
+              {
+                "x": 651.0,
+                "y": 483.0
+              },
+              {
+                "x": 594.0,
+                "y": 510.0
+              },
+              {
+                "x": 542.0,
+                "y": 521.0
+              },
+              {
+                "x": 515.0,
+                "y": 536.0
+              },
+              {
+                "x": 502.0,
+                "y": 552.0
+              },
+              {
+                "x": 540.0,
+                "y": 562.0
+              },
+              {
+                "x": 565.0,
+                "y": 559.0
+              },
+              {
+                "x": 579.0,
+                "y": 550.0
+              },
+              {
+                "x": 586.0,
+                "y": 535.0
+              }
+            ]
+          },
+          {
+            "structure": "Lateral Ventricle 2",
+            "type": "polygon",
+            "points": [
+              {
+                "x": 780.0,
+                "y": 506.0
+              },
+              {
+                "x": 750.0,
+                "y": 508.0
+              },
+              {
+                "x": 749.0,
+                "y": 463.0
+              },
+              {
+                "x": 559.0,
+                "y": 498.0
+              },
+              {
+                "x": 435.0,
+                "y": 478.0
+              },
+              {
+                "x": 449.0,
+                "y": 485.0
+              },
+              {
+                "x": 444.0,
+                "y": 527.0
+              },
+              {
+                "x": 409.0,
+                "y": 525.0
+              },
+              {
+                "x": 491.0,
+                "y": 562.0
+              },
+              {
+                "x": 590.0,
+                "y": 569.0
+              },
+              {
+                "x": 729.0,
+                "y": 534.0
+              }
+            ]
+          },
+          {
+            "structure": "Posterior Horn of Lateral Ventricle 2",
+            "type": "polygon",
+            "points": [
+              {
+                "x": 404.0,
+                "y": 478.0
+              },
+              {
+                "x": 400.0,
+                "y": 485.0
+              },
+              {
+                "x": 402.0,
+                "y": 517.0
+              },
+              {
+                "x": 422.0,
+                "y": 529.0
+              },
+              {
+                "x": 443.0,
+                "y": 527.0
+              },
+              {
+                "x": 441.0,
+                "y": 518.0
+              },
+              {
+                "x": 445.0,
+                "y": 515.0
+              },
+              {
+                "x": 445.0,
+                "y": 505.0
+              },
+              {
+                "x": 441.0,
+                "y": 493.0
+              },
+              {
+                "x": 448.0,
+                "y": 485.0
+              },
+              {
+                "x": 428.0,
+                "y": 476.0
+              }
+            ]
+          },
+          {
+            "structure": "Anterior Horn of Lateral Ventricle 1",
+            "type": "polygon",
+            "points": [
+              {
+                "x": 753.0,
+                "y": 355.0
+              },
+              {
+                "x": 748.0,
+                "y": 357.0
+              },
+              {
+                "x": 748.0,
+                "y": 364.0
+              },
+              {
+                "x": 753.0,
+                "y": 367.0
+              },
+              {
+                "x": 759.0,
+                "y": 381.0
+              },
+              {
+                "x": 762.0,
+                "y": 382.0
+              },
+              {
+                "x": 759.0,
+                "y": 399.0
+              },
+              {
+                "x": 755.0,
+                "y": 404.0
+              },
+              {
+                "x": 765.0,
+                "y": 404.0
+              },
+              {
+                "x": 785.0,
+                "y": 391.0
+              },
+              {
+                "x": 792.0,
+                "y": 384.0
+              },
+              {
+                "x": 792.0,
+                "y": 377.0
+              },
+              {
+                "x": 773.0,
+                "y": 362.0
+              },
+              {
+                "x": 772.0,
+                "y": 358.0
+              }
+            ]
+          },
+          {
+            "structure": "Inner Calvarium",
+            "type": "polygon",
+            "points": [
+              {
+                "x": 400.0,
+                "y": 270.0
+              },
+              {
+                "x": 322.0,
+                "y": 411.0
+              },
+              {
+                "x": 344.0,
+                "y": 517.0
+              },
+              {
+                "x": 404.0,
+                "y": 589.0
+              },
+              {
+                "x": 533.0,
+                "y": 637.0
+              },
+              {
+                "x": 674.0,
+                "y": 647.0
+              },
+              {
+                "x": 865.0,
+                "y": 519.0
+              },
+              {
+                "x": 874.0,
+                "y": 350.0
+              },
+              {
+                "x": 776.0,
+                "y": 253.0
+              },
+              {
+                "x": 557.0,
+                "y": 218.0
+              }
+            ]
+          },
+          {
+            "structure": "Outer Calvarium",
+            "type": "polygon",
+            "points": [
+              {
+                "x": 384.0,
+                "y": 253.0
+              },
+              {
+                "x": 302.0,
+                "y": 335.0
+              },
+              {
+                "x": 289.0,
+                "y": 390.0
+              },
+              {
+                "x": 324.0,
+                "y": 565.0
+              },
+              {
+                "x": 382.0,
+                "y": 619.0
+              },
+              {
+                "x": 522.0,
+                "y": 672.0
+              },
+              {
+                "x": 701.0,
+                "y": 672.0
+              },
+              {
+                "x": 854.0,
+                "y": 580.0
+              },
+              {
+                "x": 896.0,
+                "y": 519.0
+              },
+              {
+                "x": 907.0,
+                "y": 347.0
+              },
+              {
+                "x": 823.0,
+                "y": 248.0
+              },
+              {
+                "x": 562.0,
+                "y": 199.0
+              }
+            ]
+          }
+        ],
+        "gt_metrics_available": false,
+        "gt_metrics": null,
+        "image_quality_summary": {
+          "n_structures_predicted": 12,
+          "n_structures_ok": 11,
+          "n_structures_low_contrast": 1,
+          "n_structures_low_conf": 0,
+          "n_structures_locally_blurry": 0,
+          "overall_image_quality": "ok"
+        },
+        "structures": [
+          {
+            "structure_name": "Hemisphere 1",
+            "segmentation_confidence": {
+              "value": 0.9565,
+              "qualitative": "high",
+              "threshold": 0.5
+            },
+            "local_contrast": {
+              "value": 26.25,
+              "qualitative": "good",
+              "threshold": 10.0
+            },
+            "local_blur": {
+              "value": 44.37,
+              "qualitative": "sharp",
+              "threshold": 10.0
+            }
+          },
+          {
+            "structure_name": "Hemisphere 2",
+            "segmentation_confidence": {
+              "value": 0.9463,
+              "qualitative": "high",
+              "threshold": 0.5
+            },
+            "local_contrast": {
+              "value": 70.8,
+              "qualitative": "good",
+              "threshold": 10.0
+            },
+            "local_blur": {
+              "value": 45.63,
+              "qualitative": "sharp",
+              "threshold": 10.0
+            }
+          },
+          {
+            "structure_name": "Midline Falx",
+            "segmentation_confidence": {
+              "value": 0.9731,
+              "qualitative": "high",
+              "threshold": 0.5
+            },
+            "local_contrast": {
+              "value": 58.63,
+              "qualitative": "good",
+              "threshold": 12.0
+            },
+            "local_blur": {
+              "value": 92.4,
+              "qualitative": "sharp",
+              "threshold": 15.0
+            }
+          },
+          {
+            "structure_name": "Anterior Horn of Lateral Ventricles 2",
+            "segmentation_confidence": {
+              "value": 0.9976,
+              "qualitative": "high",
+              "threshold": 0.5
+            },
+            "local_contrast": {
+              "value": 12.72,
+              "qualitative": "good",
+              "threshold": 12.0
+            },
+            "local_blur": {
+              "value": 45.97,
+              "qualitative": "sharp",
+              "threshold": 15.0
+            }
+          },
+          {
+            "structure_name": "Anterior Midline Falx",
+            "segmentation_confidence": {
+              "value": 0.998,
+              "qualitative": "high",
+              "threshold": 0.5
+            },
+            "local_contrast": {
+              "value": 45.77,
+              "qualitative": "good",
+              "threshold": 12.0
+            },
+            "local_blur": {
+              "value": 35.11,
+              "qualitative": "sharp",
+              "threshold": 15.0
+            }
+          },
+          {
+            "structure_name": "CSP (Cavum Septum Pellucidum)",
+            "segmentation_confidence": {
+              "value": 0.9906,
+              "qualitative": "high",
+              "threshold": 0.65
+            },
+            "local_contrast": {
+              "value": 77.11,
+              "qualitative": "good",
+              "threshold": 10.0
+            },
+            "local_blur": {
+              "value": 140.43,
+              "qualitative": "sharp",
+              "threshold": 15.0
+            }
+          },
+          {
+            "structure_name": "Choroid Plexus 2",
+            "segmentation_confidence": {
+              "value": 0.9927,
+              "qualitative": "high",
+              "threshold": 0.5
+            },
+            "local_contrast": {
+              "value": 70.11,
+              "qualitative": "good",
+              "threshold": 15.0
+            },
+            "local_blur": {
+              "value": 71.84,
+              "qualitative": "sharp",
+              "threshold": 15.0
+            }
+          },
+          {
+            "structure_name": "Lateral Ventricle 2",
+            "segmentation_confidence": {
+              "value": 0.9878,
+              "qualitative": "high",
+              "threshold": 0.5
+            },
+            "local_contrast": {
+              "value": 2.0,
+              "qualitative": "low",
+              "threshold": 5.0
+            },
+            "local_blur": {
+              "value": 66.55,
+              "qualitative": "sharp",
+              "threshold": 10.0
+            }
+          },
+          {
+            "structure_name": "Posterior Horn of Lateral Ventricle 2",
+            "segmentation_confidence": {
+              "value": 0.9932,
+              "qualitative": "high",
+              "threshold": 0.5
+            },
+            "local_contrast": {
+              "value": 37.87,
+              "qualitative": "good",
+              "threshold": 12.0
+            },
+            "local_blur": {
+              "value": 84.01,
+              "qualitative": "sharp",
+              "threshold": 15.0
+            }
+          },
+          {
+            "structure_name": "Anterior Horn of Lateral Ventricle 1",
+            "segmentation_confidence": {
+              "value": 0.9937,
+              "qualitative": "high",
+              "threshold": 0.5
+            },
+            "local_contrast": {
+              "value": 18.43,
+              "qualitative": "good",
+              "threshold": 12.0
+            },
+            "local_blur": {
+              "value": 47.43,
+              "qualitative": "sharp",
+              "threshold": 15.0
+            }
+          },
+          {
+            "structure_name": "Inner Calvarium",
+            "segmentation_confidence": {
+              "value": 0.9916,
+              "qualitative": "high",
+              "threshold": 0.95
+            },
+            "local_contrast": {
+              "value": 69.83,
+              "qualitative": "good",
+              "threshold": 30.0
+            },
+            "local_blur": {
+              "value": 41.9,
+              "qualitative": "sharp",
+              "threshold": 25.0
+            }
+          },
+          {
+            "structure_name": "Outer Calvarium",
+            "segmentation_confidence": {
+              "value": 0.986,
+              "qualitative": "high",
+              "threshold": 0.95
+            },
+            "local_contrast": {
+              "value": 36.88,
+              "qualitative": "good",
+              "threshold": 30.0
+            },
+            "local_blur": {
+              "value": 37.68,
+              "qualitative": "sharp",
+              "threshold": 25.0
+            }
+          }
+        ],
+        "quality_reasons": []
+      }
+    }
+  },
+  "final_plane_prediction": {
+    "single": {
+      "plane": "Transventricular Plane",
+      "source": "segmentation",
+      "rank": "1st",
+      "plane_quality": "Standard",
+      "confidence": 0.983925
+    }
+  },
+  "biometry": {
+    "single": {
+      "Transventricular Plane": {
+        "LV": 9.87,
+        "units": "mm"
+      }
+    }
+  }
+}

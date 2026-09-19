@@ -1,10 +1,10 @@
 import json
 from pathlib import Path
 
-from source_codes.model_config import BIOM_MODEL_PLANE_CONFIG
+from config import Config
 
 
-def prepare_plane_inputs(json_directory, model_plane_config=BIOM_MODEL_PLANE_CONFIG):
+def prepare_plane_inputs(json_directory, model_plane_config=Config.BIOM_MODEL_PLANE_CONFIG):
     json_directory = Path(json_directory)
 
     model_inputs = {

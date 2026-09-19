@@ -1,0 +1,60 @@
+{
+  "image_path": "/home/htic/MLN/PIPELINE/ANUAudit_Pipeline/AUDITop/some/K63220_RANJETHA_V/20260330_105556/IMG_20260507_20_74.dcm",
+  "modality": {
+    "split": "bi-split",
+    "type": {
+      "left": "b-mode",
+      "right": "b-mode"
+    }
+  },
+  "classification": {
+    "left": {
+      "1st": {
+        "Anatomy": "Lower Limbs",
+        "Standard plane": "Both Feet",
+        "Standard_plane_confidence": 0.9996787309646606
+      },
+      "2nd": {
+        "Anatomy": "Upper Limbs",
+        "Standard plane": "Open Hands",
+        "Standard_plane_confidence": 0.7050237655639648
+      },
+      "3rd": {
+        "Anatomy": "Thorax",
+        "Standard plane": "3 Vessel View or PAS",
+        "Standard_plane_confidence": 0.3707561194896698
+      }
+    },
+    "right": {
+      "1st": {
+        "Anatomy": "Lower Limbs",
+        "Standard plane": "Both Feet",
+        "Standard_plane_confidence": 0.9996979236602783
+      },
+      "2nd": {
+        "Anatomy": "Upper Limbs",
+        "Standard plane": "Open Hands",
+        "Standard_plane_confidence": 0.7290821671485901
+      },
+      "3rd": {
+        "Anatomy": "Thorax",
+        "Standard plane": "3 Vessel View or PAS",
+        "Standard_plane_confidence": 0.4122662842273712
+      }
+    }
+  },
+  "final_plane_prediction": {
+    "left": {
+      "plane": "Both Feet",
+      "source": "classification",
+      "rank": "1st",
+      "confidence": 0.9996787309646606
+    },
+    "right": {
+      "plane": "Both Feet",
+      "source": "classification",
+      "rank": "1st",
+      "confidence": 0.9996979236602783
+    }
+  }
+}

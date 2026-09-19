@@ -6,14 +6,12 @@ from utils.get_final_plane import final_plane
 from utils.biomet_input_planes import prepare_plane_inputs
 from source_codes.biometry.measurements_pipeline import measurements_pipeline
 
+from config import Config
+
 IMAGE_DIRECTORY = (
-    r"/home/htic/MLN/PIPELINE/ANUAudit_Pipeline/12_Full_Image_Datasets/ClinicalPatient_13_dcm"
+    r"/home/htic/MLN/PIPELINE/ANUAudit_Pipeline/AUDITop/some/K63220_RANJETHA_V"
 )
 
-MODALITY_MODEL_PATH = (
-    "/home/htic/MLN/PIPELINE/"
-    "ANUAudit_Pipeline/weights/MODALITY/modality_model.pth"
-)
 
 MODALITY_OUTPUT = (
     "/home/htic/MLN/PIPELINE/ANUAudit_Pipeline/OUTPUTS"
@@ -26,8 +24,11 @@ MODALITY_OUTPUT = (
 
 modality_inference(
     IMAGE_DIRECTORY=IMAGE_DIRECTORY,
-    MODEL_PATH=MODALITY_MODEL_PATH,
-    OUTPUT_FOLDER_PATH=MODALITY_OUTPUT
+    MODEL_PATH=Config.MODALITY_MODEL_PATH,
+    OUTPUT_FOLDER_PATH=MODALITY_OUTPUT,
+    DOPPLER_MODEL_PATH=Config.COLOR_DOPPLER_MODEL_PATH,
+    CLASSIFICATION_MODEL_PATH = Config.CLASS_MODEL_PATH, 
+    DEVICE= Config.DEVICE
 )
 
 # ============================================================
