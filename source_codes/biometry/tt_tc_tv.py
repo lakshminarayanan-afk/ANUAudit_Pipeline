@@ -724,7 +724,19 @@ def measure_lv(
         -1
     )
 
-    return best_length
+    return {
+    "line_length": float(best_length),
+    "points": {
+        "start": [
+            float(best_top[0]),
+            float(best_top[1])
+        ],
+        "end": [
+            float(best_bottom[0]),
+            float(best_bottom[1])
+        ]
+    }
+}
 
 
 
@@ -984,7 +996,19 @@ def measure_tcd(
     #     overlay
     # )
 
-    return line_length_px
+    return {
+    "line_length": float(line_length_px),
+    "points": {
+        "start": [
+            float(top_point[0]),
+            float(top_point[1])
+        ],
+        "end": [
+            float(bottom_point[0]),
+            float(bottom_point[1])
+        ]
+    }
+}
 
 
 # =========================================================================
@@ -1497,12 +1521,14 @@ def process_single_image_tc(image_path, model_unet):
     #     os.path.join(out_mask_dir, f"{stem}_mask_overlay.png"),
     # )
 
-    tcd_px = measure_tcd(
+    tcd_raw = measure_tcd(
         img_bgr,
         masks["Cerebellum"],
         masks["Midline Falx"],
-        # os.path.join(tcd_meas_dir, f"{stem}_tcd.png"),
     )
+
+    tcd_px = tcd_raw["line_length"] if tcd_raw else None
+    tcd_points = tcd_raw["points"] if tcd_raw else None
 
     cm_raw = measure_cm(
         img_bgr,
@@ -1515,7 +1541,7 @@ def process_single_image_tc(image_path, model_unet):
     tcd_result, units = px_to_output_value(tcd_px, pixel_spacing, is_dicom)
     cm_result, _       = px_to_output_value(cm_px,  pixel_spacing, is_dicom)
 
-    return tcd_result, cm_result, units
+    return tcd_result, cm_result, units, tcd_points
 
 
 # =========================================================================
@@ -1548,14 +1574,22 @@ def process_single_image_tv(image_path, model_unet):
     #     os.path.join(out_mask_dir, f"{stem}_mask_overlay.png"),
     # )
 
-    lv_px = measure_lv(
+    lv_raw = measure_lv(
         img_bgr,
         masks["Lateral ventricle 2"],
         masks["Choroid Plexus 2"]
     )
 
-    return px_to_output_value(lv_px, pixel_spacing, is_dicom)
+    lv_px = lv_raw["line_length"] if lv_raw else None
+    lv_points = lv_raw["points"] if lv_raw else None
 
+    lv_result, units = px_to_output_value(
+        lv_px,
+        pixel_spacing,
+        is_dicom
+    )
+
+    return lv_result, units, lv_points
 
 # =========================================================================
 # CSV HELPERS

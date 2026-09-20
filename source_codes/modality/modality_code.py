@@ -742,21 +742,17 @@ def modality_split(image_folder = None):
             # result["modality"]["split"] = "single"
 
             if is_colour_doppler:
-                classification = {
-                    "result": None
-                }
-
-                result = {
+                    result = {
                     "modality": {
-                        "split" : "single",
+                        "split": "single",
                         "type": "colour_doppler"
                     },
-                    "classification": classification
+                    "classification": get_doppler_result(
+                        image_bgr,
+                        "colour_doppler"
+                    )
                 }
-
-                # colour_result = run_colour_doppler_model(image_bgr)
-                # result["classification"] = colour_result
-
+                    
             elif is_pulse_doppler:
                 classification = {
                     "result": None

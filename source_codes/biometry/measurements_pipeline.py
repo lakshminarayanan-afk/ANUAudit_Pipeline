@@ -48,11 +48,13 @@ def measurements_pipeline(model_inputs):
     tc_inputs = model_inputs.get("tc", [])
     for item in tc_inputs:
         image_path = item["image_path"]
-        tcd_result, cm_result, units = process_single_image_tc(image_path,model_unet)
+        tcd_result, cm_result, units, tcd_points  = process_single_image_tc(image_path,model_unet)
         json_entry = {
             "TCD": tcd_result,
             "CM": cm_result,
-            "units": units
+            "units": units,
+            "confidence": None,
+            "points": tcd_points
         }
         write_biometry_result(
             item,
@@ -62,10 +64,12 @@ def measurements_pipeline(model_inputs):
     tv_inputs = model_inputs.get("tv", [])
     for item in tv_inputs:
         image_path = item["image_path"]
-        lv_result, units = process_single_image_tv(image_path,model_unet)
+        lv_result, units, lv_points = process_single_image_tv(image_path,model_unet)
         json_entry = {
             "LV": lv_result,
-            "units": units
+            "units": units,
+            "confidence" : None,
+            "points": lv_points,
         }
         write_biometry_result(
             item,
