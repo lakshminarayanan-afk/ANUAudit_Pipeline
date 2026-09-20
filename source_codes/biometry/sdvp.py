@@ -14,6 +14,7 @@ from PIL import Image
 import albumentations as A
 import open_clip
 from pathlib import Path
+import pydicom
 
 _LIQUOR_MODEL_DIR = os.path.abspath(
     os.path.join(os.path.dirname(__file__), "model", "liquor")
@@ -186,10 +187,10 @@ def extract_original_from_padded(padded_image, orig_size):
     l, t = (pw - ow) // 2, (ph - oh) // 2
     return padded_image.crop((l, t, l + ow, t + oh))
 
-def setup_model(ckpt_path):
+def setup_model(PATH_FETALCLIP_CONFIG, ckpt_path, SDVP_FETALCLIP_WEIGHT):
     with open(PATH_FETALCLIP_CONFIG, "r") as f:
         open_clip.factory._MODEL_CONFIGS[ARCH_NAME] = json.load(f)
-    m_clip, _, prep_img = open_clip.create_model_and_transforms(ARCH_NAME, pretrained=PATH_FETALCLIP_WEIGHT)
+    m_clip, _, prep_img = open_clip.create_model_and_transforms(ARCH_NAME, pretrained=SDVP_FETALCLIP_WEIGHT)
     enc = EncoderWrapper(m_clip.visual).eval().cuda()
     model = LitModel(enc.transformer.width, NUM_CLASSES, 3, INIT_FILTERS)
     
@@ -231,7 +232,7 @@ def run_infer_img(img, encoder, model, preprocess_img):
 def save_prediction(img_name, pred, orig_img, pad_size, confidence):
     mask_raw = Image.fromarray((pred * 255).astype(np.uint8)).resize(pad_size, Image.NEAREST)
     mask_cv = np.array(extract_original_from_padded(mask_raw, orig_img.size[::-1])).astype(np.uint8)
-    cv2.imwrite(os.path.join(BINARY_DIR, img_name.replace(".jpg", ".png")), mask_cv)
+    # cv2.imwrite(os.path.join(BINARY_DIR, img_name.replace(".jpg", ".png")), mask_cv)
 
     # LOOSENING: Use Dilation to expand the mask coverage
     kernel_dilate = np.ones((9,9), np.uint8) 
@@ -244,25 +245,25 @@ def save_prediction(img_name, pred, orig_img, pad_size, confidence):
     mask_overlay = img_cv.copy()
     mask_overlay[mask_cv > 0] = [0, 255, 0]
     cv2.addWeighted(mask_overlay, 0.4, img_cv, 0.6, 0, mask_overlay)
-    cv2.imwrite(os.path.join(MASK_DIR, img_name), cv2.cvtColor(mask_overlay, cv2.COLOR_RGB2BGR))
-
+    # cv2.imwrite(os.path.join(MASK_DIR, img_name), cv2.cvtColor(mask_overlay, cv2.COLOR_RGB2BGR))
+    line = None
     cnts, _ = cv2.findContours(mask_cv, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
     if cnts:
         lrg = max(cnts, key=cv2.contourArea)
         smoothed = cv2.approxPolyDP(lrg, 0.002 * cv2.arcLength(lrg, True), True)
-        cv2.drawContours(img_cv, [smoothed], -1, (0, 255, 0), 2)
+        # cv2.drawContours(img_cv, [smoothed], -1, (0, 255, 0), 2)
         line = find_clinical_deepest_pocket(smoothed, mask_cv.shape, gray)
         if line:
             x, y1, y2 = line
-            cv2.line(img_cv, (x, y1), (x, y2), (255, 0, 0), 1)
-            cv2.circle(img_cv, (x, y1), 3, (0, 255, 255), -1)
-            cv2.circle(img_cv, (x, y2), 3, (0, 255, 255), -1)
+            # cv2.line(img_cv, (x, y1), (x, y2), (255, 0, 0), 1)
+            # cv2.circle(img_cv, (x, y1), 3, (0, 255, 255), -1)
+            # cv2.circle(img_cv, (x, y2), 3, (0, 255, 255), -1)
 
     final_out = cv2.cvtColor(img_cv, cv2.COLOR_RGB2BGR)
-    cv2.imwrite(os.path.join(OVERLAY_DIR, img_name), final_out)
+    # cv2.imwrite(os.path.join(OVERLAY_DIR, img_name), final_out)
     
-    if confidence < CONFIDENCE_THRESHOLD:
-        shutil.copy(os.path.join(OVERLAY_DIR, img_name), os.path.join(LOW_CONF_DIR, img_name))
+    # if confidence < CONFIDENCE_THRESHOLD:
+        # shutil.copy(os.path.join(OVERLAY_DIR, img_name), os.path.join(LOW_CONF_DIR, img_name))
 
     if line:
         x, y1, y2 = line
@@ -270,13 +271,24 @@ def save_prediction(img_name, pred, orig_img, pad_size, confidence):
         return {
             "SDVP": round(float(y2 - y1), 2),
             "units": "px",
-            "confidence": round(float(confidence), 4)
+            "confidence": round(float(confidence), 4),
+            "points": {
+                "start": [
+                    float(x),
+                    float(y1)
+                ],
+                "end": [
+                    float(x),
+                    float(y2)
+                ]
+            }
         }
 
     return {
         "SDVP": None,
         "units": "px",
-        "confidence": round(float(confidence), 4)
+        "confidence": round(float(confidence), 4),
+        "points": None
     }
 
 # def run_infer_folder(path):
@@ -289,22 +301,67 @@ def save_prediction(img_name, pred, orig_img, pad_size, confidence):
 #         pad, _ = make_image_square_with_zero_padding(orig)
 #         mask, _, conf = run_infer_img(pad, enc, model, prep)
 #         save_prediction(f, mask, orig, pad.size, conf)
-
 def process_single_image_sdvp(
     image_path,
     encoder,
     model,
     preprocess_img
 ):
+    image_path = str(image_path)
 
-    orig = Image.open(image_path).convert("RGB")
+    # ============================================================
+    # LOAD IMAGE / DICOM
+    # ============================================================
+    if image_path.lower().endswith(".dcm"):
+        print(f"image_path:{image_path}")
+        ds = pydicom.dcmread(image_path)
+        pixel_array = ds.pixel_array
+
+        # Handle multi-frame DICOM
+        if pixel_array.ndim > 2:
+            pixel_array = pixel_array[0]
+
+        # Normalize to uint8
+        pixel_array = pixel_array.astype(np.float32)
+
+        min_val = pixel_array.min()
+        max_val = pixel_array.max()
+
+        if max_val > min_val:
+            pixel_array = (
+                (pixel_array - min_val)
+                / (max_val - min_val)
+                * 255.0
+            )
+        else:
+            pixel_array = np.zeros_like(pixel_array)
+
+        pixel_array = pixel_array.astype(np.uint8)
+
+        # Convert grayscale DICOM to RGB
+        orig = Image.fromarray(pixel_array).convert("RGB")
+
+    else:
+        orig = Image.open(image_path).convert("RGB")
+
+    # ============================================================
+    # PAD IMAGE
+    # ============================================================
     pad, _ = make_image_square_with_zero_padding(orig)
+
+    # ============================================================
+    # INFERENCE
+    # ============================================================
     mask, _, confidence = run_infer_img(
         pad,
         encoder,
         model,
         preprocess_img
     )
+
+    # ============================================================
+    # SAVE RESULT
+    # ============================================================
     result = save_prediction(
         Path(image_path).name,
         mask,
@@ -314,6 +371,5 @@ def process_single_image_sdvp(
     )
 
     return result
-
 # if __name__ == "__main__":
 #     run_infer_folder(DIR_DATA)

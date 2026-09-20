@@ -89,7 +89,9 @@ def measurements_pipeline(model_inputs):
     if liquor_inputs:
 
         sdvp_encoder, sdvp_model, sdvp_preprocess = setup_sdvp_model(
-            Config.SDVP_LIQUOR_CHECKPOINT_PATH
+            PATH_FETALCLIP_CONFIG = Config.SDVP_PATH_FETALCLIP_CONFIG,
+            ckpt_path = Config.SDVP_LIQUOR_CHECKPOINT_PATH,
+            SDVP_FETALCLIP_WEIGHT = Config.SDVP_FETALCLIP_WEIGHT
         )
 
         for item in liquor_inputs:

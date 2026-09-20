@@ -54,7 +54,8 @@ class Config:
     ABD_CHECKPOINT= r"/home/htic/MLN/PIPELINE/ANUAudit_Pipeline/MAIN_WEIGHTS/AUTOMATE/abd/best_ac_skin_line.pt"
     # SDVP
     SDVP_LIQUOR_CHECKPOINT_PATH = r"/home/htic/MLN/PIPELINE/ANUAudit_Pipeline/MAIN_WEIGHTS/AUTOMATE/liquor/liquor_best_model.ckpt"
-
+    SDVP_PATH_FETALCLIP_CONFIG = r"/home/htic/MLN/PIPELINE/ANUAudit_Pipeline/source_codes/biometry/model/liquor/FetalCLIP_config.json"
+    SDVP_FETALCLIP_WEIGHT = r"/home/htic/MLN/PIPELINE/ANUAudit_Pipeline/MAIN_WEIGHTS/AUTOMATE/liquor/FetalCLIP_weights.pt"
 
     # AUDIT
     YOLO_AC_BPD= r"/home/htic/MLN/PIPELINE/ANUAudit_Pipeline/MAIN_WEIGHTS/AUDIT/yolo_ac_bpd.pt"
