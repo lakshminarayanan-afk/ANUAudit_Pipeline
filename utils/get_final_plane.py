@@ -143,10 +143,12 @@ def final_plane(json_directory):
                 classification_1st = (
                     panel_classification.get("1st", {})
                 )
+                # print(classification_1st)
 
                 classification_plane = (
                     classification_1st.get("Standard plane")
                 )
+                # print(classification_plane)
 
                 classification_confidence = (
                     classification_1st.get(
@@ -193,6 +195,7 @@ def final_plane(json_directory):
                 # =================================================
 
                 if classification_plane in Config.ET_PLANES:
+                    # print(f"classification_plane:{classification_plane}")
 
                     final_predictions[panel] = {
                         "plane": classification_plane,
@@ -254,6 +257,7 @@ def final_plane(json_directory):
                     if not candidates:
 
                         if classification_plane is not None:
+                            # print(f"CLASS_PLANE_SEG:{classification_plane}")
 
                             final_predictions[panel] = {
                                 "plane": classification_plane,
@@ -357,16 +361,13 @@ def final_plane(json_directory):
                         == len(candidates)
                     ):
 
-                        if classification_plane is not None:
-
-                            final_predictions[panel] = {
-                                "plane": classification_plane,
-                                "source": "classification",
-                                "rank": "1st",
-                                "confidence": (
-                                    classification_confidence
-                                )
-                            }
+                        final_predictions[panel] = {
+                            "plane": "unknown",
+                            "source": "segmentation",
+                            "rank": "1st",
+                            "plane_quality": "unknown",
+                            "confidence": None
+                        }
 
                         continue
 

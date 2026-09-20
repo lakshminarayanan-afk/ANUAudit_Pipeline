@@ -9,7 +9,7 @@ from source_codes.biometry.measurements_pipeline import measurements_pipeline
 from config import Config
 
 IMAGE_DIRECTORY = (
-    r"/home/htic/MLN/PIPELINE/ANUAudit_Pipeline/AUDITop/some/K63220_RANJETHA_V"
+    r"/home/htic/MLN/PIPELINE/ANUAudit_Pipeline/AUDITop/debug"
 )
 
 

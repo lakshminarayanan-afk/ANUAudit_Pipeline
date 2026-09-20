@@ -1,9 +1,0 @@
-{
-  "modality": {
-    "split": "single",
-    "type": "pulse_doppler"
-  },
-  "classification": {
-    "result": null
-  }
-}
