@@ -591,63 +591,50 @@ def load_model(checkpoint: str, device: torch.device):
 
 
 # ── MODIFIED: now computes and returns confidence_score ───────────────
-def run_inference_abd(dicom_path=None, image_path=None):
+def run_inference_abd(dicom_path=None, image_path=None, npz_path = None):
     WEIGHTS_PATH = Config.ABD_CHECKPOINT
     file_path = dicom_path if dicom_path is not None else image_path
     if file_path is None:
         print("Error: provide either dicom_path or image_path.")
         return None, None, None, None
-
+    if npz_path is None:
+        print("Error: npz_path is required.")
+        return None, None, None, None
+    
     img_orig, _, pixel_spacing, is_dicom = load_image_generic(file_path)
-    # Image used only for visualization
-    vis_img_bgr = img_orig.copy()
 
-    # if is_dicom:
-    #     anonymized_path_ac = anonymized_png_for_dicom(file_path)
+    # ---------------------------------------------------------
+    # LOAD MASK FROM NPZ
+    # ---------------------------------------------------------
+    print(f"Loading abdomen mask from: {npz_path}")
+    npz_data = np.load(npz_path)
+    print("NPZ keys:", npz_data.files)
+    mask = npz_data["mask"]
+    print(f"NPZ mask shape: {mask.shape}")
+    print(f"NPZ mask dtype: {mask.dtype}")
 
-    #     if anonymized_path_ac is not None:
-    #         vis_img_bgr = cv2.imread(str(anonymized_path_ac))
-    #         print(f"ANONYM PATH AC: {anonymized_path_ac}")
+    # model = YNet(input_channels=1, output_channels=64, n_class=1).to(DEVICE)
+    # model.load_state_dict(torch.load(WEIGHTS_PATH, map_location=DEVICE))
+    # model.eval()
 
-    #         if vis_img_bgr is None:
-    #             print(f"NO vis_img_bgr")
-    #             vis_img_bgr = img_orig.copy()
+    # gray = cv2.cvtColor(img_orig, cv2.COLOR_BGR2GRAY)
+    # resized = cv2.resize(gray, TARGET_SIZE)
+    # normalized = (resized / 255.0 - 0.5) / 0.5
+    # input_tensor = torch.from_numpy(normalized).float().unsqueeze(0).unsqueeze(0).to(DEVICE)
 
-    #         elif vis_img_bgr.shape[:2] != img_orig.shape[:2]:
-    #             print(f"COMING HEREEEE")
-    #             vis_img_bgr = cv2.resize(
-    #                 vis_img_bgr,
-    #                 (img_orig.shape[1], img_orig.shape[0]),
-    #                 interpolation=cv2.INTER_LINEAR
-    #             )
+    # with torch.no_grad():
+    #     _, pred = model(input_tensor)
 
-    #         else:
+    # pred_np = pred.squeeze().cpu().numpy()
+    # foreground = pred_np[pred_np > 0.5]
+    # confidence_score = round(float(foreground.mean()) if len(foreground) > 0 else 0.0, 4)
+    # print(f"Abdomen confidence score: {confidence_score}")
+    # # ──────────────────────────────────────────────────────────────────
 
-    #             vis_img_bgr = vis_img_bgr 
-    fname = os.path.basename(file_path)
-
-    model = YNet(input_channels=1, output_channels=64, n_class=1).to(DEVICE)
-    model.load_state_dict(torch.load(WEIGHTS_PATH, map_location=DEVICE))
-    model.eval()
-
-    gray = cv2.cvtColor(img_orig, cv2.COLOR_BGR2GRAY)
-    resized = cv2.resize(gray, TARGET_SIZE)
-    normalized = (resized / 255.0 - 0.5) / 0.5
-    input_tensor = torch.from_numpy(normalized).float().unsqueeze(0).unsqueeze(0).to(DEVICE)
-
-    with torch.no_grad():
-        _, pred = model(input_tensor)
-
-    pred_np = pred.squeeze().cpu().numpy()
-    foreground = pred_np[pred_np > 0.5]
-    confidence_score = round(float(foreground.mean()) if len(foreground) > 0 else 0.0, 4)
-    print(f"Abdomen confidence score: {confidence_score}")
-    # ──────────────────────────────────────────────────────────────────
-
-    mask = (pred.squeeze().cpu().numpy() > 0.5).astype(np.uint8) * 255
-    print(f"MASKKKK_type:{mask.dtype}, ")
-    print(f"MASKKKK_type:{mask.shape}, ")
-    print(f"MASKKKK_type:{mask.size}, ")
+    # mask = (pred.squeeze().cpu().numpy() > 0.5).astype(np.uint8) * 255
+    # print(f"MASKKKK_type:{mask.dtype}, ")
+    # print(f"MASKKKK_type:{mask.shape}, ")
+    # print(f"MASKKKK_type:{mask.size}, ")
 
     ac_px_full, smooth_contour, mask_resized = calculate_perfected_ac(mask, img_orig.shape)
     if ac_px_full is None:
@@ -686,7 +673,7 @@ def run_inference_abd(dicom_path=None, image_path=None):
     ac_points = smooth_contour.reshape(-1, 2).astype(float).tolist()
 
     # ── MODIFIED: returns confidence_score as extra value ─────────────
-    return ac_val, is_dicom, confidence_score, ac_points
+    return ac_val, is_dicom, None, ac_points
 
 
 #########################################################################
@@ -1198,14 +1185,21 @@ def bio_ga(model_inputs):
     # =========================================================
 
     for item in model_inputs.get("abdomen", []):
-
+        print(f"json_path= {item["json_path"]}")
+        json_path = Path(item["json_path"])
+        json_dir = json_path.parent
+        image_name = json_path.stem
+        npz_path = json_dir / f"{image_name}.npz"
+        if not npz_path.exists():
+            raise FileNotFoundError(f"NPZ file not found: {npz_path}")
         (
             ac_val,
             is_dicom,
-            confidence_score,
+            _,
             ac_points,
         ) = run_inference_abd(
-            item["image_path"]
+            item["image_path"], 
+            str(npz_path)
         )
 
         if ac_val is None:
@@ -1215,7 +1209,7 @@ def bio_ga(model_inputs):
         json_entry = {
             "AC": float(ac_val),
             "units": "mm",
-            "confidence": float(confidence_score),
+            "confidence": None,
             "points": ac_points,
         }
 
@@ -1346,7 +1340,6 @@ def bio_ga(model_inputs):
     )
     
 def biomet_inf(model_inputs):
-
 
     return bio_ga(
         model_inputs

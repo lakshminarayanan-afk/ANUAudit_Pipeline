@@ -1221,6 +1221,7 @@ def run_inference_abdomen(
 
     for item in items:
         img_path = Path(item["image_path"])
+        json_path = Path(item["json_path"])
         panel = item["panel"]
         logging.info(f"Processing: {img_path.name}")
         gray = load_gray_image(str(img_path))
@@ -1245,7 +1246,8 @@ def run_inference_abdomen(
             model, panel_gray, device, threshold
         )
         print(f"HEYYYYimg_path:{img_path}")
-        mask_path = img_path.with_suffix(".npz")
+
+        mask_path = json_path.with_suffix(".npz")
         np.savez_compressed(
             mask_path,
             label_map=label_map,
