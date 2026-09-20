@@ -47,6 +47,43 @@ def generate_candidates(data):
 def build_side_candidates(predictions):
     side_candidates = []
     seen = set()
+
+    # ========================================================
+    # FIRST-RANK BLOCKING CONDITIONS
+    # If 1st prediction is either:
+    #   1. An unavailable anatomy
+    #   2. An ET plane
+    #
+    # then do NOT allow 2nd/3rd ranks to become candidates.
+    # ========================================================
+    first_prediction = predictions.get("1st")
+
+    if first_prediction:
+        first_anatomy = first_prediction.get("Anatomy")
+        first_standard_plane = first_prediction.get("Standard plane")
+
+        # ----------------------------------------------------
+        # 1. UNAVAILABLE ANATOMY
+        # ----------------------------------------------------
+        if first_anatomy in UNAVAILABLE_ANATOMY:
+            print(
+                f"[NO MODEL] 1st rank anatomy={first_anatomy} "
+                f"-> no segmentation model available, "
+                f"so 2nd/3rd candidates are blocked"
+            )
+            return []
+
+        # ----------------------------------------------------
+        # 2. ET PLANE
+        # ----------------------------------------------------
+        if first_standard_plane in Config.ET_PLANES:
+            print(
+                f"[ET PLANE] 1st rank plane={first_standard_plane} "
+                f"-> classification result, no segmentation, "
+                f"so 2nd/3rd candidates are blocked"
+            )
+            return []
+        
     for rank in RANKS:
         prediction = predictions.get(rank)
         if not prediction:
@@ -54,10 +91,11 @@ def build_side_candidates(predictions):
             continue
         anatomy = prediction.get("Anatomy")
         standard_plane = prediction.get("Standard plane")
-        # ========================================================
+        # ====================================================
         # ET PLANE
-        # Do NOT send ET planes to segmentation.
-        # ========================================================
+        # Only relevant for 2nd / 3rd here because 1st was
+        # already handled above.
+        # ====================================================
         if standard_plane in Config.ET_PLANES:
             print(
                 f"[ET PLANE] {standard_plane} "
@@ -65,9 +103,10 @@ def build_side_candidates(predictions):
                 f"no segmentation"
             )
             continue
-        # ========================================================
+        # ====================================================
         # UNAVAILABLE ANATOMY
-        # ========================================================
+        # Only skip this rank if it is 2nd / 3rd.
+        # ====================================================
         if anatomy in UNAVAILABLE_ANATOMY:
             print(
                 f"[NO MODEL] Anatomy={anatomy} "

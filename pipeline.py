@@ -35,43 +35,43 @@ modality_inference(
 # STEP 2 — READ MODALITY JSONs + GENERATE CANDIDATES
 # ============================================================
 
-# items = load_pipeline_inputs(
-#     MODALITY_OUTPUT
-# )
+items = load_pipeline_inputs(
+    MODALITY_OUTPUT
+)
 
-# print(f"\nTotal image/side items: {len(items)}")
+print(f"\nTotal image/side items: {len(items)}")
 
-# # ============================================================
-# # STEP 3 — SEGMENTATION PIPELINE
-# # ============================================================
+# ============================================================
+# STEP 3 — SEGMENTATION PIPELINE
+# ============================================================
 
-# final_results = run_segmentation_pipeline(
-#     items
-# )
+final_results = run_segmentation_pipeline(
+    items
+)
 
-# # ============================================================
-# # STEP 4 — FINAL_PLANE PIPELINE
-# # ============================================================
+# ============================================================
+# STEP 4 — FINAL_PLANE PIPELINE
+# ============================================================
  
-# final_plane(
-#     MODALITY_OUTPUT
-# )
+final_plane(
+    MODALITY_OUTPUT
+)
 
-# # ============================================================
-# # STEP 4 — BIOMET INPUT PIPELINE
-# # ============================================================
+# ============================================================
+# STEP 4 — BIOMET INPUT PIPELINE
+# ============================================================
  
-# model_inputs = prepare_plane_inputs(
-#     MODALITY_OUTPUT
-# )
+model_inputs = prepare_plane_inputs(
+    MODALITY_OUTPUT
+)
 
-# for model, inputs in model_inputs.items():
-#     print(f"{model}: {len(inputs)} images")
+for model, inputs in model_inputs.items():
+    print(f"{model}: {len(inputs)} images")
 
-# # ============================================================
-# # STEP 4 — MEASUREMENTS PIPELINE
-# # ============================================================
+# ============================================================
+# STEP 4 — MEASUREMENTS PIPELINE
+# ============================================================
  
-# measurements_pipeline(
-#     model_inputs
-# )
+measurements_pipeline(
+    model_inputs
+)

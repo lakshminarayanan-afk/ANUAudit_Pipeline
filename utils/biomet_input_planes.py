@@ -59,6 +59,9 @@ def prepare_plane_inputs(json_directory, model_plane_config=Config.BIOM_MODEL_PL
                 )
                 continue
 
+            if not plane:
+                continue
+
             if str(plane).lower() == "colour_doppler":
                 print(
                     f"[SKIP] {json_path.name} | "
@@ -68,16 +71,37 @@ def prepare_plane_inputs(json_directory, model_plane_config=Config.BIOM_MODEL_PL
                 continue
 
             plane_quality = prediction.get("plane_quality")
+
+            # ============================================================
+            # AMNIOTIC FLUID / LIQUOR EXCEPTION
+            # Always add irrespective of plane_quality | Have to remove after egtting Liquor segmenattion model
+            # ============================================================
+
+            if str(plane).strip().lower() == "amniotic fluid or liquor":
+                print(
+                    f"[ADD] {json_path.name} | "
+                    f"panel={panel} | "
+                    f"plane={plane} | "
+                    f"plane_quality={plane_quality}"
+                )
+
+                for model_name, planes in model_plane_config.items():
+                    if plane in planes:
+                        model_inputs[model_name].append({
+                            "image_path": image_path,
+                            "json_path": str(json_path),
+                            "panel": panel,
+                            "plane": plane
+                        })
+
+                continue
+
             if plane_quality != "Standard":
                 print(
                     f"[SKIP] {json_path.name} | "
                     f"panel={panel} | "
                     f"plane_quality={plane_quality}"
                 )
-                continue
-
-            plane = prediction.get("plane")
-            if not plane:
                 continue
 
             for model_name, planes in model_plane_config.items():
