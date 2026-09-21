@@ -309,11 +309,25 @@ class Seg_Config:
         ]
         BONE_STRUCTURES: List[str] = ["Humerus", "Radius", "Ulna", "Femur", "Tibia", "Fibula"]
         LABEL_MAP: Dict[int, str] = {
-            0: "background",
-            1: "femur",
-            2: "humerus",
+            0: "Background",
+            1: "Femur",
+            2: "Humerus",
             3: "Radius and Ulna",
             4: "Tibia and Fibula",
+        }
+        BONE_CLASS_ORDER = ("Femur", "Humerus", "Radius and Ulna", "Tibia and Fibula")
+        BONE_LABEL_TO_SEG_CLASS= {"Femur": 1, "Humerus": 2, "Radius and Ulna": 3, "Tibia and Fibula": 4}
+        MIN_COMPONENT_THRESHOLDS = {
+            "Femur": 750,
+            "Humerus": 750,
+            "Radius and Ulna": 750,
+            "Tibia and Fibula": 500,
+        }
+        MORPHOLOGY_CONFIG = {
+            "Femur": {"kernel_size": 7, "max_hole_area": 1000},
+            "Humerus": {"kernel_size": 7, "max_hole_area": 1000},
+            "Radius and Ulna": {"kernel_size": 5, "max_hole_area": 700},
+            "Tibia and Fibula": {"kernel_size": 7, "max_hole_area": 1000},
         }
         NUM_SEG_CLASSES: int = len(LABEL_MAP)
         NUM_BONE_CLASSES: int = len(LABEL_MAP) - 1

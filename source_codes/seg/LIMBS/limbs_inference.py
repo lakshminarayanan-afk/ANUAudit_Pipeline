@@ -291,7 +291,7 @@ def derive_gt_bone_label(mask: np.ndarray) -> int | None:
     if not fg:
         return None
     dominant_val = max(fg, key=lambda vc: vc[1])[0]
-    return int(dominant_val) - 1  # femur=0, humerus=1, radius_ulna=2, tibia_fibula=3
+    return int(dominant_val) - 1  # Femur=0, Humerus=1, Radius and Ulna=2, Tibia and Fibula=3
 
 
 def find_gt_mask_path(masks_dir: Path | None, stem: str) -> Path | None:
@@ -334,22 +334,12 @@ def run_model(model: torch.nn.Module, tensor: torch.Tensor, device: torch.device
 #  LIMB POST-PROCESSING (unchanged math)
 # ═══════════════════════════════════════════════════════════════════════
 
-BONE_CLASS_ORDER = ("femur", "humerus", "radius_ulna", "tibia_fibula")
-BONE_LABEL_TO_SEG_CLASS = {"femur": 1, "humerus": 2, "radius_ulna": 3, "tibia_fibula": 4}
+BONE_CLASS_ORDER = CONFIG.BONE_CLASS_ORDER
+BONE_LABEL_TO_SEG_CLASS = CONFIG.BONE_LABEL_TO_SEG_CLASS
 
-MIN_COMPONENT_THRESHOLDS = {
-    "femur": 750,
-    "humerus": 750,
-    "radius_ulna": 750,
-    "tibia_fibula": 500,
-}
+MIN_COMPONENT_THRESHOLDS = CONFIG.MIN_COMPONENT_THRESHOLDS
 
-MORPHOLOGY_CONFIG = {
-    "femur": {"kernel_size": 7, "max_hole_area": 1000},
-    "humerus": {"kernel_size": 7, "max_hole_area": 1000},
-    "radius_ulna": {"kernel_size": 5, "max_hole_area": 700},
-    "tibia_fibula": {"kernel_size": 7, "max_hole_area": 1000},
-}
+MORPHOLOGY_CONFIG = CONFIG.MORPHOLOGY_CONFIG
 
 CLASS_COLORS_BGR = {
     1: (60, 60, 255),      # Femur RGB = (255, 60, 60)
@@ -394,7 +384,7 @@ def replace_small_wrong_class_components(pred_mask, min_ratio=1.0, connectivity=
 
 def remove_edge_protrusions(pred_mask, opening_sizes=None):
     if opening_sizes is None:
-        opening_sizes = {"femur": 5, "humerus": 5, "radius_ulna": 3, "tibia_fibula": 5}
+        opening_sizes = {"Femur": 5, "Humerus": 5, "Radius and Ulna": 3, "Tibia and Fibula": 5}
     cleaned = pred_mask.copy()
     for label, seg_class in BONE_LABEL_TO_SEG_CLASS.items():
         kernel_size = int(opening_sizes.get(label, 0))
@@ -560,9 +550,9 @@ def compute_all_class_metrics(pred_mask: np.ndarray, gt_mask: np.ndarray) -> dic
 #  it has nothing to do with input folder organisation.
 # ═══════════════════════════════════════════════════════════════════════
 
-PLANE_CODE_FOR_LABEL = {"femur": "Femur", "humerus": "Humerus", "radius_ulna": "Radius and Ulna", "tibia_fibula": "Tibia and Fibula"}
-DISPLAY_NAME_FOR_LABEL = {"femur": "Femur", "humerus": "Humerus",
-                          "radius_ulna": "Radius_Ulna", "tibia_fibula": "Tibia_Fibula"}
+PLANE_CODE_FOR_LABEL = {"Femur": "Femur", "Humerus": "Humerus", "Radius and Ulna": "Radius and Ulna", "Tibia and Fibula": "Tibia and Fibula"}
+DISPLAY_NAME_FOR_LABEL = {"Femur": "Femur", "Humerus": "Humerus",
+                          "Radius and Ulna": "Radius and Ulna", "Tibia and Fibula": "Tibia and Fibula"}
 
 
 def determine_final_bone(pred_mask_final: np.ndarray) -> tuple[int | None, str | None]:
@@ -907,8 +897,8 @@ def _process_images(
 
         logging.info(f"    GT={gt_bone_name.upper() if gt_bone_name else 'NA'}  "
                      f"Pred={pred_bone_name.upper()}  "
-                     f"Femur={probs_dict['femur']:.4f} Humerus={probs_dict['humerus']:.4f} "
-                     f"Radius_Ulna={probs_dict['radius_ulna']:.4f} Tibia_Fibula={probs_dict['tibia_fibula']:.4f}")
+                     f"Femur={probs_dict['Femur']:.4f} Humerus={probs_dict['Humerus']:.4f} "
+                     f"Radius and Ulna={probs_dict['Radius and Ulna']:.4f} Tibia and Fibula={probs_dict['Tibia and Fibula']:.4f}")
 
     return {"n_images": n_images, "n_images_with_gt": n_with_gt}
 
@@ -1046,7 +1036,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(
         description=(
             "Single-folder limb-bone segmentation + classification INFERENCE "
-            "(femur / humerus / radius_ulna / tibia_fibula), no plane_dirs. "
+            "(Femur / Humerus / Radius and Ulna / Tibia and Fibula), no plane_dirs. "
             "Point --image_dir at ONE folder (scanned recursively) and every image's bone "
             "type is detected automatically by the model - PNG/JPEG/BMP/TIFF/DICOM supported. "
             "--masks_dir is entirely OPTIONAL: omit it to run pure inference (predictions + "
