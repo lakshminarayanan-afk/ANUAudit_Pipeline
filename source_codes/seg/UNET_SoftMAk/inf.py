@@ -183,7 +183,7 @@ def classify_plane(struct_results: list[dict]) -> dict:
     passing = [(p, f) for p, f in scores.items() if f >= PLANE_MATCH_THRESH]
 
     if not passing:
-        best_plane = "Unclassified"
+        best_plane = "Unknown"
         quality    = "N/A"
         best_frac  = max(scores.values()) if scores else 0.0
         best_conf  = 0.0
@@ -876,7 +876,7 @@ def build_plane_candidates(plane_info: dict) -> list[str]:
     candidates are sorted by score, descending.
     """
     scores = plane_info["scores"]
-    if plane_info["plane"] == "Unclassified":
+    if plane_info["plane"] == "Unknown":
         return []
     candidates = [p for p, s in scores.items() if s >= PLANE_MATCH_THRESH]
     if plane_info["plane"] not in candidates:
@@ -1074,7 +1074,7 @@ def run_inference_head(
 
         # ── local visibility ─────────────────────────────────────────────
         struct_results, struct_summary = assess_structure_visibility(
-            gray_orig   = raw_gray,
+            gray_orig   = panel_gray,
             inner_map   = inner_map,
             calv_bin    = calv_bin,
             confidences = confidences,
@@ -1099,8 +1099,9 @@ def run_inference_head(
         })
 
         # ── polygons (FINAL mask only, original image coordinates) ────────
-        orig_h, orig_w = raw_gray.shape[:2]
-        polygons = build_polygons_from_final_mask(inner_map, calv_bin, orig_h, orig_w)
+        # orig_h, orig_w = raw_gray.shape[:2]
+        panel_h, panel_w = panel_gray.shape[:2]
+        polygons = build_polygons_from_final_mask(inner_map, calv_bin, panel_h, panel_w)
 
         csv_rows.append(_build_csv_row(img_path, plane_info, struct_summary))
         json_entry = build_per_image_json_entry(
@@ -1196,27 +1197,27 @@ def run_inference_head(
 
 
 
-if __name__ == "__main__":
-    parser = argparse.ArgumentParser(
-        description="Deployment inference — dual-head segmentation model"
-    )
-    parser.add_argument("--checkpoint",     default=Config.INFER_CHECKPOINT)
-    parser.add_argument("--image_dir",      default=Config.INFER_IMAGE_DIR)
-    parser.add_argument("--output_dir",     default=Config.INFER_OUTPUT_DIR)
-    parser.add_argument("--conf_thresh",    type=float, default=0.60)
-    parser.add_argument("--min_pixels",     type=int,   default=100)
-    parser.add_argument("--calv_threshold", type=float, default=0.85)
-    parser.add_argument("--calv_min_px",    type=int,   default=1000)
-    parser.add_argument("--device",         default="cuda")
-    args = parser.parse_args()
+# if __name__ == "__main__":
+#     parser = argparse.ArgumentParser(
+#         description="Deployment inference — dual-head segmentation model"
+#     )
+#     parser.add_argument("--checkpoint",     default=Config.INFER_CHECKPOINT)
+#     parser.add_argument("--image_dir",      default=Config.INFER_IMAGE_DIR)
+#     parser.add_argument("--output_dir",     default=Config.INFER_OUTPUT_DIR)
+#     parser.add_argument("--conf_thresh",    type=float, default=0.60)
+#     parser.add_argument("--min_pixels",     type=int,   default=100)
+#     parser.add_argument("--calv_threshold", type=float, default=0.85)
+#     parser.add_argument("--calv_min_px",    type=int,   default=1000)
+#     parser.add_argument("--device",         default="cuda")
+#     args = parser.parse_args()
 
-    run_inference(
-        checkpoint     = args.checkpoint,
-        image_dir      = args.image_dir,
-        output_dir     = args.output_dir,
-        conf_thresh    = args.conf_thresh,
-        min_pixels     = args.min_pixels,
-        calv_threshold = args.calv_threshold,
-        calv_min_px    = args.calv_min_px,
-        device_str     = args.device,
-    )
+#     run_inference(
+#         checkpoint     = args.checkpoint,
+#         image_dir      = args.image_dir,
+#         output_dir     = args.output_dir,
+#         conf_thresh    = args.conf_thresh,
+#         min_pixels     = args.min_pixels,
+#         calv_threshold = args.calv_threshold,
+#         calv_min_px    = args.calv_min_px,
+#         device_str     = args.device,
+#     )

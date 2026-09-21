@@ -4011,88 +4011,88 @@ def run_inference_face(
 # CLI
 # ═══════════════════════════════════════════════════════════════════════
 
-if __name__ == "__main__":
+# if __name__ == "__main__":
 
-    parser = argparse.ArgumentParser(
+#     parser = argparse.ArgumentParser(
 
-        description=(
-            "Generic-framework inference "
-            "for the 14-channel "
-            "face/nose/mouth U-Net++ "
-            "model. Supports "
-            "PNG/JPEG/BMP/TIFF/DICOM input."
-        )
-    )
+#         description=(
+#             "Generic-framework inference "
+#             "for the 14-channel "
+#             "face/nose/mouth U-Net++ "
+#             "model. Supports "
+#             "PNG/JPEG/BMP/TIFF/DICOM input."
+#         )
+#     )
 
-    parser.add_argument(
-        "--checkpoint",
-        default=CHECKPOINT_PATH_DEFAULT,
-        help=(
-            "Path to a "
-            "best_model.pth checkpoint."
-        ),
-    )
+#     parser.add_argument(
+#         "--checkpoint",
+#         default=CHECKPOINT_PATH_DEFAULT,
+#         help=(
+#             "Path to a "
+#             "best_model.pth checkpoint."
+#         ),
+#     )
 
-    parser.add_argument(
-        "--image_dir",
-        required=True,
-        help=(
-            "Folder to scan recursively "
-            "for images/DICOM."
-        ),
-    )
+#     parser.add_argument(
+#         "--image_dir",
+#         required=True,
+#         help=(
+#             "Folder to scan recursively "
+#             "for images/DICOM."
+#         ),
+#     )
 
-    parser.add_argument(
-        "--output_dir",
-        default=OUTPUT_DIR_DEFAULT,
-        help=(
-            "Where visualisations/ "
-            "and metrics/ for this run go."
-        ),
-    )
+#     parser.add_argument(
+#         "--output_dir",
+#         default=OUTPUT_DIR_DEFAULT,
+#         help=(
+#             "Where visualisations/ "
+#             "and metrics/ for this run go."
+#         ),
+#     )
 
-    parser.add_argument(
-        "--masks_dir",
-        default=None,
-        help=(
-            "Optional folder of GT .npz masks."
-        ),
-    )
+#     parser.add_argument(
+#         "--masks_dir",
+#         default=None,
+#         help=(
+#             "Optional folder of GT .npz masks."
+#         ),
+#     )
 
-    # parser.add_argument(
-    #     "--num_vis_images",
-    #     type=int,
-    #     default=NUM_VIS_IMAGES_DEFAULT
-    # )
+#     # parser.add_argument(
+#     #     "--num_vis_images",
+#     #     type=int,
+#     #     default=NUM_VIS_IMAGES_DEFAULT
+#     # )
 
-    parser.add_argument(
-        "--seed",
-        type=int,
-        default=42
-    )
+#     parser.add_argument(
+#         "--seed",
+#         type=int,
+#         default=42
+#     )
 
-    parser.add_argument(
-        "--device",
-        default="cuda",
-        help="cuda or cpu"
-    )
+#     parser.add_argument(
+#         "--device",
+#         default="cuda",
+#         help="cuda or cpu"
+#     )
 
-    args = parser.parse_args()
+#     args = parser.parse_args()
 
-    run_inference_face(
+#     run_inference_face(
 
-        checkpoint=args.checkpoint,
+#         checkpoint=args.checkpoint,
 
-        image_dir=args.image_dir,
+#         image_dir=args.image_dir,
 
-        output_dir=args.output_dir,
+#         output_dir=args.output_dir,
 
-        masks_dir=args.masks_dir,
+#         masks_dir=args.masks_dir,
 
-        # num_vis_images=args.num_vis_images,
+#         # num_vis_images=args.num_vis_images,
 
 
-        seed=args.seed,
+#         seed=args.seed,
 
-        device_str=args.device,
-    )
+#         device_str=args.device,
+#     )
