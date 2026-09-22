@@ -1394,14 +1394,12 @@ class FL:
                     # Final result
                     # ------------------------------------------------
                     elif failed_points:
-
                         audit["RESULTS"] = (
                             "MISPLACED CALIPERS: " +
                             ", ".join(failed_points)
                         )
 
                     else:
-
                         audit["RESULTS"] = "CORRECT"
 
         if len(calipers) != 2:

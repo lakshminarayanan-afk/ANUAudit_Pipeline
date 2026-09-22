@@ -56,7 +56,7 @@ def run_face_model(items):
 
 def run_spine_model(items):
     return run_inference_spine(
-                checkpoint= Config.SEG_MODEL_FACE,
+                checkpoint= Config.SEG_MODEL_SPINE,
                 items=items,
                 conf_thresh = Config_face.INFER_CONF_THRESH,
                 min_pixels= 50,

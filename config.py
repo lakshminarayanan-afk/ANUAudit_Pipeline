@@ -42,7 +42,7 @@ class Config:
     SEG_MODEL_ABD = r"/home/htic/MLN/PIPELINE/ANUAudit_Pipeline/MAIN_WEIGHTS/SEG/abdomen_best.pth"
     SEG_MODEL_LIMBS = r"/home/htic/MLN/PIPELINE/ANUAudit_Pipeline/MAIN_WEIGHTS/SEG/limbs_best.pt"
     SEG_MODEL_FACE = r"/home/htic/MLN/PIPELINE/ANUAudit_Pipeline/MAIN_WEIGHTS/SEG/face_best.pt"
-    SEG_MODEL_FACE = r"/home/htic/MLN/PIPELINE/ANUAudit_Pipeline/MAIN_WEIGHTS/SEG/spine_best.pth"
+    SEG_MODEL_SPINE = r"/home/htic/MLN/PIPELINE/ANUAudit_Pipeline/MAIN_WEIGHTS/SEG/spine_best.pth"
 
     ## BIOMETRY
     BI0MET_CSV_PATH = r"/home/htic/MLN/PIPELINE/ANUAudit_Pipeline/MAIN_WEIGHTS/AUTOMATE/coefficientsGlobalV3.csv"
