@@ -127,13 +127,13 @@ class UNetMultiPlane(nn.Module):
 
         # ── Three independent output heads (1x1 conv, same pattern the
         # fetal model.py used to add calv_conv alongside out_conv) ────────
-        self.out_conv_coronal            = nn.Conv2d(f, ncp["coronal"],              kernel_size=1)
+        self.out_conv_coronal            = nn.Conv2d(f, ncp["Coronal Spine"],              kernel_size=1)
         self.out_conv_sagittal_exclusive = nn.Conv2d(f, ncp["sagittal_exclusive"],    kernel_size=1)
         # +1 input channel: a normalized vertical-position map, concatenated
         # only here so the region head can tell cervical (top) apart from
         # sacral (bottom) — the other heads/encoder are untouched.
-        self.out_conv_sagittal_regions   = nn.Conv2d(f + 1, Config.NUM_REGIONS_PER_PLANE["sagittal"], kernel_size=1)
-        self.out_conv_full_body          = nn.Conv2d(f, ncp["full_body_coronal"],     kernel_size=1)
+        self.out_conv_sagittal_regions   = nn.Conv2d(f + 1, Config.NUM_REGIONS_PER_PLANE["Sagittal Spine"], kernel_size=1)
+        self.out_conv_full_body          = nn.Conv2d(f, ncp["Full Body Coronal View"],     kernel_size=1)
 
         self._init_weights()
 
@@ -183,10 +183,10 @@ class UNetMultiPlane(nn.Module):
         d_region = torch.cat([d, ypos], dim=1)
 
         return {
-            "coronal":             self.out_conv_coronal(d),
+            "Coronal Spine":             self.out_conv_coronal(d),
             "sagittal_exclusive":  self.out_conv_sagittal_exclusive(d),
             "sagittal_regions":    self.out_conv_sagittal_regions(d_region),
-            "full_body_coronal":   self.out_conv_full_body(d),
+            "Full Body Coronal View":   self.out_conv_full_body(d),
         }
 
 

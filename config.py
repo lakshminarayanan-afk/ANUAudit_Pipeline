@@ -30,40 +30,40 @@ class Config:
 
     DEVICE = "cuda"
 
+    PROJECT_ROOT = Path("/home/htic/MLN/PIPELINE/ANUAudit_Pipeline")
+    MAIN_WEIGHTS = PROJECT_ROOT / "MAIN_WEIGHTS"
+
     ## ML
-    # CLASS_MODEL_PATH= r"C:/Users/laksh/ANU/MAIN_WEIGHTS/swa_final_27-classes-DACL+ContrLoss+DeeperClsHead#1.pth"
-    CLASS_MODEL_PATH = r"/home/htic/MLN/PIPELINE/ANUAudit_Pipeline/MAIN_WEIGHTS/CLASS/hierarchicalmodel27 (1).pt"
-    COLOR_DOPPLER_MODEL_PATH=r"/home/htic/MLN/PIPELINE/ANUAudit_Pipeline/MAIN_WEIGHTS/COLOR_DOPPLER/color_doppler_model.pth"
-    MODALITY_MODEL_PATH = r"/home/htic/MLN/PIPELINE/ANUAudit_Pipeline/MAIN_WEIGHTS/MODALITY/modality_model.pth"
+    CLASS_MODEL_PATH = MAIN_WEIGHTS / "CLASS" / "hierarchicalmodel27 (1).pt"
+    COLOR_DOPPLER_MODEL_PATH = MAIN_WEIGHTS / "COLOR_DOPPLER" / "color_doppler_model.pth"
+    MODALITY_MODEL_PATH = MAIN_WEIGHTS / "MODALITY" / "modality_model.pth"
 
     ## SEG
-    # SEG_MODEL_PATH_MEDSAM= '/home/htic/MLN/MAIN_WEIGHTS/best_model.pth'
-    SEG_MODEL_HEAD= r"/home/htic/MLN/PIPELINE/ANUAudit_Pipeline/MAIN_WEIGHTS/SEG/best_model_unet.pth"
-    SEG_MODEL_ABD = r"/home/htic/MLN/PIPELINE/ANUAudit_Pipeline/MAIN_WEIGHTS/SEG/abdomen_best.pth"
-    SEG_MODEL_LIMBS = r"/home/htic/MLN/PIPELINE/ANUAudit_Pipeline/MAIN_WEIGHTS/SEG/limbs_best.pt"
-    SEG_MODEL_FACE = r"/home/htic/MLN/PIPELINE/ANUAudit_Pipeline/MAIN_WEIGHTS/SEG/face_best.pt"
-    SEG_MODEL_SPINE = r"/home/htic/MLN/PIPELINE/ANUAudit_Pipeline/MAIN_WEIGHTS/SEG/spine_best.pth"
+    SEG_MODEL_HEAD = MAIN_WEIGHTS / "SEG" / "best_model_unet.pth"
+    SEG_MODEL_ABD = MAIN_WEIGHTS / "SEG" / "abdomen_best.pth"
+    SEG_MODEL_LIMBS = MAIN_WEIGHTS / "SEG" / "limbs_best.pt"
+    SEG_MODEL_FACE = MAIN_WEIGHTS / "SEG" / "face_best.pt"
+    SEG_MODEL_SPINE = MAIN_WEIGHTS / "SEG" / "spine_best.pth"
 
     ## BIOMETRY
-    BI0MET_CSV_PATH = r"/home/htic/MLN/PIPELINE/ANUAudit_Pipeline/MAIN_WEIGHTS/AUTOMATE/coefficientsGlobalV3.csv"
-    #BPD
-    # UNET_CHECKPOINT_PATH = r"/home/htic/MLN/PIPELINE/ANUAudit_Pipeline/MAIN_WEIGHTS/AUTOMATE/head/head_unet/best_model_head.pth"
-    UNET_CHECKPOINT_PATH = r"/home/htic/MLN/PIPELINE/ANUAudit_Pipeline/MAIN_WEIGHTS/SEG/best_model_unet.pth"
-    #FL
-    FEMUR_CHECKPOINT= r"/home/htic/MLN/PIPELINE/ANUAudit_Pipeline/MAIN_WEIGHTS/AUTOMATE/femur/new_fuvai_best.pt"
+    BI0MET_CSV_PATH = MAIN_WEIGHTS / "AUTOMATE" / "coefficientsGlobalV3.csv"
+    # BPD
+    UNET_CHECKPOINT_PATH = MAIN_WEIGHTS / "SEG" / "best_model_unet.pth"
+    # FL
+    FEMUR_CHECKPOINT = MAIN_WEIGHTS / "AUTOMATE" / "femur" / "new_fuvai_best.pt"
     # ABD
-    ABD_CHECKPOINT= r"/home/htic/MLN/PIPELINE/ANUAudit_Pipeline/MAIN_WEIGHTS/AUTOMATE/abd/best_ac_skin_line.pt"
+    ABD_CHECKPOINT = MAIN_WEIGHTS / "AUTOMATE" / "abd" / "best_ac_skin_line.pt"
     # SDVP
-    SDVP_LIQUOR_CHECKPOINT_PATH = r"/home/htic/MLN/PIPELINE/ANUAudit_Pipeline/MAIN_WEIGHTS/AUTOMATE/liquor/liquor_best_model.ckpt"
-    SDVP_PATH_FETALCLIP_CONFIG = r"/home/htic/MLN/PIPELINE/ANUAudit_Pipeline/source_codes/biometry/model/liquor/FetalCLIP_config.json"
-    SDVP_FETALCLIP_WEIGHT = r"/home/htic/MLN/PIPELINE/ANUAudit_Pipeline/MAIN_WEIGHTS/AUTOMATE/liquor/FetalCLIP_weights.pt"
+    SDVP_LIQUOR_CHECKPOINT_PATH = MAIN_WEIGHTS / "AUTOMATE" / "liquor" / "liquor_best_model.ckpt"
+    SDVP_PATH_FETALCLIP_CONFIG = PROJECT_ROOT / "source_codes" / "biometry" / "model" / "liquor" / "FetalCLIP_config.json"
+    SDVP_FETALCLIP_WEIGHT = MAIN_WEIGHTS / "AUTOMATE" / "liquor" / "FetalCLIP_weights.pt"
 
     # AUDIT
-    YOLO_AC_BPD= r"/home/htic/MLN/PIPELINE/ANUAudit_Pipeline/MAIN_WEIGHTS/AUDIT/yolo_ac_bpd.pt"
-    YOLO_FL= r"/home/htic/MLN/PIPELINE/ANUAudit_Pipeline/MAIN_WEIGHTS/AUDIT/yolo_fl.pt"
-    BPD_MASK= r"/home/htic/MLN/PIPELINE/ANUAudit_Pipeline/MAIN_WEIGHTS/AUDIT/mask_bpd.pth"
-    AC_MASK= r"/home/htic/MLN/PIPELINE/ANUAudit_Pipeline/MAIN_WEIGHTS/AUDIT/mask_ac.pt"
-    FL_MASK= r"/home/htic/MLN/PIPELINE/ANUAudit_Pipeline/MAIN_WEIGHTS/AUDIT/mask_fl.pt"
+    YOLO_AC_BPD = MAIN_WEIGHTS / "AUDIT" / "yolo_ac_bpd.pt"
+    YOLO_FL = MAIN_WEIGHTS / "AUDIT" / "yolo_fl.pt"
+    BPD_MASK = MAIN_WEIGHTS / "AUDIT" / "mask_bpd.pth"
+    AC_MASK = MAIN_WEIGHTS / "AUDIT" / "mask_ac.pt"
+    FL_MASK = MAIN_WEIGHTS / "AUDIT" / "mask_fl.pt"
 
     ET_PLANES = { "Transverse Spine", "Renal Arteries", "Coronal Kidneys", "RSA", "Both Feet", "Open Hands", "Premaxillary Triangle", "Placenta", "Amniotic Fluid or Liquor", "Umbilical Artery", "Situs", "Cervix" }
     COLOUR_DOPPLER = "colour_doppler"
@@ -542,8 +542,8 @@ class Seg_Config:
             "Tibia and Fibula": 1,
         }
 
-
     class Spine:
+        
         # ==============================
         # PLANES
         # ==============================
@@ -623,7 +623,7 @@ class Seg_Config:
 
         NUM_CLASSES_PER_PLANE = {
             "Coronal Spine":              10,  # 9 structures + background
-            "Sagittal Spine":    4,  # skin line + 2 oss. centers + background
+            "sagittal_exclusive":    4,  # skin line + 2 oss. centers + background
             "Full Body Coronal View":    11,  # 10 structures + background (Lungs merged)
         }
 
@@ -751,7 +751,7 @@ class Seg_Config:
             "Full Body Coronal View": {
                 "Left Lung":  "Lungs",
                 "Right Lung": "Lungs",
-            }
+                }
         }
 
         # Maps: plane -> {structure_name: class_idx (1-based; 0=background)}
