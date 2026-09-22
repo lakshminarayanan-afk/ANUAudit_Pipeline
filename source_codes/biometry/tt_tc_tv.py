@@ -1149,7 +1149,17 @@ def measure_cm(
     # )
 
     return {
-        "line_length": cm_length
+        "line_length": float(cm_length),
+        "points": {
+            "start": [
+                float(pt1[0]),
+                float(pt1[1])
+            ],
+            "end": [
+                float(pt2[0]),
+                float(pt2[1])
+            ]
+        }
     }
 
 
@@ -1537,12 +1547,20 @@ def process_single_image_tc(image_path, model_unet):
         # os.path.join(cm_meas_dir, f"{stem}_cm.png"),
     )
     cm_px = cm_raw["line_length"] if cm_raw else None
+    cm_points = cm_raw["points"] if cm_raw else None
 
     tcd_result, units = px_to_output_value(tcd_px, pixel_spacing, is_dicom)
     cm_result, _       = px_to_output_value(cm_px,  pixel_spacing, is_dicom)
 
-    return tcd_result, cm_result, units, tcd_points
-
+    return (
+        tcd_result,
+        cm_result,
+        units,
+        {
+            "tcd": tcd_points,
+            "cm": cm_points,
+        }
+    )
 
 # =========================================================================
 # PROCESS SINGLE TV IMAGE  (LV via UNet)

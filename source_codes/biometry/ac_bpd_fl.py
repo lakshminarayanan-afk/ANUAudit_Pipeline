@@ -529,24 +529,27 @@ def process_single_file_bpd(dicom_path=None, image_path=None):
         confidence_score,
         deviation_val,
         {
-            "ofd_start": (
-                list(map(float, ofd_pts[0]))
-                if len(ofd_pts) >= 2 else None
-            ),
-            "ofd_end": (
-                list(map(float, ofd_pts[-1]))
-                if len(ofd_pts) >= 2 else None
-            ),
-            "bpd_top": (
-                list(map(float, bpd_pts["top"]))
-                if bpd_pts["top"] is not None else None
-            ),
-            "bpd_bottom": (
-                list(map(float, bpd_pts["bottom"]))
-                if bpd_pts["bottom"] is not None else None
-            ),
+            "bpd": {
+                "start": (
+                    list(map(float, bpd_pts["top"]))
+                    if bpd_pts["top"] is not None else None
+                ),
+                "end": (
+                    list(map(float, bpd_pts["bottom"]))
+                    if bpd_pts["bottom"] is not None else None
+                ),
+            },
+            "ofd": {
+                "start": (
+                    list(map(float, ofd_pts[0]))
+                    if len(ofd_pts) >= 2 else None
+                ),
+                "end": (
+                    list(map(float, ofd_pts[-1]))
+                    if len(ofd_pts) >= 2 else None
+                ),
+            },
         }
-    )
 
 
 #########################################################################
@@ -1233,7 +1236,7 @@ def bio_ga(model_inputs):
                 "is_dcm": is_dicom,
                 "image_path": item["image_path"],
             }
-            
+
     # =========================================================
     # FEMUR / FL
     # =========================================================

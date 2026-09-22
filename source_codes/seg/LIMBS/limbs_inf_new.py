@@ -1,3 +1,52 @@
+"""
+infer/infer.py
+==============
+
+Complete Cls -> YOLO26m Det -> Binary Swin-UNet Seg inference.
+
+Pipeline
+--------
+1. Frozen existing hierarchical ConvNeXt classifier
+2. YOLO26m detector
+3. Per-bone confidence extraction
+4. 60% classifier + 40% YOLO weighted fusion
+5. Select fused target bone
+6. Use ALL spatially separate YOLO boxes as ROIs
+   (YOLO class is NOT a segmentation-class gate)
+7. Binary Swin-UNet segments the FUSED bone inside every YOLO ROI
+8. Strong smooth post-processing:
+      - remove tiny blobs
+      - elliptical opening
+      - elliptical closing
+      - fill holes
+      - final small-component filtering
+      - intensity-guided boundary recovery
+      - Gaussian boundary smoothing
+      - NO largest-component filtering
+9. Restore masks to original image size
+10. Standard / Non-Standard / UNKNOWN classification
+11. Visualization:
+      LEFT  = original image
+      RIGHT = prediction
+      TOP   = classifier / YOLO / fused confidence
+      BOTTOM = Standard / Non-Standard / UNKNOWN + short reason
+12. inference_results.json (aggregate run_summary + images)
+13. inference_summary.json (backward-compatible image-list copy)
+
+Classification rule
+-------------------
+UNKNOWN
+    -> no segmentation mask was produced
+
+NON-STANDARD
+    -> a mask exists, but its geometry does not satisfy
+       the Standard requirements
+
+STANDARD
+    -> a mask exists and its geometry satisfies
+       the Standard requirements
+"""
+
 import argparse
 import csv
 import json
@@ -3203,243 +3252,640 @@ def _top_plane_candidates(
 # SUMMARY
 # ============================================================
 
-def make_summary_row(
-    image_path,
-    result,
-    output_path,
+# Same visibility thresholds used by the HEAD JSON format.
+STRUCTURE_THRESHOLDS = {
+    "_default": {
+        "contrast": 12.0,
+        "blur": 15.0,
+        "conf": 0.50,
+    },
+}
+
+
+def _get_thresh(name, metric):
+    """Return the HEAD-style threshold for a limb structure."""
+    cfg = STRUCTURE_THRESHOLDS.get(
+        str(name),
+        STRUCTURE_THRESHOLDS["_default"],
+    )
+    return float(
+        cfg.get(
+            metric,
+            STRUCTURE_THRESHOLDS["_default"][metric],
+        )
+    )
+
+
+def _qual_contrast(value, name):
+    return (
+        "good"
+        if float(value) >= _get_thresh(name, "contrast")
+        else "low"
+    )
+
+
+def _qual_blur(value, name):
+    return (
+        "sharp"
+        if float(value) >= _get_thresh(name, "blur")
+        else "blurry"
+    )
+
+
+def _qual_conf(value, name):
+    return (
+        "high"
+        if float(value) >= _get_thresh(name, "conf")
+        else "low"
+    )
+
+
+def title_case_structure(name):
+    """
+    Match the HEAD JSON naming style.
+
+    Limb names such as radius/ulna and tibia/fibula are written in
+    title case while preserving the slash-separated form.
+    """
+    if name is None:
+        return "Unknown"
+
+    text = str(name).strip()
+    if not text:
+        return "Unknown"
+
+    return "/".join(
+        part.strip().title()
+        for part in text.split("/")
+    )
+
+
+def _calculate_limb_visibility(
+    img_path,
+    segmentation_mask,
+    confidence,
+    structure_name,
 ):
-    classifier_result = result.get(
-        "classifier_result",
-        {},
-    )
+    """
+    Calculate the HEAD-style local visibility values for a limb mask.
 
-    target_bone = result.get(
-        "target_bone"
-    )
+    This is JSON metadata only. It does not modify the segmentation mask
+    or any part of the classifier -> YOLO -> fusion -> segmenter pipeline.
+    """
+    try:
+        gray_orig = load_grayscale_image(
+            Path(img_path)
+        )
 
-    target_name = BONE_NAMES.get(
-        target_bone,
-        "Unknown",
-    )
+        if gray_orig is None:
+            return {
+                "local_contrast": 0.0,
+                "local_blur": 0.0,
+            }
 
-    segmentation_mask = result.get(
-        "segmentation_mask"
-    )
+        mask_orig = np.asarray(
+            segmentation_mask
+        )
 
-    shapes = mask_to_polygons(
-        segmentation_mask,
-        target_bone,
-    )
+        if mask_orig.ndim > 2:
+            mask_orig = np.squeeze(mask_orig)
 
-    standard_status = result.get(
-        "standard_status",
-        "UNKNOWN",
-    )
+        if mask_orig.shape != gray_orig.shape:
+            mask_orig = cv2.resize(
+                mask_orig.astype(np.uint8),
+                (
+                    gray_orig.shape[1],
+                    gray_orig.shape[0],
+                ),
+                interpolation=cv2.INTER_NEAREST,
+            )
 
-    standard_details = result.get(
-        "standard_details",
-        {},
-    ) or {}
+        mask_orig = (
+            mask_orig > 0
+        ).astype(np.uint8)
 
-    components = standard_details.get(
-        "components",
-        [],
-    ) or []
+        if np.count_nonzero(mask_orig) < 30:
+            return {
+                "local_contrast": 0.0,
+                "local_blur": 0.0,
+            }
 
-    valid_components = standard_details.get(
-        "valid_components",
-        [],
-    ) or []
+        dilation_px = 21
+        kernel = cv2.getStructuringElement(
+            cv2.MORPH_ELLIPSE,
+            (dilation_px, dilation_px),
+        )
 
-    bone_ok = bool(
-        segmentation_mask is not None
-        and np.count_nonzero(segmentation_mask) > 0
-    )
+        dilated = cv2.dilate(
+            mask_orig,
+            kernel,
+        )
 
-    geometry_ok = bool(
-        len(valid_components) > 0
-    )
+        bg_ring = (
+            (
+                dilated.astype(np.int32)
+                - mask_orig.astype(np.int32)
+            ) > 0
+        ).astype(np.uint8)
 
-    shape_ok = bool(
-        len(shapes) > 0
-    )
+        struct_px = gray_orig[
+            mask_orig > 0
+        ].astype(np.float32)
 
-    # Head-style JSON first, followed by all of the existing CDS fields.
-    row = {
-        "image_path": str(image_path),
+        bg_px = (
+            gray_orig[
+                bg_ring > 0
+            ].astype(np.float32)
+            if bg_ring.sum() > 0
+            else struct_px
+        )
 
-        "predicted_plane": target_name,
+        struct_mean = float(
+            struct_px.mean()
+        )
+        bg_mean = float(
+            bg_px.mean()
+        )
 
-        "plane_info": {
-            "predicted_plane": target_name,
-            "classifier_plane": classifier_result.get(
-                "top_plane_name",
-                "unknown",
+        local_contrast = abs(
+            struct_mean - bg_mean
+        )
+
+        x, y, w, h = cv2.boundingRect(
+            mask_orig
+        )
+
+        pad = 10
+
+        y1 = max(
+            0,
+            y - pad,
+        )
+        y2 = min(
+            gray_orig.shape[0],
+            y + h + pad,
+        )
+        x1 = max(
+            0,
+            x - pad,
+        )
+        x2 = min(
+            gray_orig.shape[1],
+            x + w + pad,
+        )
+
+        crop = gray_orig[
+            y1:y2,
+            x1:x2,
+        ]
+
+        local_blur = float(
+            cv2.Laplacian(
+                crop,
+                cv2.CV_64F,
+            ).var()
+        )
+
+        return {
+            "local_contrast": round(
+                local_contrast,
+                2,
             ),
-            "plane_match_frac": float(
-                classifier_result.get(
-                    "bone_probs",
-                    {},
-                ).get(
-                    target_bone,
-                    0.0,
-                )
-            ) if target_bone is not None else 0.0,
-            "plane_mean_conf": float(
-                classifier_result.get(
-                    "bone_probs",
-                    {},
-                ).get(
-                    target_bone,
-                    0.0,
-                )
-            ) if target_bone is not None else 0.0,
-            "plane_standard": standard_status,
-            "plane_candidates": _top_plane_candidates(
-                classifier_result,
-                {},
-                limit=3,
+            "local_blur": round(
+                local_blur,
+                2,
             ),
-        },
+        }
 
-        "quality": {
-            "bone_ok": bone_ok,
-            "geometry_ok": geometry_ok,
-            "shape_ok": shape_ok,
-            "overall": standard_status,
-            "details": {
-                "bone": {
-                    "present": bone_ok,
-                    "component_count": len(components),
-                    "valid_component_count": len(valid_components),
-                    "components": components,
-                },
-                "standard_reason": result.get(
-                    "standard_reason",
-                    "",
+    except Exception as e:
+        print(
+            f"  [WARN] Could not calculate limb "
+            f"visibility metrics for "
+            f"{Path(img_path).name}: {e}"
+        )
+
+        return {
+            "local_contrast": 0.0,
+            "local_blur": 0.0,
+        }
+
+
+
+def _build_json_entry(
+    img_path: Path,
+    result: dict,
+    visualization_file: Path,
+) -> dict:
+    """
+    Build the per-image JSON entry in the same style as HEAD inference.
+
+    Existing limbs caller is kept unchanged:
+        _build_json_entry(img_path, result, visualization_file)
+
+    JSON contains only:
+      - image_path
+      - summary
+      - structures
+    """
+
+    structures = []
+
+    # ------------------------------------------------------------
+    # Build structures from the existing limbs inference result.
+    # ------------------------------------------------------------
+    target_bone = result.get("target_bone")
+    fused_conf = result.get("fused_confidence", 0.0)
+
+    if result.get("prediction_found") and target_bone:
+        structures.append({
+            "structure_name": str(target_bone),
+            "segmentation_confidence": {
+                "value": round(float(fused_conf), 4),
+                "qualitative": _qual_conf(
+                    float(fused_conf),
+                    str(target_bone),
+                ),
+                "threshold": _get_thresh(
+                    str(target_bone),
+                    "conf",
+                ),
+            },
+            "local_contrast": {
+                "value": 0.0,
+                "qualitative": _qual_contrast(
+                    0.0,
+                    str(target_bone),
+                ),
+                "threshold": _get_thresh(
+                    str(target_bone),
+                    "contrast",
+                ),
+            },
+            "local_blur": {
+                "value": 0.0,
+                "qualitative": _qual_blur(
+                    0.0,
+                    str(target_bone),
+                ),
+                "threshold": _get_thresh(
+                    str(target_bone),
+                    "blur",
+                ),
+            },
+        })
+
+    # ------------------------------------------------------------
+    # HEAD-style summary.
+    # ------------------------------------------------------------
+    n_predicted = len(structures)
+
+    return {
+        "image_path": str(img_path),
+        "summary": {
+            "n_structures_predicted": n_predicted,
+            "n_structures_ok": n_predicted,
+            "n_structures_low_contrast": 0,
+            "n_structures_low_conf": 0,
+            "n_structures_locally_blurry": 0,
+            "overall_image_quality": (
+                "GOOD" if n_predicted > 0 else "UNKNOWN"
+            ),
+            "plane_standard": {
+                "stnd": result.get(
+                    "standard_status",
+                    "UNKNOWN",
+                ),
+                "confidence": round(
+                    float(
+                        result.get(
+                            "fused_confidence",
+                            0.0,
+                        )
+                    ),
+                    4,
+                ),
+                "predicted_plane": result.get(
+                    "predicted_plane",
+                    None,
                 ),
             },
         },
-
-        "final_verdict": standard_status,
-
-        "final_verdict_detail": {
-            "geometry_ok": geometry_ok,
-            "shape_ok": shape_ok,
-            "component_count": len(components),
-            "valid_component_count": len(valid_components),
-            "split_screen": bool(
-                standard_details.get(
-                    "split_screen",
-                    False,
-                )
-            ),
-        },
-
-        "shapes": shapes,
-
-        # ----------------------------------------------------
-        # Existing CDS summary fields preserved.
-        # ----------------------------------------------------
-        "path": str(image_path),
-
-        "classifier_bone": BONE_NAMES.get(
-            classifier_result.get(
-                "predicted_bone"
-            ),
-            "unknown",
-        ),
-
-        "classifier_confidence": float(
-            classifier_result.get(
-                "confidence",
-                0.0,
-            )
-        ),
-
-        "yolo_bone": (
-            BONE_NAMES.get(
-                result.get(
-                    "yolo_predicted_bone"
-                ),
-                "none",
-            )
-            if result.get(
-                "yolo_predicted_bone"
-            ) is not None
-            else "none"
-        ),
-
-        "yolo_confidence": float(
-            result.get(
-                "yolo_confidence",
-                0.0,
-            )
-        ),
-
-        "fused_bone": target_name,
-
-        "fused_confidence": float(
-            result.get(
-                "fused_confidence",
-                0.0,
-            )
-        ),
-
-        "num_yolo_detections": len(
-            result.get(
-                "detections",
-                [],
-            )
-        ),
-
-        "num_target_boxes": len(
-            result.get(
-                "target_boxes",
-                [],
-            )
-        ),
-
-        "num_segmented_boxes": len(
-            result.get(
-                "successful_boxes",
-                [],
-            )
-        ),
-
-        "failed_boxes": result.get(
-            "failed_boxes",
-            [],
-        ),
-
-        "prediction_found": bool(
-            result.get(
-                "prediction_found",
-                False,
-            )
-        ),
-
-        "status": result.get(
-            "status",
-            "UNKNOWN",
-        ),
-
-        "reason": result.get(
-            "reason",
-            "",
-        ),
-
-        "standard_status": standard_status,
-        "standard_reason": result.get(
-            "standard_reason",
-            "",
-        ),
-        "standard_details": standard_details,
-
-        "output_image": str(output_path),
+        "structures": structures,
     }
 
-    return row
+@torch.no_grad()
+def run_inference_limbs(
+    checkpoint: str,
+    items,
+    detector_checkpoint: str,
+    segmenter_checkpoint: str,
+    output_dir: str,
+    images_dir: str | None = None,
+    device_str: str = "cuda",
+    progress_callback=None,
+):
+    """
+    Main limb inference function, intentionally following the structure and
+    naming convention of the HEAD reference's run_inference_head().
+
+    The HEAD-specific segmentation logic is not used. The existing limb
+    classifier -> YOLO -> fusion -> binary Swin-UNet -> Standard/Non-Standard/
+    UNKNOWN pipeline remains unchanged inside run_pipeline().
+    """
+
+    device = torch.device(
+        device_str if torch.cuda.is_available() else "cpu"
+    )
+
+    output_root = Path(output_dir)
+    output_root.mkdir(
+        parents=True,
+        exist_ok=True,
+    )
+
+    # --------------------------------------------------------
+    # Model loading — same ordering as the HEAD inference function.
+    # --------------------------------------------------------
+    classifier, idx2plane = load_classifier(device)
+    detector = load_detector(
+        device,
+        detector_checkpoint,
+    )
+    segmenter = load_segmenter(
+        device,
+        segmenter_checkpoint,
+    )
+
+    csv_rows: list[dict] = []
+    json_entries: list[dict] = []
+    results = []
+
+    for item in items:
+
+        img_path = item["image_path"]
+        if not isinstance(img_path, Path):
+            img_path = Path(img_path)
+
+        stem = img_path.stem
+        input_suffix = img_path.suffix
+
+        print(
+            f"  Processing: {stem}{input_suffix}"
+        )
+
+        try:
+            # HEAD-style image loading entry point. The limb loader already
+            # supports PNG/JPEG/BMP/TIFF and DICOM (.dcm/.dicom).
+            image_gray = load_grayscale_image(
+                img_path
+            )
+
+            if image_gray is None:
+                raise ValueError(
+                    f"Could not load image: {img_path}"
+                )
+
+            result = run_pipeline(
+                image_gray=image_gray,
+                classifier=classifier,
+                idx2plane=idx2plane,
+                detector=detector,
+                segmenter=segmenter,
+                device=device,
+            )
+
+            # ------------------------------------------------
+            # Existing output organisation is retained.
+            # ------------------------------------------------
+            relative_path = img_path
+            try:
+                relative_path = img_path.relative_to(
+                    Path(images_dir) if images_dir else img_path.parent
+                )
+            except Exception:
+                relative_path = Path(img_path.name)
+
+            plane = None
+            for part in relative_path.parts[:-1]:
+                upper_part = str(part).upper()
+                if upper_part in {"FE", "HU", "RU", "TF"}:
+                    plane = upper_part
+                    break
+
+            if plane is None:
+                target_bone = result.get("target_bone")
+                target_to_plane = {
+                    1: "FE",
+                    2: "HU",
+                    3: "RU",
+                    4: "TF",
+                }
+                plane = target_to_plane.get(
+                    target_bone,
+                    "UNKNOWN",
+                )
+
+            plane_root = output_root / plane
+            masks_dir = plane_root / "masks"
+            visualization_dir = plane_root / "visualization"
+
+            masks_dir.mkdir(
+                parents=True,
+                exist_ok=True,
+            )
+            visualization_dir.mkdir(
+                parents=True,
+                exist_ok=True,
+            )
+
+            mask = result.get(
+                "segmentation_mask"
+            )
+
+            if mask is None:
+                mask = np.zeros(
+                    image_gray.shape,
+                    dtype=np.int64,
+                )
+
+            mask_binary = (
+                mask > 0
+            ).astype(np.uint8) * 255
+
+            mask_file = (
+                masks_dir
+                / f"{relative_path.stem}_mask.png"
+            )
+
+            cv2.imwrite(
+                str(mask_file),
+                mask_binary,
+            )
+
+            visualization = create_visualization(
+                image_gray=image_gray,
+                mask=mask,
+                result=result,
+            )
+
+            visualization_file = (
+                visualization_dir
+                / f"{relative_path.stem}_visualization.png"
+            )
+
+            cv2.imwrite(
+                str(visualization_file),
+                visualization,
+            )
+
+            # ------------------------------------------------
+            # HEAD-style per-image JSON construction.
+            # ------------------------------------------------
+            json_entry = _build_json_entry(
+                img_path,
+                result,
+                visualization_file,
+            )
+
+            json_entries.append(json_entry)
+            results.append(result)
+
+            csv_rows.append(
+                _build_csv_row(
+                    img_path,
+                    result,
+                )
+            )
+
+            if progress_callback is not None:
+                progress_callback(
+                    len(json_entries),
+                    len(items),
+                    json_entry,
+                )
+
+        except Exception as exc:
+
+            print(
+                f"  [ERROR] {exc}"
+            )
+
+            error_result = {
+                "path": str(img_path),
+                "image_path": str(img_path),
+                "status": "ERROR",
+                "reason": str(exc),
+                "standard_status": "UNKNOWN",
+                "standard_reason": (
+                    "UNKNOWN: inference failed before "
+                    "Standard/Non-Standard classification "
+                    "could be completed."
+                ),
+                "prediction_found": False,
+                "target_bone": None,
+                "fused_confidence": 0.0,
+                "classifier_result": {},
+                "detections": [],
+                "yolo_predicted_bone": None,
+                "yolo_confidence": 0.0,
+                "target_boxes": [],
+                "successful_boxes": [],
+                "failed_boxes": [],
+                "standard_details": {},
+                "segmentation_mask": None,
+            }
+
+            json_entry = _build_json_entry(
+                img_path,
+                error_result,
+                output_root / "UNKNOWN" / "visualization" / f"{stem}_visualization.png",
+            )
+
+            json_entries.append(json_entry)
+            results.append(error_result)
+
+            csv_rows.append({
+                "image_path": str(img_path),
+                "predicted_plane": "unknown",
+                "plane_standard": "UNKNOWN",
+                "image_quality": "ERROR",
+            })
+
+    # --------------------------------------------------------
+    # HEAD-style aggregate JSON output.
+    # --------------------------------------------------------
+    inference_results = {
+        "run_summary": {
+            "input_directory": str(
+                Path(images_dir).resolve()
+            ) if images_dir else "",
+            "detector_checkpoint": str(
+                Path(detector_checkpoint).resolve()
+            ),
+            "segmenter_checkpoint": str(
+                Path(segmenter_checkpoint).resolve()
+            ),
+            "classifier_checkpoint": str(
+                Path(checkpoint).resolve()
+            ),
+            "classifier_weight": CLASSIFIER_WEIGHT,
+            "detector_weight": DETECTOR_WEIGHT,
+            "n_images": len(json_entries),
+            "n_predictions": sum(
+                1 for r in json_entries
+                if r.get("prediction_found") is True
+            ),
+            "n_standard": sum(
+                1 for r in json_entries
+                if r.get("standard_status") == "STANDARD"
+            ),
+            "n_non_standard": sum(
+                1 for r in json_entries
+                if r.get("standard_status") == "NON-STANDARD"
+            ),
+            "n_unknown": sum(
+                1 for r in json_entries
+                if r.get("standard_status") == "UNKNOWN"
+            ),
+            "n_errors": sum(
+                1 for r in json_entries
+                if r.get("status") == "ERROR"
+            ),
+            "dicom_support": _DICOM_AVAILABLE,
+        },
+        "images": json_entries,
+    }
+
+    results_path = output_root / "inference_results.json"
+    with open(results_path, "w") as f:
+        json.dump(
+            inference_results,
+            f,
+            indent=2,
+        )
+
+    # Keep the older filename as a compatibility copy.
+    summary_path = output_root / "inference_summary.json"
+    with open(summary_path, "w") as f:
+        json.dump(
+            json_entries,
+            f,
+            indent=2,
+        )
+
+    save_aggregate_csv(
+        csv_rows,
+        output_root,
+    )
+
+    print(
+        f"\nJSON saved to: {results_path}"
+    )
+    print(
+        f"Summary JSON saved to: {summary_path}"
+    )
+
+    return results
 
 
 # ------------------------------------------------------------
@@ -3570,12 +4016,9 @@ def main():
 
     args = parser.parse_args()
 
-    os.makedirs(
-        args.output_dir,
-        exist_ok=True,
+    image_paths = collect_images(
+        args.images_dir
     )
-
-    device = get_device()
 
     print("=" * 70)
     print(
@@ -3583,476 +4026,71 @@ def main():
     )
     print("=" * 70)
 
+    device = get_device()
+    print(f"Device: {device}")
     print(
-        f"Device: {device}"
+        f"DICOM support: "
+        f"{'ENABLED' if _DICOM_AVAILABLE else 'DISABLED (pip install pydicom)'}"
     )
-
     print(
-        f"DICOM support: {'ENABLED' if _DICOM_AVAILABLE else 'DISABLED (pip install pydicom)'}"
+        f"Classifier weight: {CLASSIFIER_WEIGHT:.2f}"
     )
-
     print(
-        f"Classifier weight: "
-        f"{CLASSIFIER_WEIGHT:.2f}"
+        f"YOLO weight:       {DETECTOR_WEIGHT:.2f}"
     )
-
     print(
-        f"YOLO weight:       "
-        f"{DETECTOR_WEIGHT:.2f}"
+        f"Duplicate IoU:     {DUPLICATE_IOU_THRESHOLD:.2f}"
     )
-
     print(
-        f"Duplicate IoU:     "
-        f"{DUPLICATE_IOU_THRESHOLD:.2f}"
+        f"Min component:     {MIN_COMPONENT_AREA}px"
     )
-
     print(
-        f"Min component:     "
-        f"{MIN_COMPONENT_AREA}px"
+        f"FE/HU angle limit: {FE_HU_MAX_ANGLE:.0f}°"
     )
-
     print(
-        f"FE/HU angle limit: "
-        f"{FE_HU_MAX_ANGLE:.0f}°"
+        f"RU/TF angle limit: {RU_TF_MAX_ANGLE:.0f}°"
     )
-
     print(
-        f"RU/TF angle limit: "
-        f"{RU_TF_MAX_ANGLE:.0f}°"
+        f"Mask smoothing:    Gaussian "
+        f"{SMOOTH_BLUR_KERNEL}, sigma={SMOOTH_BLUR_SIGMA}"
     )
-
-    print(
-        f"Mask smoothing:    "
-        f"Gaussian "
-        f"{SMOOTH_BLUR_KERNEL}, "
-        f"sigma={SMOOTH_BLUR_SIGMA}"
-    )
-
-    print(
-        "No mask status:    UNKNOWN"
-    )
-
+    print("No mask status:    UNKNOWN")
     print("=" * 70)
 
-    # --------------------------------------------------------
-    # LOAD MODELS
-    # --------------------------------------------------------
-
-    print(
-        "\nLoading classifier..."
-    )
-
-    # EXACT ORIGINAL LOADER.
-    classifier, idx2plane = (
-        load_classifier(
-            device
+    if not image_paths:
+        print(
+            "ERROR: No images found."
         )
-    )
-
-    print(
-        "Classifier loaded."
-    )
-
-    print(
-        "\nLoading YOLO detector..."
-    )
-
-    detector = load_detector(
-        device,
-        args.detector_checkpoint,
-    )
-
-    print(
-        "YOLO detector loaded."
-    )
-
-    print(
-        "\nLoading segmenter..."
-    )
-
-    segmenter = load_segmenter(
-        device,
-        args.segmenter_checkpoint,
-    )
-
-    print(
-        "Segmenter loaded."
-    )
-
-    # --------------------------------------------------------
-    # COLLECT IMAGES
-    # --------------------------------------------------------
-
-    image_paths = collect_images(
-        args.images_dir
-    )
+        return
 
     print(
         f"\nFound {len(image_paths)} images."
     )
-
-    if not image_paths:
-
-        print(
-            "ERROR: No images found."
-        )
-
-        return
-
     print(
-        f"Output directory: "
-        f"{args.output_dir}"
+        f"Output directory: {args.output_dir}"
     )
 
-    # --------------------------------------------------------
-    # RUN
-    # --------------------------------------------------------
+    # HEAD-style `items` input. The limb pipeline has no head-specific
+    # `panel` field, so each item only carries its image path plus the input
+    # root used for output-plane organisation.
+    items = [
+        {
+            "image_path": image_path,
+        }
+        for image_path in image_paths
+    ]
 
-    summary_rows = []
-    csv_rows = []
-
-    for (
-        index,
-        image_path,
-    ) in enumerate(
-        image_paths,
-        start=1,
-    ):
-
-        print(
-            f"\n[{index}/{len(image_paths)}] "
-            f"{image_path}"
-        )
-
-        try:
-
-            image_gray = load_grayscale_image(
-                image_path
-            )
-
-            result = run_pipeline(
-                image_gray=image_gray,
-                classifier=classifier,
-                idx2plane=idx2plane,
-                detector=detector,
-                segmenter=segmenter,
-                device=device,
-            )
-
-            # ------------------------------------------------
-            # Console information
-            # ------------------------------------------------
-
-            cls_result = (
-                result[
-                    "classifier_result"
-                ]
-            )
-
-            cls_name = BONE_NAMES.get(
-                cls_result[
-                    "predicted_bone"
-                ],
-                "unknown",
-            )
-
-            yolo_name = (
-                BONE_NAMES.get(
-                    result[
-                        "yolo_predicted_bone"
-                    ],
-                    "none",
-                )
-                if result[
-                    "yolo_predicted_bone"
-                ] is not None
-                else "none"
-            )
-
-            fused_name = BONE_NAMES.get(
-                result[
-                    "target_bone"
-                ],
-                "unknown",
-            )
-
-            print(
-                f"  Classifier : "
-                f"{cls_name} "
-                f"{cls_result['confidence']:.3f}"
-            )
-
-            print(
-                f"  YOLO       : "
-                f"{yolo_name} "
-                f"{result['yolo_confidence']:.3f}"
-            )
-
-            print(
-                f"  Fused      : "
-                f"{fused_name} "
-                f"{result['fused_confidence']:.3f}"
-            )
-
-            print(
-                f"  Target boxes: "
-                f"{len(result['target_boxes'])}"
-            )
-
-            print(
-                f"  Segmented   : "
-                f"{len(result['successful_boxes'])}"
-            )
-
-            print(
-                f"  Status      : "
-                f"{result['status']}"
-            )
-
-            print(
-                f"  Reason      : "
-                f"{result['reason']}"
-            )
-
-            # ------------------------------------------------
-            # STANDARD CLASSIFICATION
-            # ------------------------------------------------
-
-            print(
-                f"  Standard    : "
-                f"{result.get('standard_status', 'UNKNOWN')}"
-            )
-
-            print(
-                f"  Std reason  : "
-                f"{result.get('standard_reason', '')}"
-            )
-
-            # ------------------------------------------------
-            # Mask
-            # ------------------------------------------------
-
-            mask = result[
-                "segmentation_mask"
-            ]
-
-            if mask is None:
-
-                mask = np.zeros(
-                    image_gray.shape,
-                    dtype=np.int64,
-                )
-
-            # ------------------------------------------------
-            # OUTPUT ORGANIZATION
-            # ------------------------------------------------
-            # Every plane gets its own folder containing:
-            #
-            #   FE/
-            #     masks/          -> all FE masks
-            #     visualization/  -> all FE visualizations
-            #
-            # Same structure for HU, RU and TF.
-
-            relative_path = (
-                image_path.relative_to(
-                    Path(args.images_dir)
-                )
-            )
-
-            plane = None
-
-            # Prefer the actual input-folder plane when available.
-            for part in relative_path.parts[:-1]:
-                upper_part = str(part).upper()
-                if upper_part in {"FE", "HU", "RU", "TF"}:
-                    plane = upper_part
-                    break
-
-            # Fallback to the fused prediction if the input directory
-            # does not contain FE/HU/RU/TF in its path.
-            if plane is None:
-                target_bone = result.get("target_bone")
-                target_to_plane = {
-                    1: "FE",
-                    2: "HU",
-                    3: "RU",
-                    4: "TF",
-                }
-                plane = target_to_plane.get(
-                    target_bone,
-                    "UNKNOWN",
-                )
-
-            plane_root = (
-                Path(args.output_dir) / plane
-            )
-
-            masks_dir = plane_root / "masks"
-            visualization_dir = plane_root / "visualization"
-
-            masks_dir.mkdir(
-                parents=True,
-                exist_ok=True,
-            )
-
-            visualization_dir.mkdir(
-                parents=True,
-                exist_ok=True,
-            )
-
-            # ------------------------------------------------
-            # SAVE MASK
-            # ------------------------------------------------
-            # Binary mask: foreground = 255, background = 0.
-            # The mask contains only the final fused target-bone
-            # segmentation; YOLO boxes are not written into it.
-
-            mask_binary = (
-                mask > 0
-            ).astype(np.uint8) * 255
-
-            mask_file = (
-                masks_dir
-                /
-                f"{relative_path.stem}_mask.png"
-            )
-
-            cv2.imwrite(
-                str(mask_file),
-                mask_binary,
-            )
-
-            # ------------------------------------------------
-            # SAVE VISUALIZATION
-            # ------------------------------------------------
-
-            visualization = create_visualization(
-                image_gray=image_gray,
-                mask=mask,
-                result=result,
-            )
-
-            visualization_file = (
-                visualization_dir
-                /
-                f"{relative_path.stem}_visualization.png"
-            )
-
-            cv2.imwrite(
-                str(visualization_file),
-                visualization,
-            )
-
-            # ------------------------------------------------
-            # Summary
-            # ------------------------------------------------
-
-            summary_rows.append(
-                make_summary_row(
-                    image_path,
-                    result,
-                    visualization_file,
-                )
-            )
-
-            csv_rows.append(
-                _build_csv_row(
-                    image_path,
-                    result,
-                )
-            )
-
-        except Exception as exc:
-
-            print(
-                f"  [ERROR] {exc}"
-            )
-
-            summary_rows.append(
-                {
-                    "path": str(
-                        image_path
-                    ),
-                    "status": "ERROR",
-                    "reason": str(
-                        exc
-                    ),
-                    "standard_status": "UNKNOWN",
-                    "standard_reason": (
-                        "UNKNOWN: inference "
-                        "failed before "
-                        "Standard/Non-Standard "
-                        "classification could "
-                        "be completed."
-                    ),
-                }
-            )
-
-            csv_rows.append(
-                {
-                    "image_path": str(
-                        image_path
-                    ),
-                    "predicted_plane": "unknown",
-                    "plane_standard": "UNKNOWN",
-                    "image_quality": "ERROR",
-                }
-            )
-
-    # --------------------------------------------------------
-    # WRITE JSON — SAME AGGREGATE STYLE AS THE HEAD/LIMB
-    # GENERIC INFERENCE FRAMEWORK
-    # --------------------------------------------------------
-    # One JSON file for the entire run.
-    #
-    # {
-    #   "run_summary": {...},
-    #   "images": [ ... one entry per image ... ]
-    # }
-    #
-    # Keep inference_summary.json as a compatibility copy of the image
-    # entries, while inference_results.json is the canonical aggregate file.
-
-    output_root = Path(args.output_dir)
-
-    inference_results = {
-        "run_summary": {
-            "input_directory": str(Path(args.images_dir).resolve()),
-            "detector_checkpoint": str(Path(args.detector_checkpoint).resolve()),
-            "segmenter_checkpoint": str(Path(args.segmenter_checkpoint).resolve()),
-            "classifier_checkpoint": str(Path(Config.CLASSIFIER_CHECKPOINT).resolve()),
-            "classifier_weight": CLASSIFIER_WEIGHT,
-            "detector_weight": DETECTOR_WEIGHT,
-            "n_images": len(summary_rows),
-            "n_predictions": sum(1 for r in summary_rows if r.get("prediction_found") is True),
-            "n_standard": sum(1 for r in summary_rows if r.get("standard_status") == "STANDARD"),
-            "n_non_standard": sum(1 for r in summary_rows if r.get("standard_status") == "NON-STANDARD"),
-            "n_unknown": sum(1 for r in summary_rows if r.get("standard_status") == "UNKNOWN"),
-            "n_errors": sum(1 for r in summary_rows if r.get("status") == "ERROR"),
-            "dicom_support": _DICOM_AVAILABLE,
-        },
-        "images": summary_rows,
-    }
-
-    results_path = output_root / "inference_results.json"
-    with open(results_path, "w") as f:
-        json.dump(inference_results, f, indent=2)
-
-    # Backward-compatible filename used by the older CDS inference.
-    summary_path = output_root / "inference_summary.json"
-    with open(summary_path, "w") as f:
-        json.dump(summary_rows, f, indent=2)
-
-    # HEAD-style aggregate CSV (image_path / predicted_plane /
-    # plane_standard / image_quality), appended across runs.
-    csv_path = save_aggregate_csv(csv_rows, output_root)
-
-    print(f"\nJSON saved to: {results_path}")
-    print(f"Compatibility JSON saved to: {summary_path}")
-
-    if csv_path:
-        print(f"CSV saved to: {csv_path}")
+    run_inference_limbs(
+        checkpoint=str(
+            Config.CLASSIFIER_CHECKPOINT
+        ),
+        items=items,
+        detector_checkpoint=args.detector_checkpoint,
+        segmenter_checkpoint=args.segmenter_checkpoint,
+        output_dir=args.output_dir,
+        images_dir=args.images_dir,
+        device_str=str(device),
+    )
 
 
 if __name__ == "__main__":

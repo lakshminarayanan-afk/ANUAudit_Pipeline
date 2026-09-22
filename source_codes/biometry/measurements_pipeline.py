@@ -48,13 +48,13 @@ def measurements_pipeline(model_inputs):
     tc_inputs = model_inputs.get("tc", [])
     for item in tc_inputs:
         image_path = item["image_path"]
-        tcd_result, cm_result, units, tcd_points  = process_single_image_tc(image_path,model_unet)
+        tcd_result, cm_result, units, tcd_cm_points  = process_single_image_tc(image_path,model_unet)
         json_entry = {
             "TCD": tcd_result,
             "CM": cm_result,
             "units": units,
             "confidence": None,
-            "points": tcd_points
+            "points": tcd_cm_points
         }
         write_biometry_result(
             item,
@@ -103,7 +103,7 @@ def measurements_pipeline(model_inputs):
                 sdvp_encoder,
                 sdvp_model,
                 sdvp_preprocess
-            )
+            )   # returns correctly only. return structure is inside save_prediction
 
             write_biometry_result(
                 item,
