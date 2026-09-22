@@ -54,12 +54,12 @@ from utils.seg_biom_results_json import write_segmentation_result
 
 
 def _n_classes(p):
-    return CONFIG.NUM_CLASSES_PER_PLANE["sagittal_exclusive"] if p == "sagittal" \
+    return CONFIG.NUM_CLASSES_PER_PLANE["sagittal_exclusive"] if p == "Sagittal Spine" \
         else CONFIG.NUM_CLASSES_PER_PLANE[p]
 
 
 def _structures(p):
-    return CONFIG.STRUCTURES["sagittal_exclusive"] if p == "sagittal" \
+    return CONFIG.STRUCTURES["sagittal_exclusive"] if p == "Sagittal Spine" \
         else CONFIG.STRUCTURES[p]
 
 
@@ -471,7 +471,7 @@ def classify_plane(model, tensor: torch.Tensor, device: torch.device,
     candidates = []
 
     for p in CONFIG.PLANES:
-        if p == "sagittal":
+        if p == "Sagittal Spine":
             logits_excl = outputs["sagittal_exclusive"]
             logits_region = outputs["sagittal_regions"]
             probs = F.softmax(logits_excl, dim=1)[0].cpu().numpy().astype(np.float32)
@@ -484,7 +484,7 @@ def classify_plane(model, tensor: torch.Tensor, device: torch.device,
         class_map_raw = np.argmax(probs, axis=0).astype(np.int32)
         class_map, confidences = postprocess(class_map_raw, probs, conf_thresh=conf_thresh, min_pixels=min_pixels, plane=p)
         region_mask = None
-        if p == "sagittal" and region_probs is not None:
+        if p == "Sagittal Spine" and region_probs is not None:
             region_mask = postprocess_regions(region_probs, conf_thresh=region_conf_thresh, min_pixels=min_pixels)
 
         per_plane_predictions[p] = (class_map, confidences, region_mask, region_probs)
@@ -586,7 +586,7 @@ def assess_structure_visibility(
         mask_orig = cv2.resize((class_map == c).astype(np.uint8), (orig_W, orig_H),
                                 interpolation=cv2.INTER_NEAREST)
         res = _local_metrics(mask_orig, name, float(confidences[c]))
-        if plane == "full_body_coronal" and name == "Lungs":
+        if plane == "Full Body Coronal View" and name == "Lungs":
             n_lab, _ = cv2.connectedComponents((class_map == c).astype(np.uint8), connectivity=8)
             res["n_blobs"] = n_lab - 1          # number of separate lung pieces
         results.append(res)
@@ -633,7 +633,7 @@ def classify_plane_standard(struct_results: list[dict], plane: str) -> dict:
     mean_conf = float(np.mean(confs)) if confs else 0.0
 
     two_lungs_ok = True
-    if plane == "full_body_coronal":
+    if plane == "Full Body Coronal View":
         lungs = by_name.get("Lungs")
         two_lungs_ok = bool(lungs and lungs.get("n_blobs", 0) == 2)
 

@@ -1,5 +1,5 @@
-
 import argparse
+import csv
 import json
 import os
 from pathlib import Path
@@ -112,6 +112,26 @@ MAX_PAIR_ANGLE_DIFFERENCE = 25.0
 # of split-screen. This is deliberately conservative.
 SPLIT_SCREEN_X_GAP_RATIO = 0.15
 
+# ------------------------------------------------------------
+# Generic image/DICOM input framework
+# ------------------------------------------------------------
+# Mirrors the HEAD inference's generic input conventions: a single
+# shared extension set used both for recursive collection and for
+# dispatching DICOM vs. raster loading, plus the transfer-syntax
+# photometric interpretations pydicom already decodes to RGB itself
+# (so VOI LUT windowing must NOT be re-applied on top of that RGB
+# output, matching the HEAD implementation).
+
+_RASTER_EXTS = {".png", ".jpg", ".jpeg", ".bmp", ".tif", ".tiff"}
+_DICOM_EXTS = {".dcm", ".dicom"}
+SUPPORTED_EXTS = _RASTER_EXTS | _DICOM_EXTS
+
+# Photometric interpretations that pydicom's own pixel handler already
+# decodes to RGB (JPEG-2000 lossy/lossless colour transforms). VOI LUT
+# windowing is meant for raw stored pixel values, not this decoded RGB,
+# so it is skipped for these — same behavior as the HEAD reference.
+_YBR_PYDICOM_CONVERT = {"YBR_ICT", "YBR_RCT"}
+
 
 # ============================================================
 # DEVICE
@@ -151,6 +171,27 @@ def _load_dicom_as_gray_uint8(path):
     photometric = str(getattr(ds, "PhotometricInterpretation", "")).upper()
     arr = ds.pixel_array
 
+    # ----------------------------------------------------------------
+    # HEAD-style early return for JPEG-2000 YBR transfer syntaxes.
+    # ----------------------------------------------------------------
+    # For YBR_ICT / YBR_RCT, pydicom's own pixel handler has already
+    # performed the inverse colour transform and returns RGB-like uint8
+    # data. Applying VOI LUT / windowing on top of that (as the generic
+    # path below does for raw stored values) would double-process the
+    # pixel data, so — exactly as in the HEAD reference implementation —
+    # this case is handled separately and returned early.
+    if photometric in _YBR_PYDICOM_CONVERT:
+        arr = np.asarray(arr, dtype=np.float32)
+        if arr.ndim == 4:
+            arr = arr[0]
+        if arr.ndim == 3 and arr.shape[-1] in (3, 4):
+            arr = (
+                0.2989 * arr[..., 0]
+                + 0.5870 * arr[..., 1]
+                + 0.1140 * arr[..., 2]
+            )
+        return np.clip(arr, 0, 255).astype(np.uint8)
+
     # Multi-frame: use first frame.  A normal ultrasound DICOM is usually
     # single-frame, but this keeps the inference loop robust.
     if arr.ndim == 4:
@@ -159,23 +200,15 @@ def _load_dicom_as_gray_uint8(path):
     # Colour DICOM -> grayscale.
     if arr.ndim == 3 and arr.shape[-1] in (3, 4):
         arr = arr[..., :3].astype(np.float32)
-        if photometric.startswith("YBR"):
-            # For the inference input we only need a stable grayscale image.
-            # Use luminance weights on the stored channels.
-            arr = (
-                0.2989 * arr[..., 0]
-                + 0.5870 * arr[..., 1]
-                + 0.1140 * arr[..., 2]
-            )
-        else:
-            arr = (
-                0.2989 * arr[..., 0]
-                + 0.5870 * arr[..., 1]
-                + 0.1140 * arr[..., 2]
-            )
+        arr = (
+            0.2989 * arr[..., 0]
+            + 0.5870 * arr[..., 1]
+            + 0.1140 * arr[..., 2]
+        )
     elif arr.ndim == 3:
-        # Single-channel multi-frame DICOM: first frame.
-        arr = arr[0]
+        # Single-channel multi-frame DICOM: middle frame (matches the
+        # HEAD reference's multi-frame convention).
+        arr = arr[arr.shape[0] // 2]
 
     arr = np.asarray(arr, dtype=np.float32)
 
@@ -215,7 +248,7 @@ def load_grayscale_image(path):
     """
     path = Path(path)
 
-    if path.suffix.lower() in {".dcm", ".dicom"}:
+    if path.suffix.lower() in _DICOM_EXTS:
         return _load_dicom_as_gray_uint8(path)
 
     image = cv2.imread(
@@ -2904,27 +2937,20 @@ def create_visualization(
     result,
 ):
     """
-    Side-by-side:
+    Prediction-only visualization.
 
-        LEFT  = ORIGINAL
-        RIGHT = PREDICTION
+    Layout:
+        TOP    = Standard / Non-Standard / UNKNOWN + target bone
+        BODY   = prediction image with segmentation overlay
 
-    Top:
-        classifier confidence
-        YOLO confidence
-        fused confidence
-
-    Bottom:
-        Standard / Non-Standard / UNKNOWN
-        reasoning
+    IMPORTANT:
+        - No original-image panel.
+        - No classifier / YOLO / fused confidence text.
+        - No box-count text.
+        - No segmented-count text.
+        - No classification reason text.
+        - Existing prediction/segmentation visualization is preserved.
     """
-
-    h, w = image_gray.shape[:2]
-
-    left = cv2.cvtColor(
-        image_gray,
-        cv2.COLOR_GRAY2BGR,
-    )
 
     right = create_prediction_panel(
         image_gray,
@@ -2932,350 +2958,79 @@ def create_visualization(
         result,
     )
 
-    # --------------------------------------------------------
-    # Top information
-    # --------------------------------------------------------
-
-    classifier_result = (
-        result[
-            "classifier_result"
-        ]
-    )
-
-    cls_bone = classifier_result[
-        "predicted_bone"
-    ]
-
-    cls_conf = classifier_result[
-        "confidence"
-    ]
-
-    yolo_bone = result[
-        "yolo_predicted_bone"
-    ]
-
-    yolo_conf = result[
-        "yolo_confidence"
-    ]
-
-    fused_bone = result[
-        "target_bone"
-    ]
-
-    fused_conf = result[
-        "fused_confidence"
-    ]
-
-    header_h = 115
-    bottom_h = 125
-
-    left_canvas = cv2.copyMakeBorder(
-        left,
-        header_h,
-        bottom_h,
-        0,
-        0,
-        cv2.BORDER_CONSTANT,
-        value=(
-            30,
-            30,
-            30,
-        ),
-    )
-
-    right_canvas = cv2.copyMakeBorder(
-        right,
-        header_h,
-        bottom_h,
-        0,
-        0,
-        cv2.BORDER_CONSTANT,
-        value=(
-            30,
-            30,
-            30,
-        ),
-    )
-
-    # --------------------------------------------------------
-    # Titles
-    # --------------------------------------------------------
-
-    cv2.putText(
-        left_canvas,
-        "ORIGINAL",
-        (
-            20,
-            35,
-        ),
-        cv2.FONT_HERSHEY_SIMPLEX,
-        0.9,
-        (
-            255,
-            255,
-            255,
-        ),
-        2,
-        cv2.LINE_AA,
-    )
-
-    cv2.putText(
-        right_canvas,
-        "PREDICTION",
-        (
-            20,
-            35,
-        ),
-        cv2.FONT_HERSHEY_SIMPLEX,
-        0.9,
-        (
-            255,
-            255,
-            255,
-        ),
-        2,
-        cv2.LINE_AA,
-    )
-
-    # --------------------------------------------------------
-    # Confidence line
-    # --------------------------------------------------------
-
-    cls_name = BONE_NAMES.get(
-        cls_bone,
-        "Unknown",
-    )
-
-    yolo_name = (
-        BONE_NAMES.get(
-            yolo_bone,
-            "None",
-        )
-        if yolo_bone is not None
-        else "None"
-    )
-
-    fused_name = BONE_NAMES.get(
-        fused_bone,
-        "Unknown",
-    )
-
-    confidence_text = (
-        f"Classifier: {cls_name} "
-        f"{cls_conf:.3f}    "
-        f"YOLO: {yolo_name} "
-        f"{yolo_conf:.3f}    "
-        f"Fused: {fused_name} "
-        f"{fused_conf:.3f}"
-    )
-
-    cv2.putText(
-        left_canvas,
-        confidence_text,
-        (
-            20,
-            72,
-        ),
-        cv2.FONT_HERSHEY_SIMPLEX,
-        0.52,
-        (
-            255,
-            255,
-            255,
-        ),
-        1,
-        cv2.LINE_AA,
-    )
-
-    cv2.putText(
-        right_canvas,
-        confidence_text,
-        (
-            20,
-            72,
-        ),
-        cv2.FONT_HERSHEY_SIMPLEX,
-        0.52,
-        (
-            255,
-            255,
-            255,
-        ),
-        1,
-        cv2.LINE_AA,
-    )
-
-    # --------------------------------------------------------
-    # Box count
-    # --------------------------------------------------------
-
-    box_text = (
-        f"Target: {fused_name}    "
-        f"Boxes: "
-        f"{len(result['target_boxes'])}    "
-        f"Segmented: "
-        f"{len(result['successful_boxes'])}"
-    )
-
-    cv2.putText(
-        left_canvas,
-        box_text,
-        (
-            20,
-            97,
-        ),
-        cv2.FONT_HERSHEY_SIMPLEX,
-        0.48,
-        (
-            220,
-            220,
-            220,
-        ),
-        1,
-        cv2.LINE_AA,
-    )
-
-    cv2.putText(
-        right_canvas,
-        box_text,
-        (
-            20,
-            97,
-        ),
-        cv2.FONT_HERSHEY_SIMPLEX,
-        0.48,
-        (
-            220,
-            220,
-            220,
-        ),
-        1,
-        cv2.LINE_AA,
-    )
-
-    # --------------------------------------------------------
-    # STANDARD / NON-STANDARD / UNKNOWN
-    # --------------------------------------------------------
-
     standard_status = result.get(
         "standard_status",
         "UNKNOWN",
     )
 
-    standard_reason = result.get(
-        "standard_reason",
-        "",
+    target_bone = result.get(
+        "target_bone",
     )
 
-    classification_text = (
-        f"CLASSIFICATION: "
-        f"{standard_status}"
+    target_name = BONE_NAMES.get(
+        target_bone,
+        "Unknown",
     )
-
-    reason_prefix = "Reason: "
-
-    # Wrap reason based on available width.
-    max_chars = 85
-
-    words = (
-        reason_prefix
-        +
-        standard_reason
-    ).split()
-
-    reason_lines = []
-
-    current_line = ""
-
-    for word in words:
-
-        candidate = (
-            current_line
-            +
-            " "
-            +
-            word
-        ).strip()
-
-        if len(candidate) > max_chars:
-
-            if current_line:
-                reason_lines.append(
-                    current_line
-                )
-
-            current_line = word
-
-        else:
-
-            current_line = candidate
-
-    if current_line:
-        reason_lines.append(
-            current_line
-        )
-
-    # Draw classification + reason on BOTH panels.
-    for canvas in [
-        left_canvas,
-        right_canvas,
-    ]:
-
-        cv2.putText(
-            canvas,
-            classification_text,
-            (
-                20,
-                h + 32,
-            ),
-            cv2.FONT_HERSHEY_SIMPLEX,
-            0.68,
-            (
-                255,
-                255,
-                255,
-            ),
-            2,
-            cv2.LINE_AA,
-        )
-
-        y = h + 58
-
-        for line in reason_lines[:3]:
-
-            cv2.putText(
-                canvas,
-                line,
-                (
-                    20,
-                    y,
-                ),
-                cv2.FONT_HERSHEY_SIMPLEX,
-                0.43,
-                (
-                    220,
-                    220,
-                    220,
-                ),
-                1,
-                cv2.LINE_AA,
-            )
-
-            y += 19
 
     # --------------------------------------------------------
-    # Side-by-side
+    # Header
     # --------------------------------------------------------
 
-    combined = np.concatenate(
-        [
-            left_canvas,
-            right_canvas,
-        ],
-        axis=1,
+    header_h = 80
+
+    prediction_canvas = cv2.copyMakeBorder(
+        right,
+        header_h,
+        0,
+        0,
+        0,
+        cv2.BORDER_CONSTANT,
+        value=(
+            30,
+            30,
+            30,
+        ),
     )
 
-    return combined
+    # Standard / Non-Standard / UNKNOWN
+    cv2.putText(
+        prediction_canvas,
+        standard_status,
+        (
+            20,
+            32,
+        ),
+        cv2.FONT_HERSHEY_SIMPLEX,
+        0.68,
+        (
+            255,
+            255,
+            255,
+        ),
+        2,
+        cv2.LINE_AA,
+    )
+
+    # Target bone
+    cv2.putText(
+        prediction_canvas,
+        f"Target: {target_name}",
+        (
+            20,
+            62,
+        ),
+        cv2.FONT_HERSHEY_SIMPLEX,
+        0.55,
+        (
+            220,
+            220,
+            220,
+        ),
+        1,
+        cv2.LINE_AA,
+    )
+
+    return prediction_canvas
 
 
 # ============================================================
@@ -3297,17 +3052,6 @@ def collect_images(
             TF/
     """
 
-    extensions = {
-        ".png",
-        ".jpg",
-        ".jpeg",
-        ".bmp",
-        ".tif",
-        ".tiff",
-        ".dcm",
-        ".dicom",
-    }
-
     root = Path(
         images_dir
     )
@@ -3319,7 +3063,7 @@ def collect_images(
             p.is_file()
             and
             p.suffix.lower()
-            in extensions
+            in SUPPORTED_EXTS
         )
     ]
 
@@ -3698,6 +3442,86 @@ def make_summary_row(
     return row
 
 
+# ------------------------------------------------------------
+# HEAD-style aggregate summary CSV
+# ------------------------------------------------------------
+# Same generic convention as the HEAD reference: one row per image with
+# image_path / predicted_plane / plane_standard / image_quality. The
+# HEAD field names are generic structural conventions, not head-specific
+# fields, so they are reused as-is; the values populated underneath are
+# entirely limb-specific (fused bone name, Standard/Non-Standard/UNKNOWN,
+# and the limb pipeline's own per-image status flag).
+
+CSV_FIELDNAMES = [
+    "image_path", "predicted_plane", "plane_standard", "image_quality",
+]
+
+
+def _build_csv_row(image_path, result):
+    """
+    Build one HEAD-style aggregate CSV row for an image.
+
+    Field mapping (generic convention -> limb-specific value):
+        image_path      -> input image path
+        predicted_plane -> fused target bone name
+        plane_standard  -> Standard / Non-Standard / UNKNOWN
+        image_quality   -> per-image pipeline status
+                           (SUCCESS / PARTIAL / NO PREDICTION / ERROR)
+    """
+
+    target_bone = result.get("target_bone")
+
+    return {
+        "image_path": str(image_path),
+        "predicted_plane": BONE_NAMES.get(
+            target_bone,
+            "unknown",
+        ),
+        "plane_standard": result.get(
+            "standard_status",
+            "UNKNOWN",
+        ),
+        "image_quality": result.get(
+            "status",
+            "UNKNOWN",
+        ),
+    }
+
+
+def save_aggregate_csv(csv_rows, output_dir, csv_path=None):
+    """
+    Append aggregate summary rows to a shared CSV file.
+
+    Mirrors the HEAD reference's aggregate-CSV convention: creates the
+    file with a header on first write, and appends rows on subsequent
+    runs so results from multiple invocations accumulate in one file.
+    """
+
+    if not csv_rows:
+        return None
+
+    csv_path = csv_path or (
+        Path(output_dir) / "inference_summary.csv"
+    )
+
+    file_exists = csv_path.exists()
+
+    with open(csv_path, "a", newline="") as f:
+        writer = csv.DictWriter(
+            f,
+            fieldnames=CSV_FIELDNAMES,
+            extrasaction="ignore",
+            restval="",
+        )
+
+        if not file_exists:
+            writer.writeheader()
+
+        writer.writerows(csv_rows)
+
+    return str(csv_path)
+
+
 # ============================================================
 # MAIN
 # ============================================================
@@ -3885,6 +3709,7 @@ def main():
     # --------------------------------------------------------
 
     summary_rows = []
+    csv_rows = []
 
     for (
         index,
@@ -4019,47 +3844,103 @@ def main():
                 )
 
             # ------------------------------------------------
-            # Visualization
+            # OUTPUT ORGANIZATION
             # ------------------------------------------------
+            # Every plane gets its own folder containing:
+            #
+            #   FE/
+            #     masks/          -> all FE masks
+            #     visualization/  -> all FE visualizations
+            #
+            # Same structure for HU, RU and TF.
 
-            visualization = (
-                create_visualization(
-                    image_gray=image_gray,
-                    mask=mask,
-                    result=result,
-                )
-            )
-
-            # Preserve subdirectory structure.
             relative_path = (
                 image_path.relative_to(
-                    Path(
-                        args.images_dir
-                    )
+                    Path(args.images_dir)
                 )
             )
 
-            output_path = (
-                Path(
-                    args.output_dir
+            plane = None
+
+            # Prefer the actual input-folder plane when available.
+            for part in relative_path.parts[:-1]:
+                upper_part = str(part).upper()
+                if upper_part in {"FE", "HU", "RU", "TF"}:
+                    plane = upper_part
+                    break
+
+            # Fallback to the fused prediction if the input directory
+            # does not contain FE/HU/RU/TF in its path.
+            if plane is None:
+                target_bone = result.get("target_bone")
+                target_to_plane = {
+                    1: "FE",
+                    2: "HU",
+                    3: "RU",
+                    4: "TF",
+                }
+                plane = target_to_plane.get(
+                    target_bone,
+                    "UNKNOWN",
                 )
-                /
-                relative_path.parent
+
+            plane_root = (
+                Path(args.output_dir) / plane
             )
 
-            output_path.mkdir(
+            masks_dir = plane_root / "masks"
+            visualization_dir = plane_root / "visualization"
+
+            masks_dir.mkdir(
                 parents=True,
                 exist_ok=True,
             )
 
-            output_file = (
-                output_path
+            visualization_dir.mkdir(
+                parents=True,
+                exist_ok=True,
+            )
+
+            # ------------------------------------------------
+            # SAVE MASK
+            # ------------------------------------------------
+            # Binary mask: foreground = 255, background = 0.
+            # The mask contains only the final fused target-bone
+            # segmentation; YOLO boxes are not written into it.
+
+            mask_binary = (
+                mask > 0
+            ).astype(np.uint8) * 255
+
+            mask_file = (
+                masks_dir
                 /
-                f"{relative_path.stem}_pred.png"
+                f"{relative_path.stem}_mask.png"
             )
 
             cv2.imwrite(
-                str(output_file),
+                str(mask_file),
+                mask_binary,
+            )
+
+            # ------------------------------------------------
+            # SAVE VISUALIZATION
+            # ------------------------------------------------
+
+            visualization = create_visualization(
+                image_gray=image_gray,
+                mask=mask,
+                result=result,
+            )
+
+            visualization_file = (
+                visualization_dir
+                /
+                f"{relative_path.stem}_visualization.png"
+            )
+
+            cv2.imwrite(
+                str(visualization_file),
                 visualization,
             )
 
@@ -4071,7 +3952,14 @@ def main():
                 make_summary_row(
                     image_path,
                     result,
-                    output_file,
+                    visualization_file,
+                )
+            )
+
+            csv_rows.append(
+                _build_csv_row(
+                    image_path,
+                    result,
                 )
             )
 
@@ -4098,6 +3986,17 @@ def main():
                         "classification could "
                         "be completed."
                     ),
+                }
+            )
+
+            csv_rows.append(
+                {
+                    "image_path": str(
+                        image_path
+                    ),
+                    "predicted_plane": "unknown",
+                    "plane_standard": "UNKNOWN",
+                    "image_quality": "ERROR",
                 }
             )
 
@@ -4145,41 +4044,15 @@ def main():
     with open(summary_path, "w") as f:
         json.dump(summary_rows, f, indent=2)
 
+    # HEAD-style aggregate CSV (image_path / predicted_plane /
+    # plane_standard / image_quality), appended across runs.
+    csv_path = save_aggregate_csv(csv_rows, output_root)
+
     print(f"\nJSON saved to: {results_path}")
     print(f"Compatibility JSON saved to: {summary_path}")
 
-    print(
-        "\n"
-        +
-        "=" * 70
-    )
-
-    print(
-        "INFERENCE COMPLETE"
-    )
-
-    print(
-        "=" * 70
-    )
-
-    print(
-        f"Images processed: "
-        f"{len(summary_rows)}"
-    )
-
-    print(
-        f"Summary: "
-        f"{summary_path}"
-    )
-
-    print(
-        f"Visualizations: "
-        f"{args.output_dir}"
-    )
-
-    print(
-        "=" * 70
-    )
+    if csv_path:
+        print(f"CSV saved to: {csv_path}")
 
 
 if __name__ == "__main__":

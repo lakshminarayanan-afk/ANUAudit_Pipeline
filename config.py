@@ -547,22 +547,22 @@ class Seg_Config:
         # ==============================
         # PLANES
         # ==============================
-        PLANES = ["coronal", "sagittal", "full_body_coronal"]
+        PLANES = ["Coronal Spine", "Sagittal Spine", "Full Body Coronal View"]
 
         MANDATORY_STRUCTURES = {
-            "coronal": [
+            "Coronal Spine": [
                 "Iliac Crest 1",
                 "Iliac Crest 2",
                 "Anterior Vertebral Body",
                 "Ossification Center - Posterior arch 1",
                 "Ossification Center - Posterior arch 2",
             ],
-            "sagittal": [
+            "Sagittal Spine": [
                 "Skin line",
                 "Ossification Center- Vertebral Body",
                 "Ossification Center - Arch of vertebra",
             ],
-            "full_body_coronal": [
+            "Full Body Coronal View": [
                 "Lungs",
                 "Heart",
                 "Stomach",
@@ -577,16 +577,16 @@ class Seg_Config:
         # ==============================
         DATA_ROOT = "/mnt/data4tb/anusha/Prathicksha_Spine/data"
 
-        IMAGE_DIRS = {
-            "coronal":            f"{DATA_ROOT}/coronal/images",
-            "sagittal":            f"{DATA_ROOT}/sagittal/images",
-            "full_body_coronal":  f"{DATA_ROOT}/full_body_coronal/images",
-        }
-        MASK_DIRS = {
-            "coronal":            f"{DATA_ROOT}/coronal/masks_27",
-            "sagittal":            f"{DATA_ROOT}/sagittal/masks_27",
-            "full_body_coronal":  f"{DATA_ROOT}/full_body_coronal/masks_27",
-        }
+        # IMAGE_DIRS = {
+        #     "coronal":            f"{DATA_ROOT}/coronal/images",
+        #     "sagittal":            f"{DATA_ROOT}/sagittal/images",
+        #     "full_body_coronal":  f"{DATA_ROOT}/full_body_coronal/images",
+        # }
+        # MASK_DIRS = {
+        #     "coronal":            f"{DATA_ROOT}/coronal/masks_27",
+        #     "sagittal":            f"{DATA_ROOT}/sagittal/masks_27",
+        #     "full_body_coronal":  f"{DATA_ROOT}/full_body_coronal/masks_27",
+        # }
 
         IMAGE_EXTS = {".png", ".jpg", ".jpeg", ".bmp", ".tiff", ".tif"}
         MASK_EXT   = ".npz"
@@ -622,14 +622,14 @@ class Seg_Config:
         DROPOUT       = 0.3
 
         NUM_CLASSES_PER_PLANE = {
-            "coronal":              10,  # 9 structures + background
-            "sagittal_exclusive":    4,  # skin line + 2 oss. centers + background
-            "full_body_coronal":    11,  # 10 structures + background (Lungs merged)
+            "Coronal Spine":              10,  # 9 structures + background
+            "Sagittal Spine":    4,  # skin line + 2 oss. centers + background
+            "Full Body Coronal View":    11,  # 10 structures + background (Lungs merged)
         }
 
         # Sigmoid multi-label region head (no background channel — regions
         # are independent, can overlap ossification-center classes above).
-        NUM_REGIONS_PER_PLANE = {"sagittal": 4}
+        NUM_REGIONS_PER_PLANE = {"Sagittal Spine": 4}
         REGION_LOSS_WEIGHT    = 3.0
 
         # ==============================
@@ -710,7 +710,7 @@ class Seg_Config:
         # Index 0 is background (implicit) for every plane's head.
         # ==============================
         STRUCTURES = {
-            "coronal": [
+            "Coronal Spine": [
                 "Coronal spine- Cervical Region",              # 1
                 "Coronal spine- Sacral Region",                # 2
                 "Coronal spine- Thoracic Region",               # 3
@@ -732,7 +732,7 @@ class Seg_Config:
                 "Sagittal spine - Lumbar Region",                # 2
                 "Sagittal spine - Thoracic Region",              # 3
             ],
-            "full_body_coronal": [
+            "Full Body Coronal View": [
                 "Gall Bladder",                                  # 1
                 "Diaphragm",                                     # 2
                 "Lungs",                                          # 3
@@ -748,7 +748,7 @@ class Seg_Config:
 
         # Raw npz channel names that must map onto one merged class.
         STRUCTURE_ALIASES = {
-            "full_body_coronal": {
+            "Full Body Coronal View": {
                 "Left Lung":  "Lungs",
                 "Right Lung": "Lungs",
             }
