@@ -672,13 +672,13 @@ class AC:
                     if failed_calipers:
 
                         log_entry['RESULTS'] = (
-                            "BAD AUDIT - " +
+                            "MISPLACED CALIPERS: " +
                             ", ".join(failed_calipers)
                         )
 
                     else:
 
-                        log_entry['RESULTS'] = "GOOD"
+                        log_entry['RESULTS'] = "CORRECT"
             
 
         gray_input = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
@@ -1055,7 +1055,7 @@ class BPD:
                         elif failed_points:
 
                             log_entry["RESULTS"] = (
-                                "BAD AUDIT - " +
+                                "MISPLACED CALIPERS: " +
                                 ", ".join(failed_points)
                             )
 
@@ -1064,7 +1064,7 @@ class BPD:
                         # ------------------------------------------------
                         else:
 
-                            log_entry["RESULTS"] = "GOOD"
+                            log_entry["RESULTS"] = "CORRECT"
 
             if len(detections) != 4:
                 reject_reason = f"Detection Error: Found {len(detections)} points"
@@ -1396,13 +1396,13 @@ class FL:
                     elif failed_points:
 
                         audit["RESULTS"] = (
-                            "BAD AUDIT - " +
+                            "MISPLACED CALIPERS: " +
                             ", ".join(failed_points)
                         )
 
                     else:
 
-                        audit["RESULTS"] = "GOOD"
+                        audit["RESULTS"] = "CORRECT"
 
         if len(calipers) != 2:
             audit["yolo detection"] = "wrong"

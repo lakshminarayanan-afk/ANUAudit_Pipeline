@@ -9,7 +9,7 @@ from source_codes.biometry.measurements_pipeline import measurements_pipeline
 from config import Config
 
 IMAGE_DIRECTORY = (
-    r"/home/htic/MLN/PIPELINE/ANUAudit_Pipeline/12_Full_Image_Datasets/Quad"
+    r"/home/htic/MLN/PIPELINE/ANUAudit_Pipeline/12_Full_Image_Datasets/TEST"
 )
 
 
@@ -49,9 +49,9 @@ final_results = run_segmentation_pipeline(
     items
 )
 
-# # ============================================================
-# # STEP 4 — FINAL_PLANE PIPELINE
-# # ============================================================
+# # # ============================================================
+# # # STEP 4 — FINAL_PLANE PIPELINE
+# # # ============================================================
  
 # final_plane(
 #     MODALITY_OUTPUT

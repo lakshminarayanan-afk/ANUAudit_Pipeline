@@ -4,8 +4,11 @@ from source_codes.seg.UNET_SoftMAk.inf import run_inference_head
 from source_codes.seg.ABDOMEN.abdomen_inference import run_inference_abdomen
 from source_codes.seg.LIMBS.limbs_inference import run_inference_limbs
 from source_codes.seg.FACE.face_inference import run_inference_face
+from source_codes.seg.SPINE.spine_inference import run_inference_spine
 
 from config import Config
+from config import Seg_Config
+Config_face = Seg_Config.Spine
 
 def run_head_model(items):
 
@@ -51,6 +54,18 @@ def run_face_model(items):
                 device_str= Config.DEVICE,
             )
 
+def run_spine_model(items):
+    return run_inference_spine(
+                checkpoint= Config.SEG_MODEL_FACE,
+                items=items,
+                conf_thresh = Config_face.INFER_CONF_THRESH,
+                min_pixels= 50,
+                region_conf_thresh = 0.3,
+                plane = None,          # unused (kept for caller compatibility); plane is always auto-detected
+                device_str= Config.DEVICE,
+                progress_callback=None,
+            )
+
 MODEL_CONFIG = {
 
     "Head": {
@@ -73,9 +88,9 @@ MODEL_CONFIG = {
         "function": run_face_model,
     },
 
-    # "Spine": {
-    #     "function": run_spine_model,
-    # },
+    "Spine": {
+        "function": run_spine_model,
+    },
 
     # "Thorax": {
     #     "function": run_spine_model,

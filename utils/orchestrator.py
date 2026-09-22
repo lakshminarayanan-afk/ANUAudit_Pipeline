@@ -103,7 +103,7 @@ def run_segmentation_pipeline(items):
             # NO MODEL YET
             # =====================================================
 
-            if anatomy in {"Spine", "Thorax"}:
+            if anatomy in {"Thorax"}:
 
                 print(
                     "[SKIP MODEL] Spine and Thorax model "

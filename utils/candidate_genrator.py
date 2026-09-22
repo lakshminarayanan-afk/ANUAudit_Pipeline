@@ -8,7 +8,7 @@ SKIP_MODALITIES = {
 }
 UNAVAILABLE_ANATOMY = {
     "Thorax",
-    "Spine"
+    # "Spine"
 }
 
 def generate_candidates(data):
