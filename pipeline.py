@@ -9,7 +9,7 @@ from source_codes.biometry.measurements_pipeline import measurements_pipeline
 from config import Config
 
 IMAGE_DIRECTORY = (
-    r"/home/htic/MLN/PIPELINE/ANUAudit_Pipeline/12_Full_Image_Datasets/TEST"
+    r"/home/htic/MLN/PIPELINE/ANUAudit_Pipeline/12_Full_Image_Datasets/TEST copy"
 )
 
 
@@ -49,29 +49,29 @@ final_results = run_segmentation_pipeline(
     items
 )
 
-# # # ============================================================
-# # # STEP 4 — FINAL_PLANE PIPELINE
-# # # ============================================================
- 
-# final_plane(
-#     MODALITY_OUTPUT
-# )
-
 # # ============================================================
-# # STEP 4 — BIOMET INPUT PIPELINE
+# # STEP 4 — FINAL_PLANE PIPELINE
 # # ============================================================
  
-# model_inputs = prepare_plane_inputs(
-#     MODALITY_OUTPUT
-# )
+final_plane(
+    MODALITY_OUTPUT
+)
 
-# for model, inputs in model_inputs.items():
-#     print(f"{model}: {len(inputs)} images")
-
-# # ============================================================
-# # STEP 4 — MEASUREMENTS PIPELINE
-# # ============================================================
+# ============================================================
+# STEP 4 — BIOMET INPUT PIPELINE
+# ============================================================
  
-# measurements_pipeline(
-#     model_inputs
-# )
+model_inputs = prepare_plane_inputs(
+    MODALITY_OUTPUT
+)
+
+for model, inputs in model_inputs.items():
+    print(f"{model}: {len(inputs)} images")
+
+# ============================================================
+# STEP 4 — MEASUREMENTS PIPELINE
+# ============================================================
+ 
+measurements_pipeline(
+    model_inputs
+)

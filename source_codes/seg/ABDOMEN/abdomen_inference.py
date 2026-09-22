@@ -1221,6 +1221,7 @@ def run_inference_abdomen(
 
     for item in items:
         img_path = Path(item["image_path"])
+        json_path = Path(item["json_path"])
         panel = item["panel"]
         logging.info(f"Processing: {img_path.name}")
         gray = load_gray_image(str(img_path))
@@ -1232,20 +1233,21 @@ def run_inference_abdomen(
             })
             continue
 
+        orig_h, orig_w = gray.shape[:2]
 
         panel_gray = extract_panel(
             gray,
             panel
         )
-        # orig_h, orig_w = gray.shape[:2]
-        panel_h, panel_w = panel_gray.shape[:2]
+
 
         # ── Predict (EXISTING abdomen model + EXISTING abdomen post-processing, untouched) ──
         label_map, skin_bin, probs, (skin_circularity, skin_axis_ratio) = predict(
             model, panel_gray, device, threshold
         )
         print(f"HEYYYYimg_path:{img_path}")
-        mask_path = img_path.with_suffix(".npz")
+
+        mask_path = json_path.with_suffix(".npz")
         np.savez_compressed(
             mask_path,
             label_map=label_map,
@@ -1308,7 +1310,7 @@ def run_inference_abdomen(
         mean_structure_confidence = compute_mean_structure_confidence(label_map, skin_bin, probs, (mH, mW))
 
         # ── Polygons (FINAL mask only, original image coordinates) ──
-        polygons = build_polygons_from_final_mask(label_map, skin_bin, panel_h, panel_w)
+        polygons = build_polygons_from_final_mask(label_map, skin_bin, orig_h, orig_w)
 
         # from ui.utils.dcm_png_utils import anonymized_png_for_dicom
 

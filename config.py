@@ -243,7 +243,7 @@ class Seg_Config:
                 "Skin Line",
                 "Vertebrae",
                 "Stomach",
-                "Adrenal",
+                # "Adrenal",
             ],
             "Cord Insertion": [
                 "Cord Insertion",

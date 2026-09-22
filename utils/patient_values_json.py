@@ -48,17 +48,20 @@ def write_patient_results(
         "confidence": {
             "BPD": (
                 best["bpd"]["confidence"]
-                if best["bpd"]["confidence"] >= 0
+                if best["bpd"]["confidence"] is not None
+                and best["bpd"]["confidence"] >= 0
                 else None
             ),
             "AC": (
                 best["ac"]["confidence"]
-                if best["ac"]["confidence"] >= 0
+                if best["ac"]["confidence"] is not None
+                and best["ac"]["confidence"] >= 0
                 else None
             ),
             "FL": (
                 best["fl"]["confidence"]
-                if best["fl"]["confidence"] >= 0
+                if best["fl"]["confidence"] is not None
+                and best["fl"]["confidence"] >= 0
                 else None
             ),
         },
